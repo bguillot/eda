@@ -1,0 +1,352 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!-- INHERITED VIEW FOR THE OBJECT : product.product -->
+
+<record id="product_normal_form_coloc_type" model="ir.ui.view">
+    <field name="name">product.normal.form</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="arch" type="xml">
+        <field name="type" position="after">
+            <field name="coloc_type"/>
+        </field>
+    </field>
+</record>
+
+        <!--  VIEW FOR THE OBJECT : coloc.expense -->
+
+<menuitem name="Coloc"
+          id="menu_coloc"
+          groups="base.group_no_one"/>
+
+<menuitem id="menu_expense"
+          name="Expences"
+          parent="menu_coloc"
+          sequence="0"/>
+
+<menuitem id="menu_balance"
+          name="Balancess"
+          parent="menu_coloc"
+          sequence="1"/>
+
+
+<menuitem id="menu_partner_form_coloc" 
+          parent="menu_coloc" action="base.action_partner_form" sequence="10"/>
+
+<record id="coloc_expense_search_view" model="ir.ui.view">
+    <field name="name">coloc.expense.search</field>
+    <field name="model">coloc.expense</field>
+    <field name="arch" type="xml">
+        <search string="Expenses">
+            <field name="month" string="Month"/>
+            <field name="partner_id"/>
+            <newline/>
+            <group expand="1" string="Group By...">
+                <filter string="Partner" name="group_partner_id" icon="terp-personal" context="{'group_by':'partner_id'}"/>
+                <filter string="Month" icon="terp-go-month" context="{'group_by':'month'}" help="Order of Month"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="coloc_expense_form_view" model="ir.ui.view">
+    <field name="name">coloc.expense.form</field>
+    <field name="model">coloc.expense</field>
+    <field name="arch" type="xml">
+        <form string="Expenses" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="month" class="oe_edit_only"/>
+                    <h1>
+                        <field name="month"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="amount"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="coloc_expense_tree_view" model="ir.ui.view">
+    <field name="name">coloc.expense.list</field>
+    <field name="model">coloc.expense</field>
+    <field name="arch" type="xml">
+        <tree string="Expenses" editable="top">
+            <field name="create_date"/>
+            <field name="month"/>
+            <field name="partner_id"/>
+            <field name="product_id"/>
+            <field name="amount"/>
+            <field name="comment"/>
+        </tree>
+    </field>
+</record>
+
+<record id="coloc_expense_action_form" model="ir.actions.act_window">
+    <field name="name">Expenses</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">coloc.expense</field>
+    <field name="context">{'search_default_month':1}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="coloc_expense_search_view"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_coloc_expense_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="coloc_expense_form_view"/>
+    <field name="act_window_id" ref="coloc_expense_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_coloc_expense_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="coloc_expense_tree_view"/>
+    <field name="act_window_id" ref="coloc_expense_action_form"/>
+</record>
+
+<menuitem action="coloc_expense_action_form"
+            id="menu_coloc_expense"
+            parent="menu_expense"
+            sequence="0" groups="base.group_no_one"/>
+
+<record id="meal_attendance_search_view" model="ir.ui.view">
+    <field name="name">meal.attendance.search</field>
+    <field name="model">meal.attendance</field>
+    <field name="arch" type="xml">
+        <search string="Attendance">
+            <field name="month" string="Month"/>
+        </search>
+    </field>
+</record>
+
+<record model="ir.ui.view" id="meal_attendance_kanban_view">
+    <field name="name">meal.attendance.kanban</field>
+    <field name="model">meal.attendance</field>
+    <field name="arch" type="xml">
+        <kanban default_group_by="partner_id" >
+            <field name="color"/>
+            <field name="month"/>
+            <field name="partner_id"/>
+            <field name="meal_qty"/>
+            <field name="write_date"/>
+            <templates>
+            <t t-name="kanban-box">
+                <div t-attf-class="oe_kanban_color_#{kanban_getcolor(record.color.raw_value)} oe_kanban_card oe_kanban_global_click">
+                    <div class="oe_dropdown_toggle oe_dropdown_kanban" groups="base.group_user">
+                        <span class="oe_e">í</span>
+                        <ul class="oe_dropdown_menu">
+                            <t t-if="widget.view.is_action_enabled('edit')"><li><a type="edit">Edit...</a></li></t>
+                            <t t-if="widget.view.is_action_enabled('delete')"><li><a type="delete">Delete</a></li></t>
+                            <li><ul class="oe_kanban_colorpicker" data-field="color"/></li>
+                        </ul>
+                    </div>
+
+                    <div class="oe_kanban_content">
+                        <div><b><field name="month"/></b></div>
+                        <div>
+                            <field name="partner_id"/><br/>
+                        </div>
+                        <div class="oe_kanban_bottom_right">
+                            <t groups="base.group_user">
+                                <a type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_status oe_kanban_status_red"> </a>
+                                <a type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_status oe_kanban_status_green"> </a>
+                            </t>
+                            <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)" t-att-title="record.partner_id.value" width="30" height="30" class="oe_kanban_avatar"/>
+                        </div>
+                        <div class="oe_kanban_footer_left">
+                            <span groups="base.group_no_one" title="Meal quantity">
+                                <span class="oe_e">N</span>
+                                <t t-esc="Math.round(record.meal_qty.raw_value)"/>
+                            </span>
+                        </div>
+                    </div>
+                    <div class="oe_clear"></div>
+                </div>
+            </t>
+            </templates>
+        </kanban>
+    </field>
+</record>
+
+<record id="meal_attendance_form_view" model="ir.ui.view">
+    <field name="name">meal.attendance.form</field>
+    <field name="model">meal.attendance</field>
+    <field name="arch" type="xml">
+        <form string="Attendance" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="month" class="oe_edit_only"/>
+                    <h1>
+                        <field name="month"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="partner_id"/>
+                    <field name="meal_qty"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="meal_attendance_tree_view" model="ir.ui.view">
+    <field name="name">meal.attendance.brand.list</field>
+    <field name="model">meal.attendance</field>
+    <field name="arch" type="xml">
+        <tree string="Attendance" editable="top">
+            <field name="write_date"/>
+            <field name="month"/>
+            <field name="partner_id"/>
+            <field name="meal_qty"/>
+        </tree>
+    </field>
+</record>
+
+<record id="meal_attendance_action_form" model="ir.actions.act_window">
+    <field name="name">Attendances</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">meal.attendance</field>
+    <field name="context">{'search_default_month': 1}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">kanban,tree,form</field>
+    <field name="search_view_id" ref="meal_attendance_search_view"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_meal_attendance_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="meal_attendance_form_view"/>
+    <field name="act_window_id" ref="meal_attendance_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_meal_attendance_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="meal_attendance_tree_view"/>
+    <field name="act_window_id" ref="meal_attendance_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_meal_attendance_kanban_view">
+    <field name="sequence" eval="0"/>
+    <field name="view_mode">kanban</field>
+    <field name="view_id" ref="meal_attendance_kanban_view"/>
+    <field name="act_window_id" ref="meal_attendance_action_form"/>
+</record>
+
+<menuitem action="meal_attendance_action_form"
+            id="menu_meal_attendance"
+            parent="menu_expense"
+            sequence="0" groups="base.group_no_one"/>
+
+<record id="balance_result_search_view" model="ir.ui.view">
+    <field name="name">balance.result.search</field>
+    <field name="model">balance.result</field>
+    <field name="arch" type="xml">
+        <search string="Balancess">
+            <field name="month" string="Month"/>
+        </search>
+    </field>
+</record>
+
+<record id="balance_result_form_view" model="ir.ui.view">
+    <field name="name">balance.result.form</field>
+    <field name="model">balance.result</field>
+    <field name="arch" type="xml">
+        <form string="Balance" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="month" class="oe_edit_only"/>
+                    <h1>
+                        <field name="month"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="total_paid"/>
+                    <field name="normal_average"/>
+                    <field name="prop_average"/>
+                </group>
+                <group name="partner_balance" colspan="4" string="Balances">
+                    <field name="partner_balance_ids" nolabel="1">
+                        <tree version="7.0">
+                            <field name="partner_id"/>
+                            <field name="amount"/>
+                        </tree>
+                    </field>
+                </group>
+                <group name="transactions" colspan="4" string="Transactions">
+                    <field name="transaction_ids" nolabel="1">
+                        <tree version="7.0">
+                            <field name="ower_id"/>
+                            <field name="dummy1" string="owe"/>
+                            <field name="amount"/>
+                            <field name="dummy2" string="to"/>
+                            <field name="receiver_id"/>
+                        </tree>
+                    </field>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+
+<record id="balance_result_tree_view" model="ir.ui.view">
+    <field name="name">balance.result.list</field>
+    <field name="model">balance.result</field>
+    <field name="arch" type="xml">
+        <tree string="Balances">
+            <field name="month"/>
+            <field name="total_paid"/>
+            <field name="normal_average"/>
+            <field name="prop_average"/>
+        </tree>
+    </field>
+</record>
+
+<record id="balance_result_action_form" model="ir.actions.act_window">
+    <field name="name">Balances</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">balance.result</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="balance_result_search_view"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_balance_result_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="balance_result_form_view"/>
+    <field name="act_window_id" ref="balance_result_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_balance_result_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="balance_result_tree_view"/>
+    <field name="act_window_id" ref="balance_result_action_form"/>
+</record>
+
+<menuitem action="balance_result_action_form"
+            id="menu_balance_result"
+            parent="menu_balance"
+            sequence="0" groups="base.group_no_one"/>
+
+    </data>
+</openerp>
