@@ -66,27 +66,28 @@ class expense_balance(orm.Model):
         expense_obj = self.pool['coloc.expense']
         normal_amount = 0.0
         prop_amount = 0.0
-        partner_expense = {}
+        partner_expenses = {}
         for expense in expense_obj.browse(cr, uid, ids, context=context):
             if expense.month != month:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _('All the expenses should be from the '
                                        'same month, you stupid fuck!'))
             partner_id = expense.partner_id.id
-            if not partner_id in partner_expense.keys():
-                partner_expense[partner_id] = {'normal_amount': 0.0,
+            if not partner_id in partner_expenses.keys():
+                partner_expenses[partner_id] = {'normal_amount': 0.0,
                                                'prop_amount': 0.0}
             if expense.product_id.coloc_type == 'courses':
                 prop_amount += expense.amount
-                partner_expense[partner_id]['prop_amount'] += expense.amount
+                partner_expenses[partner_id]['prop_amount'] += expense.amount
             else:
                 normal_amount += expense.amount
-                partner_expense[partner_id]['normal_amount'] += expense.amount
+                partner_expenses[partner_id]['normal_amount'] += expense.amount
         return normal_amount, prop_amount, partner_expenses
 
     def _prepare_attendance(self, cr, uid, partner_ids, month, context=None):
+        attendance_obj = self.pool['meal.attendance']
         attendance_ids = attendance_obj.search(
-            cr, uid, [('partner_id', 'in', partner_expense.keys()),
+            cr, uid, [('partner_id', 'in', partner_ids),
                       ('month', '=', month)],
             context=context)
         if not attendance_ids:
@@ -144,9 +145,9 @@ class expense_balance(orm.Model):
         return transactions
 
     def _get_transactions(self, cr, uid, partner_balances, context=None):
-        transactions sale._get_exactmatch_transactions(cr, uid,
-                                                       partner_balances,
-                                                       context=context)
+        transactions = self._get_exactmatch_transactions(cr, uid,
+                                                         partner_balances,
+                                                         context=context)
         return transactions
 
     def calculate_expense_balance(self, cr, uid, id, context=None):
@@ -164,7 +165,7 @@ class expense_balance(orm.Model):
         partner_balances, balance_ids = self._get_balances(
             cr, uid, partner_expenses, partner_attendance, normal_average,
             prop_average, context=context)
-        transactions = self._get_transations(cr, uid, partner_balances,
+        transactions = self._get_transactions(cr, uid, partner_balances,
                                              context=context)
         result = {
             'total_paid': normal_amount + prop_amount,

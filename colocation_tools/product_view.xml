@@ -83,12 +83,12 @@
     <field name="model">coloc.expense</field>
     <field name="arch" type="xml">
         <tree string="Expenses" editable="top">
-            <field name="create_date"/>
             <field name="month"/>
             <field name="partner_id"/>
             <field name="product_id"/>
             <field name="amount"/>
             <field name="comment"/>
+            <field name="create_date"/>
         </tree>
     </field>
 </record>
@@ -161,17 +161,24 @@
                             <field name="partner_id"/><br/>
                         </div>
                         <div class="oe_kanban_bottom_right">
-                            <t groups="base.group_user">
-                                <a type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_status oe_kanban_status_red"> </a>
-                                <a type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_status oe_kanban_status_green"> </a>
-                            </t>
-                            <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)" t-att-title="record.partner_id.value" width="30" height="30" class="oe_kanban_avatar"/>
+                            <div class="oe_event_date "><t t-esc="record.write_date.raw_value.getDate()"/>
+                                <t t-esc="record.write_date.raw_value.toString('MMM')"/>
+                                <t t-esc="record.write_date.raw_value.getFullYear()"/>
+                            </div>
+<!--                        <div><b><field name="write_date"/></b></div>-->
+<!--                           <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)" t-att-title="record.partner_id.value" width="30" height="30" class="oe_kanban_avatar"/>-->
                         </div>
                         <div class="oe_kanban_footer_left">
-                            <span groups="base.group_no_one" title="Meal quantity">
+                            <span groups="base.group_no_one" >
                                 <span class="oe_e">N</span>
                                 <t t-esc="Math.round(record.meal_qty.raw_value)"/>
                             </span>
+                            <div>
+                                <t groups="base.group_user">
+                                    <button type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_button">Less</button>
+                                    <button type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_button">More</button>
+                                </t>
+                            </div>
                         </div>
                     </div>
                     <div class="oe_clear"></div>
