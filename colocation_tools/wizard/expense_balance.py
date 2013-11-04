@@ -62,17 +62,12 @@ class expense_balance(orm.Model):
         'month': _get_default_month,
         }
 
-    def calculate_expense_balance(self, cr, uid, id, context=None):
+    def _prepare_partner_expense(self, cr, uid, ids, month, context=None):
         expense_obj = self.pool['coloc.expense']
-        attendance_obj = self.pool['meal.attendance']
-        result_obj = self.pool['balance.result']
-        model_data_obj = self.pool['ir.model.data']
-        wizard = self.browse(cr, uid, id, context=context)[0]
-        month = wizard.month
         normal_amount = 0.0
-        proportional_amount = 0.0
+        prop_amount = 0.0
         partner_expense = {}
-        for expense in expense_obj.browse(cr, uid, context['active_ids'], context=context):
+        for expense in expense_obj.browse(cr, uid, ids, context=context):
             if expense.month != month:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _('All the expenses should be from the '
@@ -80,13 +75,16 @@ class expense_balance(orm.Model):
             partner_id = expense.partner_id.id
             if not partner_id in partner_expense.keys():
                 partner_expense[partner_id] = {'normal_amount': 0.0,
-                                               'proportional_amount': 0.0}
+                                               'prop_amount': 0.0}
             if expense.product_id.coloc_type == 'courses':
-                proportional_amount += expense.amount
-                partner_expense[partner_id]['proportional_amount'] += expense.amount
+                prop_amount += expense.amount
+                partner_expense[partner_id]['prop_amount'] += expense.amount
             else:
                 normal_amount += expense.amount
                 partner_expense[partner_id]['normal_amount'] += expense.amount
+        return normal_amount, prop_amount, partner_expenses
+
+    def _prepare_attendance(self, cr, uid, partner_ids, month, context=None):
         attendance_ids = attendance_obj.search(
             cr, uid, [('partner_id', 'in', partner_expense.keys()),
                       ('month', '=', month)],
@@ -101,17 +99,18 @@ class expense_balance(orm.Model):
         for attendance in attendance_obj.browse(cr, uid, attendance_ids, context=context):
             total_attendance += attendance.meal_qty
             partner_attendance[attendance.partner_id.id] = attendance.meal_qty
-        normal_average = normal_amount/len(partner_expense.keys())
-        prop_average = proportional_amount/total_attendance
+        return total_attendance, partner_attendance
+
+    def _get_balances(self, cr, uid, partner_expenses, partner_attendance, normal_average, prop_average, context=None):
         partner_balances = []
         balance_ids = []
-        for partner_id, expenses in partner_expense.iteritems():
+        for partner_id, expenses in partner_expenses.iteritems():
             if not partner_id in partner_attendance:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _('You have to set up attendance for all '
                                        'partners, you stupid fuck!'))
             partner_normal = normal_average - expenses['normal_amount']
-            partner_prop = (prop_average*partner_attendance[partner_id]) - expenses['proportional_amount']
+            partner_prop = (prop_average*partner_attendance[partner_id]) - expenses['prop_amount']
             partner_balance = partner_normal + partner_prop
             partner_balances.append({
                 'partner_id': partner_id,
@@ -119,7 +118,10 @@ class expense_balance(orm.Model):
             balance_ids.append((0, 0, {
                 'partner_id': partner_id,
                 'amount': partner_balance}))
-        transaction_ids = []
+        return partner_balances, balance_ids
+
+    def _get_exactmatch_transactions(self, cr, uid, partner_balances, context=None):
+        transactions = []
         for balance in partner_balances:
             todel = False
             partner_balance = abs(round(balance['partner_balance'], 3))
@@ -132,20 +134,45 @@ class expense_balance(orm.Model):
                     else:
                         ower = other_balance['partner_id']
                         receiver = balance['partner_id']
-                    transaction_ids.append((0, 0, {
+                    transactions.append((0, 0, {
                         'ower_id': ower,
                         'receiver_id': receiver,
                         'amount': abs(balance['partner_balance'])}))
                     todel = True
             if todel:
                 del partner_balances[0]
+        return transactions
+
+    def _get_transactions(self, cr, uid, partner_balances, context=None):
+        transactions sale._get_exactmatch_transactions(cr, uid,
+                                                       partner_balances,
+                                                       context=context)
+        return transactions
+
+    def calculate_expense_balance(self, cr, uid, id, context=None):
+        result_obj = self.pool['balance.result']
+        model_data_obj = self.pool['ir.model.data']
+        wizard = self.browse(cr, uid, id, context=context)[0]
+        month = wizard.month
+        normal_amount, prop_amount, partner_expenses = self._prepare_partner_expense(
+            cr, uid, context['active_ids'], month, context=context)
+        partner_ids = partner_expenses.keys()
+        total_attendance, partner_attendance = self._prepare_attendance(
+            cr, uid, partner_ids, month, context=context)
+        normal_average = normal_amount/len(partner_ids)
+        prop_average = prop_amount/total_attendance
+        partner_balances, balance_ids = self._get_balances(
+            cr, uid, partner_expenses, partner_attendance, normal_average,
+            prop_average, context=context)
+        transactions = self._get_transations(cr, uid, partner_balances,
+                                             context=context)
         result = {
-            'total_paid': normal_amount + proportional_amount,
+            'total_paid': normal_amount + prop_amount,
             'month': month,
             'normal_average': normal_average,
             'prop_average': prop_average,
             'partner_balance_ids': balance_ids,
-            'transaction_ids': transaction_ids,
+            'transaction_ids': transactions,
             }
         balance_id = result_obj.create(cr, uid, result, context=context)
         model, view_id = model_data_obj.get_object_reference(
