@@ -32,9 +32,11 @@
     'website': 'http://www.akretion.com/',
     'depends': ['product'], 
     'init_xml': [],
-    'update_xml': [ 
+    'update_xml': [
+           'data.xml',
            'product_view.xml',
            'wizard/expense_balance_view.xml',
+           'base_view.xml',
     ],
     'demo_xml': [],
     'installable': True,

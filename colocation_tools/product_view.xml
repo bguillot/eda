@@ -129,6 +129,7 @@
     <field name="arch" type="xml">
         <search string="Attendance">
             <field name="month" string="Month"/>
+            <field name="partner_id"/>
         </search>
     </field>
 </record>
@@ -175,8 +176,8 @@
                             </span>
                             <div>
                                 <t groups="base.group_user">
-                                    <button type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_button">Less</button>
-                                    <button type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_button">More</button>
+                                    <button type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_button">  -  </button>
+                                    <button type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_button">  +  </button>
                                 </t>
                             </div>
                         </div>
@@ -202,6 +203,7 @@
                     </h1>
                 </div>
                 <group name="extra_fields" colspan="4">
+                    <field name="write_date"/>
                     <field name="partner_id"/>
                     <field name="meal_qty"/>
                 </group>
@@ -287,15 +289,17 @@
                     <field name="normal_average"/>
                     <field name="prop_average"/>
                 </group>
-                <group name="partner_balance" colspan="4" string="Balances">
+                <group name="balances" colspan="4" col="4">
+                <group name="partner_balance" colspan="2" string="Balances">
                     <field name="partner_balance_ids" nolabel="1">
                         <tree version="7.0">
                             <field name="partner_id"/>
+                            <field name="total_paid"/>
                             <field name="amount"/>
                         </tree>
                     </field>
                 </group>
-                <group name="transactions" colspan="4" string="Transactions">
+                <group name="transactions" colspan="2" string="Transactions">
                     <field name="transaction_ids" nolabel="1">
                         <tree version="7.0">
                             <field name="ower_id"/>
@@ -305,6 +309,7 @@
                             <field name="receiver_id"/>
                         </tree>
                     </field>
+                </group>
                 </group>
             </sheet>
         </form>

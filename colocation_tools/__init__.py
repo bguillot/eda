@@ -22,5 +22,5 @@
 
 import product
 import wizard
-
+import base
 

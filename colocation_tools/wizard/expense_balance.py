@@ -118,7 +118,8 @@ class expense_balance(orm.Model):
                 'partner_balance': partner_balance})
             balance_ids.append((0, 0, {
                 'partner_id': partner_id,
-                'amount': partner_balance}))
+                'amount': partner_balance,
+                'total_paid': expenses['normal_amount'] + expenses['prop_amount']}))
         return partner_balances, balance_ids
 
     def _get_exactmatch_transactions(self, cr, uid, partner_balances, context=None):

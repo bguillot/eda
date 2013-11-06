@@ -31,11 +31,26 @@ class coloc_expense(orm.Model):
     def _get_default_month(self, cr, uid, context=None):
         return str(date.today().month)
 
+    def _get_default_partner(self, cr, uid, context=None):
+        partner_id = False
+        if uid != 1:
+            partner_id = self.read(cr, uid, uid, ['partner_id'],
+                                   context=context)['partner_id'][0]
+        return partner_id
+
+
     _columns={
-        'product_id': fields.many2one('product.product', string="Produit"),
+        'product_id': fields.many2one(
+            'product.product',
+            'Product'),
         'create_date': fields.datetime('Create date'),
-        'amount': fields.float('amount'),
-        'partner_id': fields.many2one('res.partner', string="Partner"),
+        'amount': fields.float(
+            'Amount',
+            required=True),
+        'partner_id': fields.many2one(
+            'res.partner',
+            'Partner',
+            required=True),
         'comment': fields.char('Comment', size=128),
         'month': fields.selection(
             [('1', 'January'),
@@ -49,11 +64,13 @@ class coloc_expense(orm.Model):
              ('10', 'October'),
              ('11', 'November'),
              ('12', 'December')],
-            'Month'),
+            'Month',
+            required=True),
         }
 
     _defaults={
-        'month': _get_default_month
+        'month': _get_default_month,
+        'partner_id': _get_default_partner,
         }
 
 
@@ -160,9 +177,13 @@ class partner_balance(orm.Model):
     _description = "Partner balance"
 
     _columns={
-        'balance_id': fields.many2one('balance.result', 'Balance'),
+        'balance_id': fields.many2one(
+            'balance.result',
+            'Balance',
+            ondelete="cascade"),
         'partner_id': fields.many2one('res.partner', 'Partner'),
         'amount': fields.float('Amount'),
+        'total_paid': fields.float('Total paid'),
         }
 
 
@@ -171,7 +192,10 @@ class balance_transaction(orm.Model):
     _description = "Balance transaction"
 
     _columns={
-        'balance_id': fields.many2one('balance.result', 'Balance'),
+        'balance_id': fields.many2one(
+            'balance.result',
+            'Balance',
+            ondelete="cascade"),
         'ower_id': fields.many2one('res.partner', 'Ower'),
         'receiver_id': fields.many2one('res.partner', 'Receiver'),
         'amount': fields.float('Amount'),
@@ -183,3 +207,41 @@ class balance_transaction(orm.Model):
         'dummy1': 'owe',
         'dummy2': 'to',
     }
+
+
+class automatic_expense(orm.Model):
+    _name = "automatic.expense"
+    _description = "Automatic Expenses"
+
+    _columns = {
+        'partner_id': fields.many2one(
+            'res.partner',
+            'Partner',
+            required=True),
+        'product_id': fields.many2one(
+            'product.product',
+            'Product',
+            required=True),
+        'amount': fields.float(
+            'Amount',
+            required=True),
+        'active': fields.boolean('Active'),
+        }
+
+    _defaults = {
+        'active': True,
+        }
+
+    def automatic_expense_scheduler(self, cr, uid, context=None):
+        expense_obj = self.pool['coloc.expense']
+        ids = self.search(cr, uid, [], context=context)
+        month = str(date.today().month)
+        for auto_expense in self.browse(cr, uid, ids, context=context):
+            vals = {
+                'month': month,
+                'partner_id': auto_expense.partner_id.id,
+                'product_id': auto_expense.product_id.id,
+                'amount': auto_expense.amount,
+                }
+            expense_obj.create(cr, uid, vals, context=context)
+        return True

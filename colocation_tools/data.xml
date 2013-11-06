@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data noupdate="1">
+
+        <!-- DATA FOR THE OBJECT : automatic_expense -->
+<record forcecreate="True" id="ir_cron_automatic_expense_action" model="ir.cron">
+    <field name="name">Automatic Expenses</field>
+    <field eval="False" name="active"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">1</field>
+    <field name="interval_type">months</field>
+    <field name="numbercall">-1</field>
+    <field eval="False" name="doall"/>
+    <field eval="'automatic.expense'" name="model"/>
+    <field eval="'automatic_expense_scheduler'" name="function"/>
+    <field eval="'()'" name="args"/>
+</record>
+
+        <!-- DATA FOR THE OBJECT : mail.mail -->
+<record forcecreate="True" id="ir_cron_email_remainde_action" model="ir.cron">
+    <field name="name">Expense/Attendance Reminder</field>
+    <field eval="False" name="active"/>
+    <field name="user_id" ref="base.user_root"/>
+    <field name="interval_number">1</field>
+    <field name="interval_type">weeks</field>
+    <field name="numbercall">-1</field>
+    <field eval="False" name="doall"/>
+    <field eval="'mail.mail'" name="model"/>
+    <field eval="'expense_attendance_remainder'" name="function"/>
+    <field eval="'()'" name="args"/>
+</record>
+        <!--Email template -->
+<record id="expense_reminder_template" model="email.template">
+    <field name="name">Expense - Attedance Reminder</field>
+    <field name="email_from">${object.email or 'admin@erpcoloc.com'}</field>
+    <field name="subject">[Erp Coloc] Expense and attendance reminder</field>
+    <field name="email_recipients">${object.roomate_emails}</field>
+    <field name="model_id" ref="base.model_res_company"/>
+    <field name="auto_delete" eval="True"/>
+    <field name="lang">fr_FR</field>
+    <field name="body_html"><![CDATA[
+<div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
+
+    <p>Hello Roomates,</p>
+
+<p>Don't forget to add your expenses and meal attendances in the coloc erp ! </p>
+
+    <br/>
+    <p>If you have any question, do not hesitate to contact us.</p>
+    <p>Thank you for choosing ${object.name or 'us'}!</p>
+    <br/>
+    <br/>
+    <div style="width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;">
+        <h3 style="margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;">
+            <strong style="text-transform:uppercase;">${object.name}</strong></h3>
+    </div>
+    <div style="width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;">
+        <span style="color: #222; margin-bottom: 5px; display: block; ">
+        % if object.street:
+            ${object.street}<br/>
+        % endif
+        % if object.street2:
+            ${object.street2}<br/>
+        % endif
+        % if object.city or object.zip:
+            ${object.zip} ${object.city}<br/>
+        % endif
+        % if object.country_id:
+            ${object.state_id and ('%s, ' % object.state_id.name) or ''} ${object.country_id.name or ''}<br/>
+        % endif
+        </span>
+        % if object.phone:
+            <div style="margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; ">
+                Phone:&nbsp; ${object.phone}
+            </div>
+        % endif
+        % if object.website:
+            <div>
+                Web :&nbsp;<a href="${object.website}">${object.website}</a>
+            </div>
+        %endif
+        <p></p>
+    </div>
+</div>
+        ]]></field>
+    </record>
+
+    </data>
+</openerp>

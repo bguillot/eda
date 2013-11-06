@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!-- INHERITED VIEW FOR THE OBJECT : res.company -->
+
+<record id="view_company_form" model="ir.ui.view">
+    <field name="name">coloc.company.form</field>
+    <field name="model">res.company</field>
+    <field name="inherit_id" ref="base.view_company_form"/>
+    <field name="arch" type="xml">
+        <xpath expr="//page[@string='Configuration']" position="after">
+            <page name="coloc_conf" string="Colocation configuration">
+                <group name="roomates" string="Roomates">
+                    <field name="roomate_ids" nolabel="1"/>
+                </group>
+            </page>
+        </xpath>
+    </field>
+</record>
+
+    </data>
+</openerp>
