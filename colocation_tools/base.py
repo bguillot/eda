@@ -66,6 +66,7 @@ class res_company(orm.Model):
                 'res.partner': (_get_company_from_partner, ['email'], 20),
                 }),
         }
+
     def expense_attendance_reminder(self, cr, uid, context=None):
         data_obj = self.pool['ir.model.data']
         template_obj = self.pool['email.template']
