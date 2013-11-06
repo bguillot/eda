@@ -34,7 +34,7 @@
           sequence="0"/>
 
 <menuitem id="menu_balance"
-          name="Balancess"
+          name="Balances"
           parent="menu_coloc"
           sequence="1"/>
 
@@ -266,7 +266,7 @@
     <field name="name">balance.result.search</field>
     <field name="model">balance.result</field>
     <field name="arch" type="xml">
-        <search string="Balancess">
+        <search string="Balances">
             <field name="month" string="Month"/>
         </search>
     </field>
@@ -358,6 +358,92 @@
 <menuitem action="balance_result_action_form"
             id="menu_balance_result"
             parent="menu_balance"
+            sequence="0" groups="base.group_no_one"/>
+
+<menuitem id="menu_coloc_configuration"
+          name="Configuration"
+          parent="menu_coloc"
+          sequence="100"/>
+
+<menuitem id="menu_expense_config"
+          name="Expenses"
+          parent="menu_coloc_configuration"
+          sequence="1"/>
+
+<record id="automatic_expense_search_view" model="ir.ui.view">
+    <field name="name">automatic.expense.search</field>
+    <field name="model">automatic.expense</field>
+    <field name="arch" type="xml">
+        <search string="Expenses">
+            <field name="partner_id"/>
+            <field name="product_id"/>
+        </search>
+    </field>
+</record>
+
+<record id="automatic_expense_form_view" model="ir.ui.view">
+    <field name="name">automatic.expense.form</field>
+    <field name="model">automatic.expense</field>
+    <field name="arch" type="xml">
+        <form string="Automatic Expense" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="product_id" class="oe_edit_only"/>
+                    <h1>
+                        <field name="product_id"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="partner_id"/>
+                    <field name="amount"/>
+                    <field name="active"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+
+<record id="automatic_expense_tree_view" model="ir.ui.view">
+    <field name="name">automatic_expense.list</field>
+    <field name="model">automatic.expense</field>
+    <field name="arch" type="xml">
+        <tree string="Automatic Expense">
+            <field name="product_id"/>
+            <field name="partner_id"/>
+            <field name="amount"/>
+        </tree>
+    </field>
+</record>
+
+<record id="automatic_expense_action_form" model="ir.actions.act_window">
+    <field name="name">Automatic Expenses</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">automatic.expense</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="automatic_expense_search_view"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_automatic_expense_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="automatic_expense_form_view"/>
+    <field name="act_window_id" ref="automatic_expense_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_automatic_expense_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="automatic_expense_tree_view"/>
+    <field name="act_window_id" ref="automatic_expense_action_form"/>
+</record>
+
+<menuitem action="automatic_expense_action_form"
+            id="menu_automatic_expense"
+            parent="menu_expense_config"
             sequence="0" groups="base.group_no_one"/>
 
     </data>
