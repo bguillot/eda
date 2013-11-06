@@ -237,11 +237,18 @@ class automatic_expense(orm.Model):
         ids = self.search(cr, uid, [], context=context)
         month = str(date.today().month)
         for auto_expense in self.browse(cr, uid, ids, context=context):
-            vals = {
-                'month': month,
-                'partner_id': auto_expense.partner_id.id,
-                'product_id': auto_expense.product_id.id,
-                'amount': auto_expense.amount,
-                }
-            expense_obj.create(cr, uid, vals, context=context)
+            expense_id = expense_obj.search(cr, uid,
+                                            [('month', '=', month),
+                                             ('partner_id' '=', auto_expense.partner_id.id),
+                                             ('product_id', '=', auto_expense.product_id.id),
+                                             ('amount', '=', auto_expense.amount)],
+                                            context=context)
+            if not expense_id:
+                vals = {
+                    'month': month,
+                    'partner_id': auto_expense.partner_id.id,
+                    'product_id': auto_expense.product_id.id,
+                    'amount': auto_expense.amount,
+                    }
+                expense_obj.create(cr, uid, vals, context=context)
         return True
