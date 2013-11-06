@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+<menuitem name="Coloc"
+          id="menu_coloc"
+          groups="base.group_no_one"/>
+
+<menuitem id="menu_expense"
+          name="Expences"
+          parent="menu_coloc"
+          sequence="5"/>
+
+<menuitem id="menu_balance"
+          name="Balances"
+          parent="menu_coloc"
+          sequence="10"/>
+
+<menuitem id="menu_partner_coloc"
+          parent="menu_coloc"
+          name="Partners"
+          sequence="0"/>
+
+<menuitem id="menu_partner_coloc_action"
+          parent="menu_partner_coloc"
+          sequence="1"
+          action="menu_partner_coloc_action_form"/>
+
+<menuitem action="balance_result_action_form"
+          id="menu_balance_result"
+          parent="menu_balance"
+          sequence="0"
+          groups="base.group_no_one"/>
+
+<menuitem id="menu_coloc_configuration"
+          name="Configuration"
+          parent="menu_coloc"
+          sequence="100"/>
+
+<menuitem id="menu_expense_config"
+          name="Expenses"
+          parent="menu_coloc_configuration"
+          sequence="1"/>
+
+<menuitem action="coloc_expense_action_form"
+          id="menu_coloc_expense"
+          parent="menu_expense"
+          sequence="0"
+          groups="base.group_no_one"/>
+
+<menuitem action="meal_attendance_action_form"
+          id="menu_meal_attendance"
+          parent="menu_expense"
+          sequence="0"
+          groups="base.group_no_one"/>
+
+<menuitem action="automatic_expense_action_form"
+          id="menu_automatic_expense"
+          parent="menu_expense_config"
+          sequence="0"
+          groups="base.group_no_one"/>
+
+    </data>
+</openerp>

@@ -24,24 +24,6 @@
 
         <!--  VIEW FOR THE OBJECT : coloc.expense -->
 
-<menuitem name="Coloc"
-          id="menu_coloc"
-          groups="base.group_no_one"/>
-
-<menuitem id="menu_expense"
-          name="Expences"
-          parent="menu_coloc"
-          sequence="0"/>
-
-<menuitem id="menu_balance"
-          name="Balances"
-          parent="menu_coloc"
-          sequence="1"/>
-
-
-<menuitem id="menu_partner_form_coloc" 
-          parent="menu_coloc" action="base.action_partner_form" sequence="10"/>
-
 <record id="coloc_expense_search_view" model="ir.ui.view">
     <field name="name">coloc.expense.search</field>
     <field name="model">coloc.expense</field>
@@ -118,11 +100,6 @@
     <field name="act_window_id" ref="coloc_expense_action_form"/>
 </record>
 
-<menuitem action="coloc_expense_action_form"
-            id="menu_coloc_expense"
-            parent="menu_expense"
-            sequence="0" groups="base.group_no_one"/>
-
 <record id="meal_attendance_search_view" model="ir.ui.view">
     <field name="name">meal.attendance.search</field>
     <field name="model">meal.attendance</field>
@@ -133,6 +110,8 @@
         </search>
     </field>
 </record>
+
+        <!--  VIEW FOR THE OBJECT : meal.attendance -->
 
 <record model="ir.ui.view" id="meal_attendance_kanban_view">
     <field name="name">meal.attendance.kanban</field>
@@ -257,10 +236,7 @@
     <field name="act_window_id" ref="meal_attendance_action_form"/>
 </record>
 
-<menuitem action="meal_attendance_action_form"
-            id="menu_meal_attendance"
-            parent="menu_expense"
-            sequence="0" groups="base.group_no_one"/>
+    <!--  VIEW FOR THE OBJECT : balance.result -->
 
 <record id="balance_result_search_view" model="ir.ui.view">
     <field name="name">balance.result.search</field>
@@ -316,7 +292,6 @@
     </field>
 </record>
 
-
 <record id="balance_result_tree_view" model="ir.ui.view">
     <field name="name">balance.result.list</field>
     <field name="model">balance.result</field>
@@ -355,26 +330,13 @@
     <field name="act_window_id" ref="balance_result_action_form"/>
 </record>
 
-<menuitem action="balance_result_action_form"
-            id="menu_balance_result"
-            parent="menu_balance"
-            sequence="0" groups="base.group_no_one"/>
-
-<menuitem id="menu_coloc_configuration"
-          name="Configuration"
-          parent="menu_coloc"
-          sequence="100"/>
-
-<menuitem id="menu_expense_config"
-          name="Expenses"
-          parent="menu_coloc_configuration"
-          sequence="1"/>
+    <!--  VIEW FOR THE OBJECT : automatic.expense -->
 
 <record id="automatic_expense_search_view" model="ir.ui.view">
     <field name="name">automatic.expense.search</field>
     <field name="model">automatic.expense</field>
     <field name="arch" type="xml">
-        <search string="Expenses">
+        <search string="Automatic Expenses">
             <field name="partner_id"/>
             <field name="product_id"/>
         </search>
@@ -402,7 +364,6 @@
         </form>
     </field>
 </record>
-
 
 <record id="automatic_expense_tree_view" model="ir.ui.view">
     <field name="name">automatic_expense.list</field>
@@ -441,10 +402,6 @@
     <field name="act_window_id" ref="automatic_expense_action_form"/>
 </record>
 
-<menuitem action="automatic_expense_action_form"
-            id="menu_automatic_expense"
-            parent="menu_expense_config"
-            sequence="0" groups="base.group_no_one"/>
 
     </data>
 </openerp>

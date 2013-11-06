@@ -34,9 +34,10 @@
     'init_xml': [],
     'update_xml': [
            'data.xml',
-           'product_view.xml',
-           'wizard/expense_balance_view.xml',
            'base_view.xml',
+           'coloc_menu.xml',
+           'coloc_view.xml',
+           'wizard/expense_balance_view.xml',
     ],
     'demo_xml': [],
     'installable': True,
