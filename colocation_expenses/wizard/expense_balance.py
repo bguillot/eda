@@ -76,7 +76,7 @@ class expense_balance(orm.Model):
             if not partner_id in partner_expenses.keys():
                 partner_expenses[partner_id] = {'normal_amount': 0.0,
                                                'prop_amount': 0.0}
-            if expense.product_id.coloc_type == 'courses':
+            if expense.product_id.expense_type == 'courses':
                 prop_amount += expense.amount
                 partner_expenses[partner_id]['prop_amount'] += expense.amount
             else:
@@ -172,13 +172,14 @@ class expense_balance(orm.Model):
             'total_paid': normal_amount + prop_amount,
             'month': month,
             'normal_average': normal_average,
+            'prop_total': prop_amount,
             'prop_average': prop_average,
             'partner_balance_ids': balance_ids,
             'transaction_ids': transactions,
             }
         balance_id = result_obj.create(cr, uid, result, context=context)
         model, view_id = model_data_obj.get_object_reference(
-            cr, uid, 'colocation_tools', 'balance_result_form_view')
+            cr, uid, 'colocation_expenses', 'balance_result_form_view')
         return {
             'view_type': 'form',
             'view_mode': 'form',

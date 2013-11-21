@@ -17,8 +17,29 @@
     <field name="inherit_id" ref="product.product_normal_form_view"/>
     <field name="arch" type="xml">
         <field name="type" position="after">
-            <field name="coloc_type"/>
+            <field name="expense_type"
+                attrs="{'invisible': [('type', '!=', 'expense')], 'required': [('type', '=', 'expense')]}"/>
         </field>
+    </field>
+</record>
+
+<record id="coloc_expense_product_action" model="ir.actions.act_window">
+    <field name="name">Products Expenses</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">product.product</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form,kanban</field>
+    <field name="context">{"default_type":"expense"}</field>
+    <field name="domain">[('type','=','expense')]</field>
+    <field name="view_id" ref="product.product_product_tree_view"/>
+    <field name="search_view_id" ref="product.product_search_form_view"/>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to define a new product.
+      </p><p>
+        You must define a product for everything you buy or sell,
+        whether it's a physical product, a consumable or service.
+      </p>
     </field>
 </record>
 
@@ -33,8 +54,14 @@
             <field name="partner_id"/>
             <newline/>
             <group expand="1" string="Group By...">
-                <filter string="Partner" name="group_partner_id" icon="terp-personal" context="{'group_by':'partner_id'}"/>
-                <filter string="Month" icon="terp-go-month" context="{'group_by':'month'}" help="Order of Month"/>
+                <filter string="Partner"
+                    name="group_partner_id"
+                    icon="terp-personal"
+                    context="{'group_by':'partner_id'}"/>
+                <filter string="Month"
+                    icon="terp-go-month"
+                    context="{'group_by':'month'}"
+                    help="Order of Month"/>
             </group>
         </search>
     </field>
@@ -67,7 +94,8 @@
         <tree string="Expenses" editable="top">
             <field name="month"/>
             <field name="partner_id"/>
-            <field name="product_id"/>
+            <field name="product_id"
+                   context="{'force_type':'expense'})"/>
             <field name="amount"/>
             <field name="comment"/>
             <field name="create_date"/>
@@ -155,8 +183,14 @@
                             </span>
                             <div>
                                 <t groups="base.group_user">
-                                    <button type="object" string="Remove meal" name="remove_meal_attendance" class="oe_kanban_button">  -  </button>
-                                    <button type="object" string="Add meal" name="add_meal_attendance" class="oe_kanban_button">  +  </button>
+                                    <button type="object"
+                                        string="Remove meal"
+                                        name="remove_meal_attendance"
+                                        class="oe_kanban_button">  -  </button>
+                                    <button type="object"
+                                        string="Add meal"
+                                        name="add_meal_attendance"
+                                        class="oe_kanban_button">  +  </button>
                                 </t>
                             </div>
                         </div>
@@ -263,6 +297,7 @@
                 <group name="extra_fields" colspan="4">
                     <field name="total_paid"/>
                     <field name="normal_average"/>
+                    <field name="prop_total"/>
                     <field name="prop_average"/>
                 </group>
                 <group name="balances" colspan="4" col="4">
@@ -300,6 +335,7 @@
             <field name="month"/>
             <field name="total_paid"/>
             <field name="normal_average"/>
+            <field name="prop_total"/>
             <field name="prop_average"/>
         </tree>
     </field>
@@ -401,7 +437,6 @@
     <field name="view_id" ref="automatic_expense_tree_view"/>
     <field name="act_window_id" ref="automatic_expense_action_form"/>
 </record>
-
 
     </data>
 </openerp>

@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 #
-#   colocation_tools for OpenERP
+#   colocation_expenses for OpenERP
 #   Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
 #   @author Benoît GUILLOT <benoit.guillot@akretion.com>
 #
@@ -23,4 +23,4 @@
 import product
 import wizard
 import base
-
+import expense

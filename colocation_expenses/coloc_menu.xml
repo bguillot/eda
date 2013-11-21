@@ -9,29 +9,15 @@
 <openerp>
     <data>
 
-<menuitem name="Coloc"
-          id="menu_coloc"
-          groups="base.group_no_one"/>
-
 <menuitem id="menu_expense"
           name="Expences"
-          parent="menu_coloc"
+          parent="base_colocation_tools.menu_coloc"
           sequence="5"/>
 
 <menuitem id="menu_balance"
           name="Balances"
-          parent="menu_coloc"
+          parent="base_colocation_tools.menu_coloc"
           sequence="10"/>
-
-<menuitem id="menu_partner_coloc"
-          parent="menu_coloc"
-          name="Partners"
-          sequence="0"/>
-
-<menuitem id="menu_partner_coloc_action"
-          parent="menu_partner_coloc"
-          sequence="1"
-          action="menu_partner_coloc_action_form"/>
 
 <menuitem action="balance_result_action_form"
           id="menu_balance_result"
@@ -39,14 +25,9 @@
           sequence="0"
           groups="base.group_no_one"/>
 
-<menuitem id="menu_coloc_configuration"
-          name="Configuration"
-          parent="menu_coloc"
-          sequence="100"/>
-
 <menuitem id="menu_expense_config"
           name="Expenses"
-          parent="menu_coloc_configuration"
+          parent="base_colocation_tools.menu_coloc_configuration"
           sequence="1"/>
 
 <menuitem action="coloc_expense_action_form"
@@ -66,6 +47,11 @@
           parent="menu_expense_config"
           sequence="0"
           groups="base.group_no_one"/>
+
+<menuitem id="menu_coloc_product_expense_action"
+          parent="menu_expense"
+          sequence="100"
+          action="coloc_expense_product_action"/>
 
     </data>
 </openerp>

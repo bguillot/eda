@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 #
-#   colocation_tools for OpenERP
+#   base_colocation_tools for OpenERP
 #   Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
 #   @author Benoît GUILLOT <benoit.guillot@akretion.com>
 #
@@ -20,27 +20,4 @@
 #
 ###############################################################################
 
-
-
-{
-    'name': 'colocation_tools',
-    'version': '0.1',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """empty""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': ['product'], 
-    'init_xml': [],
-    'update_xml': [
-           'data.xml',
-           'base_view.xml',
-           'coloc_menu.xml',
-           'coloc_view.xml',
-           'wizard/expense_balance_view.xml',
-    ],
-    'demo_xml': [],
-    'installable': True,
-    'active': False,
-}
-
+import base

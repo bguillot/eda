@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 ###############################################################################
 #
-#   colocation_tools for OpenERP
+#   base_colocation_tools for OpenERP
 #   Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
 #   @author Benoît GUILLOT <benoit.guillot@akretion.com>
 #
@@ -21,7 +21,6 @@
 ###############################################################################
 
 from openerp.osv import fields, orm
-from datetime import datetime, date
 
 
 class res_company(orm.Model):
@@ -67,11 +66,3 @@ class res_company(orm.Model):
                 }),
         }
 
-    def expense_attendance_reminder(self, cr, uid, context=None):
-        data_obj = self.pool['ir.model.data']
-        template_obj = self.pool['email.template']
-        model, template_id = data_obj.get_object_reference(cr, uid,
-                'colocation_tools', 'expense_reminder_template')
-        template_obj.send_mail(cr, uid, template_id, 1, force_send=False,
-                               context=context)
-        return True

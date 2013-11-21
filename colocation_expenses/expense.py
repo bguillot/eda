@@ -42,7 +42,8 @@ class coloc_expense(orm.Model):
     _columns={
         'product_id': fields.many2one(
             'product.product',
-            'Product'),
+            'Product',
+            domain="[('type', '=', 'expense')]"),
         'create_date': fields.datetime('Create date'),
         'amount': fields.float(
             'Amount',
@@ -123,19 +124,6 @@ class meal_attendance(orm.Model):
         return True
 
 
-class product_product(orm.Model):
-    _inherit="product.product"
-
-    _columns={
-        'coloc_type': fields.selection(
-            [('courses', 'Courses'),
-             ('fournitures', 'Fournitures'),
-             ('charges', 'Charges'),
-             ('autres', 'Autres')],
-            'Coloc type')
-        }
-
-
 class balance_result(orm.Model):
     _name = "balance.result"
     _description = "Balance Result"
@@ -156,6 +144,7 @@ class balance_result(orm.Model):
              ('12', 'December')],
             'month'),
         'normal_average': fields.float('Normal average'),
+        'prop_total': fields.float('Total propostionnal'),
         'prop_average': fields.float('Proportional average'),
         'partner_balance_ids': fields.one2many(
             'partner.balance',
