@@ -38,7 +38,6 @@ class coloc_expense(orm.Model):
                                    context=context)['partner_id'][0]
         return partner_id
 
-
     _columns={
         'product_id': fields.many2one(
             'product.product',
