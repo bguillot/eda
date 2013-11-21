@@ -31,8 +31,8 @@
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
     'depends': ['base'], 
-    'init_xml': [],
-    'update_xml': [
+    'data': [
+           'security/colocation_security.xml',
            'base_view.xml',
            'coloc_menu.xml',
     ],

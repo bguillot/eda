@@ -47,7 +47,7 @@ class product_template(orm.Model):
         if context.get('force_type'):
             product_type = context['force_type']
         return product_type
-    
+
     _defaults = {
         'type': _get_default_type,
         }

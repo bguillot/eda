@@ -35,6 +35,7 @@
         'procurement',
         ], 
     'data': [
+           'security/ir.model.access.csv',
            'data.xml',
            'coloc_view.xml',
            'coloc_menu.xml',

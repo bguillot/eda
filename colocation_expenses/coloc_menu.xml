@@ -23,7 +23,7 @@
           id="menu_balance_result"
           parent="menu_balance"
           sequence="0"
-          groups="base.group_no_one"/>
+          groups="base_colocation_tools.group_roomates"/>
 
 <menuitem id="menu_expense_config"
           name="Expenses"
@@ -34,19 +34,19 @@
           id="menu_coloc_expense"
           parent="menu_expense"
           sequence="0"
-          groups="base.group_no_one"/>
+          groups="base_colocation_tools.group_roomates"/>
 
 <menuitem action="meal_attendance_action_form"
           id="menu_meal_attendance"
           parent="menu_expense"
           sequence="0"
-          groups="base.group_no_one"/>
+          groups="base_colocation_tools.group_roomates"/>
 
 <menuitem action="automatic_expense_action_form"
           id="menu_automatic_expense"
           parent="menu_expense_config"
           sequence="0"
-          groups="base.group_no_one"/>
+          groups="base_colocation_tools.group_roomates"/>
 
 <menuitem id="menu_coloc_product_expense_action"
           parent="menu_expense"

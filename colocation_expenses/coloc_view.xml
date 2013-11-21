@@ -98,7 +98,7 @@
                    context="{'force_type':'expense'})"/>
             <field name="amount"/>
             <field name="comment"/>
-            <field name="create_date"/>
+            <field name="create_date" readonly="1"/>
         </tree>
     </field>
 </record>
