@@ -33,8 +33,9 @@ class coloc_expense(orm.Model):
 
     def _get_default_partner(self, cr, uid, context=None):
         partner_id = False
+        user_obj = self.pool['res.users']
         if uid != 1:
-            partner_id = self.read(cr, uid, uid, ['partner_id'],
+            partner_id = user_obj.read(cr, uid, uid, ['partner_id'],
                                    context=context)['partner_id'][0]
         return partner_id
 
