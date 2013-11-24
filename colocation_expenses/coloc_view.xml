@@ -165,7 +165,11 @@
                     </div>
 
                     <div class="oe_kanban_content">
-                        <div><b><field name="month"/></b></div>
+                        <div>
+                            <img t-att-src="kanban_image('res.partner', 'image', record.partner_id.raw_value)"
+                                t-att-title="record.partner_id.value" width="30" height="30" class="oe_kanban_avatar"/>
+                           <b><field name="month"/></b>
+                       </div>
                         <div>
                             <field name="partner_id"/><br/>
                         </div>
@@ -174,8 +178,6 @@
                                 <t t-esc="record.write_date.raw_value.toString('MMM')"/>
                                 <t t-esc="record.write_date.raw_value.getFullYear()"/>
                             </div>
-<!--                        <div><b><field name="write_date"/></b></div>-->
-<!--                           <img t-att-src="kanban_image('res.partner', 'image_small', record.partner_id.raw_value)" t-att-title="record.partner_id.value" width="30" height="30" class="oe_kanban_avatar"/>-->
                         </div>
                         <div class="oe_kanban_footer_left">
                             <span groups="base.group_no_one" >
