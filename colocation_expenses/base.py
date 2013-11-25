@@ -30,7 +30,7 @@ class res_company(orm.Model):
         data_obj = self.pool['ir.model.data']
         template_obj = self.pool['email.template']
         model, template_id = data_obj.get_object_reference(cr, uid,
-                'colocation_tools', 'expense_reminder_template')
+                'colocation_expenses', 'expense_reminder_template')
         template_obj.send_mail(cr, uid, template_id, 1, force_send=False,
                                context=context)
         return True
