@@ -37,10 +37,11 @@ class res_company(orm.Model):
         for company in self.browse(cr, uid, ids, context=context):
             emails = ''
             for roomate in company.roomate_ids:
-                if emails:
-                    emails = emails + ', ' + roomate.email
-                else:
-                    emails = roomate.email
+                if roomate.email:
+                    if emails:
+                        emails = emails + ', ' + roomate.email
+                    else:
+                        emails = roomate.email
             res[company.id] = emails
         return res
 
