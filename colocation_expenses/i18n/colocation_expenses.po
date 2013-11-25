@@ -1,0 +1,508 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* colocation_expenses
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-25 08:49+0000\n"
+"PO-Revision-Date: 2013-11-25 08:49+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: colocation_expenses
+#: code:addons/colocation_expenses/wizard/expense_balance.py:111
+#, python-format
+msgid "You have to set up attendance for all partners, you stupid fuck!"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:product.product,expense_type:0
+msgid "Fournitures"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "Attendance"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:automatic.expense:0
+msgid "Automatic Expense"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,total_paid:0
+#: field:partner.balance,total_paid:0
+msgid "Total paid"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: view:coloc.expense:0
+#: field:coloc.expense,month:0
+#: field:expense.balance,month:0
+#: view:meal.attendance:0
+msgid "Month"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: field:balance.transaction,dummy1:0
+msgid "owe"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,partner_balance_ids:0
+#: model:ir.model,name:colocation_expenses.model_partner_balance
+msgid "Partner balance"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.transaction,receiver_id:0
+msgid "Receiver"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:coloc.expense:0
+msgid "Order of Month"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,prop_total:0
+msgid "Total propostionnal"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,month:0
+#: field:meal.attendance,month:0
+msgid "month"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:coloc.expense:0
+msgid "Group By..."
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.actions.act_window,help:colocation_expenses.coloc_expense_product_action
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"        Click to define a new product.\n"
+"      </p><p>\n"
+"        You must define a product for everything you buy or sell,\n"
+"        whether it's a physical product, a consumable or service.\n"
+"      </p>\n"
+"    "
+msgstr ""
+
+#. module: colocation_expenses
+#: field:coloc.expense,create_date:0
+msgid "Create date"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "í"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.actions.act_window,name:colocation_expenses.coloc_expense_product_action
+#: model:ir.ui.menu,name:colocation_expenses.menu_coloc_product_expense_action
+msgid "Products Expenses"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:coloc.expense:0
+#: model:ir.actions.act_window,name:colocation_expenses.coloc_expense_action_form
+#: model:ir.ui.menu,name:colocation_expenses.menu_coloc_expense
+#: model:ir.ui.menu,name:colocation_expenses.menu_expense_config
+msgid "Expenses"
+msgstr ""
+
+#. module: colocation_expenses
+#: code:addons/colocation_expenses/wizard/expense_balance.py:95
+#, python-format
+msgid "You have to set up attendance for this month, you stupid fuck!"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:automatic.expense:0
+#: model:ir.actions.act_window,name:colocation_expenses.automatic_expense_action_form
+#: model:ir.model,name:colocation_expenses.model_automatic_expense
+#: model:ir.ui.menu,name:colocation_expenses.menu_automatic_expense
+msgid "Automatic Expenses"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:automatic.expense,product_id:0
+#: field:coloc.expense,product_id:0
+#: model:ir.model,name:colocation_expenses.model_product_product
+msgid "Product"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.actions.act_window,name:colocation_expenses.meal_attendance_action_form
+#: model:ir.ui.menu,name:colocation_expenses.menu_meal_attendance
+msgid "Attendances"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "March"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "August"
+msgstr ""
+
+#. module: colocation_expenses
+#: sql_constraint:balance.result:0
+msgid "Balance has to be uniq per month!"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: field:balance.result,transaction_ids:0
+msgid "Transactions"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "October"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "June"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:expense.balance:0
+msgid "Calculate expense balance"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_balance_transaction
+msgid "Balance transaction"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: field:balance.transaction,dummy2:0
+msgid "to"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,prop_average:0
+msgid "Proportional average"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:automatic.expense,active:0
+msgid "Active"
+msgstr ""
+
+#. module: colocation_expenses
+#: sql_constraint:meal.attendance:0
+msgid "Balance has to be uniq per partner and per month!"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.actions.act_window,name:colocation_expenses.action_expense_balance
+msgid "Expense balance"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_meal_attendance
+msgid "Meal attendance"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.ui.menu,name:colocation_expenses.menu_expense
+msgid "Expences"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "February"
+msgstr ""
+
+#. module: colocation_expenses
+#: code:addons/colocation_expenses/wizard/expense_balance.py:72
+#: code:addons/colocation_expenses/wizard/expense_balance.py:94
+#: code:addons/colocation_expenses/wizard/expense_balance.py:110
+#, python-format
+msgid "Keyboard/Chair error"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_product_template
+msgid "Product Template"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:meal.attendance,write_date:0
+msgid "Write date"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:expense.balance:0
+msgid "Balance expense"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:product.product,expense_type:0
+msgid "Charges"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "January"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "November"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_res_company
+msgid "Companies"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:email.template,subject:colocation_expenses.expense_reminder_template
+msgid "[Erp Coloc] Expense and attendance reminder"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "April"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:automatic.expense,amount:0
+#: field:balance.transaction,amount:0
+#: field:coloc.expense,amount:0
+#: field:partner.balance,amount:0
+msgid "Amount"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:automatic.expense,partner_id:0
+#: view:coloc.expense:0
+#: field:coloc.expense,partner_id:0
+#: field:meal.attendance,partner_id:0
+#: field:partner.balance,partner_id:0
+msgid "Partner"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_balance_result
+msgid "Balance Result"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "Add meal"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: field:balance.transaction,balance_id:0
+#: field:partner.balance,balance_id:0
+msgid "Balance"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "July"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "Septembre"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "Delete"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:coloc.expense,comment:0
+msgid "Comment"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:meal.attendance,color:0
+msgid "Color Index"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_coloc_expense
+msgid "Coloc Expenses"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:email.template,body_html:colocation_expenses.expense_reminder_template
+msgid "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <p>Hello Roomates,</p>\n"
+"\n"
+"<p>Don't forget to add your expenses and meal attendances in the coloc erp ! </p>\n"
+"\n"
+"    <br/>\n"
+"    <p>If you have any question, do not hesitate to contact us.</p>\n"
+"    <p>Thank you for choosing ${object.name or 'us'}!</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${object.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if object.street:\n"
+"            ${object.street}<br/>\n"
+"        % endif\n"
+"        % if object.street2:\n"
+"            ${object.street2}<br/>\n"
+"        % endif\n"
+"        % if object.city or object.zip:\n"
+"            ${object.zip} ${object.city}<br/>\n"
+"        % endif\n"
+"        % if object.country_id:\n"
+"            ${object.state_id and ('%s, ' % object.state_id.name) or ''} ${object.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if object.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Phone:&nbsp; ${object.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if object.website:\n"
+"            <div>\n"
+"                Web :&nbsp;<a href=\"${object.website}\">${object.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"        "
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:product.product,expense_type:0
+msgid "Courses"
+msgstr ""
+
+#. module: colocation_expenses
+#: code:addons/colocation_expenses/wizard/expense_balance.py:73
+#, python-format
+msgid "All the expenses should be from the same month, you stupid fuck!"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:balance.result,month:0
+#: selection:coloc.expense,month:0
+#: selection:expense.balance,month:0
+#: selection:meal.attendance,month:0
+msgid "December"
+msgstr ""
+
+#. module: colocation_expenses
+#: selection:product.product,expense_type:0
+msgid "Autres"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:meal.attendance,meal_qty:0
+msgid "Meal quantity"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.result,normal_average:0
+msgid "Normal average"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:balance.result:0
+#: model:ir.actions.act_window,name:colocation_expenses.balance_result_action_form
+#: model:ir.ui.menu,name:colocation_expenses.menu_balance
+#: model:ir.ui.menu,name:colocation_expenses.menu_balance_result
+msgid "Balances"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:product.product,expense_type:0
+msgid "Expense type"
+msgstr ""
+
+#. module: colocation_expenses
+#: field:balance.transaction,ower_id:0
+msgid "Ower"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:expense.balance:0
+msgid "Cancel"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "Edit..."
+msgstr ""
+
+#. module: colocation_expenses
+#: view:meal.attendance:0
+msgid "Remove meal"
+msgstr ""
+
+#. module: colocation_expenses
+#: model:ir.model,name:colocation_expenses.model_expense_balance
+msgid "Expense Balance"
+msgstr ""
+
+#. module: colocation_expenses
+#: view:expense.balance:0
+msgid "or"
+msgstr ""
+

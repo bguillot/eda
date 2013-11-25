@@ -51,7 +51,7 @@ class expense_balance(orm.Model):
              ('6', 'June'),
              ('7', 'July'),
              ('8', 'August'),
-             ('9', 'Septembre'),
+             ('9', 'September'),
              ('10', 'October'),
              ('11', 'November'),
              ('12', 'December')],
@@ -154,6 +154,7 @@ class expense_balance(orm.Model):
     def calculate_expense_balance(self, cr, uid, id, context=None):
         result_obj = self.pool['balance.result']
         model_data_obj = self.pool['ir.model.data']
+        partner_obj = self.pool['res.partner']
         wizard = self.browse(cr, uid, id, context=context)[0]
         month = wizard.month
         normal_amount, prop_amount, partner_expenses = self._prepare_partner_expense(
@@ -168,6 +169,18 @@ class expense_balance(orm.Model):
             prop_average, context=context)
         transactions = self._get_transactions(cr, uid, partner_balances,
                                              context=context)
+        synthesis = ''
+        for transaction in transactions:
+            amount = round(transaction[2]['amount'], 2)
+            ower = partner_obj.read(cr, uid,
+                                    transaction[2]['ower_id'],
+                                    ['name'],
+                                    context=context)['name']
+            receiver = partner_obj.read(cr, uid,
+                                        transaction[2]['receiver_id'],
+                                        ['name'],
+                                        context=context)['name']
+            synthesis = u'%s doit %s€ à %s\n' %(ower, amount, receiver)
         result = {
             'total_paid': normal_amount + prop_amount,
             'month': month,
@@ -176,6 +189,7 @@ class expense_balance(orm.Model):
             'prop_average': prop_average,
             'partner_balance_ids': balance_ids,
             'transaction_ids': transactions,
+            'synthesis': synthesis,
             }
         balance_id = result_obj.create(cr, uid, result, context=context)
         model, view_id = model_data_obj.get_object_reference(

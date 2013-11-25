@@ -317,14 +317,15 @@
                     <field name="transaction_ids" nolabel="1">
                         <tree version="7.0">
                             <field name="ower_id"/>
-                            <field name="dummy1" string="owe"/>
                             <field name="amount"/>
-                            <field name="dummy2" string="to"/>
                             <field name="receiver_id"/>
                         </tree>
                     </field>
                 </group>
-                </group>
+            </group>
+            <group name="synthesis" colspan="4" string="Synthesis">
+                <field name="synthesis" nolabel="1"/>
+            </group>
             </sheet>
         </form>
     </field>

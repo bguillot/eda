@@ -61,7 +61,7 @@ class coloc_expense(orm.Model):
              ('6', 'June'),
              ('7', 'July'),
              ('8', 'August'),
-             ('9', 'Septembre'),
+             ('9', 'September'),
              ('10', 'October'),
              ('11', 'November'),
              ('12', 'December')],
@@ -94,7 +94,7 @@ class meal_attendance(orm.Model):
              ('6', 'June'),
              ('7', 'July'),
              ('8', 'August'),
-             ('9', 'Septembre'),
+             ('9', 'September'),
              ('10', 'October'),
              ('11', 'November'),
              ('12', 'December')],
@@ -138,13 +138,13 @@ class balance_result(orm.Model):
              ('6', 'June'),
              ('7', 'July'),
              ('8', 'August'),
-             ('9', 'Septembre'),
+             ('9', 'September'),
              ('10', 'October'),
              ('11', 'November'),
              ('12', 'December')],
-            'month'),
+            'Month'),
         'normal_average': fields.float('Normal average'),
-        'prop_total': fields.float('Total propostionnal'),
+        'prop_total': fields.float('Total proportional'),
         'prop_average': fields.float('Proportional average'),
         'partner_balance_ids': fields.one2many(
             'partner.balance',
@@ -154,6 +154,7 @@ class balance_result(orm.Model):
             'balance.transaction',
             'balance_id',
             'Transactions'),
+        'synthesis': fields.text('Synthesis'),
         }
 
     _sql_constraints = [
@@ -188,15 +189,7 @@ class balance_transaction(orm.Model):
         'ower_id': fields.many2one('res.partner', 'Ower'),
         'receiver_id': fields.many2one('res.partner', 'Receiver'),
         'amount': fields.float('Amount'),
-        'dummy1': fields.char('owe', size=16),
-        'dummy2': fields.char('to', size=16),
         }
-
-    _defaults={
-        'dummy1': 'owe',
-        'dummy2': 'to',
-    }
-
 
 class automatic_expense(orm.Model):
     _name = "automatic.expense"
