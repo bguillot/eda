@@ -290,6 +290,12 @@
     <field name="model">balance.result</field>
     <field name="arch" type="xml">
         <form string="Balance" version="7.0">
+            <header>
+                <field name="state"
+                    widget="statusbar"
+                    statusbar_visible="to_pay,paid"
+                    statusbar_colors='{"to_pay":"red","paid":"blue"}'/>
+            </header>
             <sheet>
                 <div class="oe_title">
                     <label for="month" class="oe_edit_only"/>
@@ -323,8 +329,12 @@
                     </field>
                 </group>
             </group>
-            <group name="synthesis" colspan="4" string="Synthesis">
-                <field name="synthesis" nolabel="1"/>
+            <group name="synthesis" colspan="2" string="Synthesis" col="4">
+                <field name="synthesis" nolabel="1" colspan="4"/>
+            </group>
+            <group name="payment" colspan="2" string="Payment Method" col="4">
+                <field name="payment_method" nolabel="1" colspan="4"
+                    attrs="{'invisible': [('state', '!=', 'paid')], 'required': [('state', '=', 'paid')]}"/>
             </group>
             </sheet>
         </form>

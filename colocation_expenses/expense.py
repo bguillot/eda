@@ -155,6 +155,13 @@ class balance_result(orm.Model):
             'balance_id',
             'Transactions'),
         'synthesis': fields.text('Synthesis'),
+        'state': fields.selection(
+            [('to_pay', 'To Pay'), ('paid', 'Paid')],
+            'State'),
+        'payment_method': fields.char(
+            'Payment Method',
+            size=128,
+            help="Way to pay the balance result"),
         }
 
     _sql_constraints = [
