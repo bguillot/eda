@@ -152,6 +152,7 @@ class expense_balance(orm.Model):
         return transactions
 
     def calculate_expense_balance(self, cr, uid, id, context=None):
+        expense_obj = self.pool['coloc.expense']
         result_obj = self.pool['balance.result']
         model_data_obj = self.pool['ir.model.data']
         partner_obj = self.pool['res.partner']
@@ -192,6 +193,10 @@ class expense_balance(orm.Model):
             'synthesis': synthesis,
             }
         balance_id = result_obj.create(cr, uid, result, context=context)
+        expense_obj.write(cr, uid,
+            context['active_ids'],
+            {'balance_id': balance_id},
+            context=context)
         model, view_id = model_data_obj.get_object_reference(
             cr, uid, 'colocation_expenses', 'balance_result_form_view')
         return {

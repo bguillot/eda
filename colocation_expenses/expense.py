@@ -22,6 +22,7 @@
 
 from openerp.osv import fields, orm
 from datetime import datetime, date
+from openerp.tools.translate import _
 
 
 class coloc_expense(orm.Model):
@@ -38,6 +39,15 @@ class coloc_expense(orm.Model):
             partner_id = user_obj.read(cr, uid, uid, ['partner_id'],
                                    context=context)['partner_id'][0]
         return partner_id
+
+    def _get_balanced(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for expense in self.browse(cr, uid, ids, context=context):
+            if expense.balance_id:
+                res[expense.id] = True
+            else:
+                res[expense.id] = False
+        return res
 
     _columns={
         'product_id': fields.many2one(
@@ -67,12 +77,32 @@ class coloc_expense(orm.Model):
              ('12', 'December')],
             'Month',
             required=True),
+        'balance_id': fields.many2one('balance.result', 'Balance result'),
+        'balanced': fields.function(
+            _get_balanced,
+            string='Balanced',
+            type='boolean',
+            store={
+                'coloc.expense':
+                    (lambda self, cr, uid, ids, c=None:
+                        ids,
+                        ['balance_id'],
+                        10),
+                })
         }
 
     _defaults={
         'month': _get_default_month,
         'partner_id': _get_default_partner,
         }
+
+    def unlink(self, cr, uid, ids, context=None):
+        for expense in self.browse(cr, uid, ids, context=context):
+            if expense.balance_id:
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("You can't delete and expense already "
+                                    "balanced, you stupid fuck!"))
+        return super(coloc_expense, self).unlink(cr, uid, ids, context=context)
 
 
 class meal_attendance(orm.Model):
@@ -123,6 +153,14 @@ class meal_attendance(orm.Model):
             attendance.write({'meal_qty': attendance.meal_qty - 1})
         return True
 
+    def write(self, cr, uid, ids, vals, context=None):
+        month = str(date.today().month)
+        for attendance in self.browse(cr, uid, ids, context=context):
+            if month != attendance.month:
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("You try to add an attendance of "
+                                       "another month, you stupid fuck!"))
+        return super(meal_attendance, self).write(cr, uid, ids, vals, context=context)
 
 class balance_result(orm.Model):
     _name = "balance.result"
@@ -164,10 +202,32 @@ class balance_result(orm.Model):
             help="Way to pay the balance result"),
         }
 
+    _defaults = {
+        'state': 'to_pay',
+        }
+
     _sql_constraints = [
         ('month_uniq', 'unique(month)', 'Balance has to be uniq per month!'),
     ]
 
+    def pay_balance(self, cr, uid, ids, context=None):
+        return self.write(cr, uid, ids, {'state': 'paid'}, context=context)
+
+    def unlink(self, cr, uid, ids, context=None):
+        for result in self.browse(cr, uid, ids, context=context):
+            if resulte.state == 'paid':
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("You can't delete a balance result that "
+                                     "have already been paid, you stupid fuck!"))
+        return super(balance_result, self).unlink(cr, uid, ids, context=context)
+
+    def _name_search(self, cr, uid, name='', args=None, operator='ilike',
+            context=None, limit=100, name_get_uid=None):
+        if args[0][0] == 'name':
+            new_args = [('month', args[0][1], args[0][2])]
+        return super(balance_result, self)._name_search(cr, uid, name=name,
+                args=new_args, operator=operator, context=context, limit=limit,
+                name_get_uid=name_get_uid)
 
 class partner_balance(orm.Model):
     _name = "partner.balance"

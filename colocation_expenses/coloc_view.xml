@@ -52,6 +52,10 @@
         <search string="Expenses">
             <field name="month" string="Month"/>
             <field name="partner_id"/>
+            <field name="balance_id"/>
+            <separator/>
+            <filter icon="terp-dolar_ok!" string="Unbalanced" name="unbalanced"
+                domain="[('balance_id','=', False)]"/>
             <newline/>
             <group expand="1" string="Group By...">
                 <filter string="Partner"
@@ -62,6 +66,8 @@
                     icon="terp-go-month"
                     context="{'group_by':'month'}"
                     help="Order of Month"/>
+                <filter string="Balance"
+                    context="{'group_by': 'balance_id'}"/>
             </group>
         </search>
     </field>
@@ -100,6 +106,7 @@
             <field name="amount"/>
             <field name="comment"/>
             <field name="create_date" readonly="1"/>
+            <field name="balance_id" invisible="1"/>
         </tree>
     </field>
 </record>
@@ -108,7 +115,7 @@
     <field name="name">Expenses</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">coloc.expense</field>
-    <field name="context">{'search_default_month':1}</field>
+    <field name="context">{'search_default_unbalanced':1}</field>
     <field name="domain">[]</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
@@ -291,6 +298,9 @@
     <field name="arch" type="xml">
         <form string="Balance" version="7.0">
             <header>
+                <button name="pay_balance" states="to_pay" class="oe_highlight"
+                    string="Pay Balance Result" type="object"
+                    groups="base_colocation_tools.group_roomates"/>
                 <field name="state"
                     widget="statusbar"
                     statusbar_visible="to_pay,paid"
@@ -329,12 +339,15 @@
                     </field>
                 </group>
             </group>
-            <group name="synthesis" colspan="2" string="Synthesis" col="4">
-                <field name="synthesis" nolabel="1" colspan="4"/>
-            </group>
-            <group name="payment" colspan="2" string="Payment Method" col="4">
-                <field name="payment_method" nolabel="1" colspan="4"
-                    attrs="{'invisible': [('state', '!=', 'paid')], 'required': [('state', '=', 'paid')]}"/>
+            <group name="results" colspan="2" col="4">
+                <group name="synthesis" colspan="2" string="Synthesis" col="4">
+                    <field name="synthesis" nolabel="1" colspan="4"/>
+                </group>
+                <group name="payment" colspan="2" string="Payment Method"
+                    col="4" attrs="{'invisible': [('state', '!=', 'paid')]}">
+                    <field name="payment_method" nolabel="1" colspan="4"
+                        attrs="{ 'required': [('state', '=', 'paid')]}"/>
+                </group>
             </group>
             </sheet>
         </form>
