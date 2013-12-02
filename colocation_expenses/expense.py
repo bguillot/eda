@@ -24,6 +24,18 @@ from openerp.osv import fields, orm
 from datetime import datetime, date
 from openerp.tools.translate import _
 
+MONTH = [('1', 'January'),
+         ('2', 'February'),
+         ('3', 'March'),
+         ('5', 'April'),
+         ('6', 'June'),
+         ('7', 'July'),
+         ('8', 'August'),
+         ('9', 'September'),
+         ('10', 'October'),
+         ('11', 'November'),
+         ('12', 'December')]
+
 
 class coloc_expense(orm.Model):
     _name = "coloc.expense"
@@ -64,17 +76,7 @@ class coloc_expense(orm.Model):
             required=True),
         'comment': fields.char('Comment', size=128),
         'month': fields.selection(
-            [('1', 'January'),
-             ('2', 'February'),
-             ('3', 'March'),
-             ('5', 'April'),
-             ('6', 'June'),
-             ('7', 'July'),
-             ('8', 'August'),
-             ('9', 'September'),
-             ('10', 'October'),
-             ('11', 'November'),
-             ('12', 'December')],
+            MONTH,
             'Month',
             required=True),
         'balance_id': fields.many2one('balance.result', 'Balance result'),
@@ -117,17 +119,7 @@ class meal_attendance(orm.Model):
         'meal_qty': fields.float('Meal quantity'),
         'write_date': fields.datetime('Write date'),
         'month': fields.selection(
-            [('1', 'January'),
-             ('2', 'February'),
-             ('3', 'March'),
-             ('5', 'April'),
-             ('6', 'June'),
-             ('7', 'July'),
-             ('8', 'August'),
-             ('9', 'September'),
-             ('10', 'October'),
-             ('11', 'November'),
-             ('12', 'December')],
+            MONTH,
             'month'),
         'color': fields.integer('Color Index'),
         }
@@ -162,24 +154,34 @@ class meal_attendance(orm.Model):
                                        "another month, you stupid fuck!"))
         return super(meal_attendance, self).write(cr, uid, ids, vals, context=context)
 
+
 class balance_result(orm.Model):
     _name = "balance.result"
     _description = "Balance Result"
 
+    def _get_name(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for balance in self.browse(cr, uid, ids, context=context):
+            res[balance.id] = dict(MONTH).get(balance.month, '')
+        return res
+
+
     _columns={
+        'name': fields.function(
+            _get_name,
+            type='char',
+            size=32,
+            string='Name',
+            store={
+                'balance.result':
+                    (lambda self, cr, uid, ids, c=None:
+                        ids,
+                        ['month'],
+                        10),
+                }),
         'total_paid': fields.float('Total paid'),
         'month': fields.selection(
-            [('1', 'January'),
-             ('2', 'February'),
-             ('3', 'March'),
-             ('5', 'April'),
-             ('6', 'June'),
-             ('7', 'July'),
-             ('8', 'August'),
-             ('9', 'September'),
-             ('10', 'October'),
-             ('11', 'November'),
-             ('12', 'December')],
+            MONTH,
             'Month'),
         'normal_average': fields.float('Normal average'),
         'prop_total': fields.float('Total proportional'),
@@ -221,13 +223,6 @@ class balance_result(orm.Model):
                                      "have already been paid, you stupid fuck!"))
         return super(balance_result, self).unlink(cr, uid, ids, context=context)
 
-    def _name_search(self, cr, uid, name='', args=None, operator='ilike',
-            context=None, limit=100, name_get_uid=None):
-        if args[0][0] == 'name':
-            new_args = [('month', args[0][1], args[0][2])]
-        return super(balance_result, self)._name_search(cr, uid, name=name,
-                args=new_args, operator=operator, context=context, limit=limit,
-                name_get_uid=name_get_uid)
 
 class partner_balance(orm.Model):
     _name = "partner.balance"
