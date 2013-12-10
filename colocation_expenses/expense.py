@@ -217,7 +217,7 @@ class balance_result(orm.Model):
 
     def unlink(self, cr, uid, ids, context=None):
         for result in self.browse(cr, uid, ids, context=context):
-            if resulte.state == 'paid':
+            if result.state == 'paid':
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _("You can't delete a balance result that "
                                      "have already been paid, you stupid fuck!"))
@@ -283,7 +283,7 @@ class automatic_expense(orm.Model):
         for auto_expense in self.browse(cr, uid, ids, context=context):
             expense_id = expense_obj.search(cr, uid,
                                             [('month', '=', month),
-                                             ('partner_id' '=', auto_expense.partner_id.id),
+                                             ('partner_id', '=', auto_expense.partner_id.id),
                                              ('product_id', '=', auto_expense.product_id.id),
                                              ('amount', '=', auto_expense.amount)],
                                             context=context)
