@@ -87,6 +87,7 @@
                 </div>
                 <group name="extra_fields" colspan="4">
                     <field name="amount"/>
+                    <field name="concerned_partner_ids"/>
                 </group>
             </sheet>
         </form>
@@ -104,6 +105,7 @@
                 context="{'force_type':'expense'})"/>
 <!--            TODO onchange pour remplir le montant en fonction du produit -->
             <field name="amount"/>
+            <field name="concerned_partner_ids" widget="many2many_tags"/>
             <field name="comment"/>
             <field name="create_date" readonly="1"/>
             <field name="balance_id" invisible="1"/>
@@ -325,7 +327,7 @@
                         <tree version="7.0">
                             <field name="partner_id"/>
                             <field name="total_paid"/>
-                            <field name="amount"/>
+                            <field name="total_owe"/>
                         </tree>
                     </field>
                 </group>

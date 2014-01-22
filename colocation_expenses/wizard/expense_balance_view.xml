@@ -17,6 +17,7 @@
     <field name="arch" type="xml">
         <form string="Balance expense" version="7.0">
             <field name="month"/>
+            <field name="participant_ids" readonly="1"/>
             <group colspan="4">
                 <button icon="gtk-ok" name="calculate_expense_balance"
                     string="Calculate expense balance" type="object"/>

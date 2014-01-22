@@ -49,8 +49,14 @@ class coloc_expense(orm.Model):
         user_obj = self.pool['res.users']
         if uid != 1:
             partner_id = user_obj.read(cr, uid, uid, ['partner_id'],
-                                   context=context)['partner_id'][0]
+                                       context=context)['partner_id'][0]
         return partner_id
+
+    def _get_default_concerned_partners(self, cr, uid, context=None):
+        user = self.pool['res.users'].browse(cr, uid, uid, context=context)
+        partners = user.company_id.roomate_ids
+        partner_ids  = [x.id for x in partners]
+        return partner_ids
 
     def _get_balanced(self, cr, uid, ids, name, args, context=None):
         res = {}
@@ -90,12 +96,20 @@ class coloc_expense(orm.Model):
                         ids,
                         ['balance_id'],
                         10),
-                })
+                }),
+        'concerned_partner_ids': fields.many2many(
+            'res.partner',
+            'expense_partner_rel',
+            'expense_id',
+            'partner_id',
+            'Concerned Partners',
+            required=True),
         }
 
     _defaults={
         'month': _get_default_month,
         'partner_id': _get_default_partner,
+        'concerned_partner_ids': _get_default_concerned_partners,
         }
 
     def unlink(self, cr, uid, ids, context=None):
@@ -129,7 +143,7 @@ class meal_attendance(orm.Model):
         }
 
     _sql_constraints = [
-        ('month_partner__uniq',
+        ('month_partner_uniq',
          'unique(month, partner_id)',
          'Balance has to be uniq per partner and per month!'),
     ]
@@ -159,26 +173,28 @@ class balance_result(orm.Model):
     _name = "balance.result"
     _description = "Balance Result"
 
-    def _get_name(self, cr, uid, ids, name, args, context=None):
-        res = {}
-        for balance in self.browse(cr, uid, ids, context=context):
-            res[balance.id] = dict(MONTH).get(balance.month, '')
-        return res
+    _rec_name = "month"
+    
+#    def _get_name(self, cr, uid, ids, name, args, context=None):
+#        res = {}
+#        for balance in self.browse(cr, uid, ids, context=context):
+#            res[balance.id] = _(dict(MONTH).get(balance.month, ''))
+#        return res
 
 
     _columns={
-        'name': fields.function(
-            _get_name,
-            type='char',
-            size=32,
-            string='Name',
-            store={
-                'balance.result':
-                    (lambda self, cr, uid, ids, c=None:
-                        ids,
-                        ['month'],
-                        10),
-                }),
+#        'name': fields.function(
+#            _get_name,
+#            type='char',
+#            size=32,
+#            string='Name',
+#            store={
+#                'balance.result':
+#                    (lambda self, cr, uid, ids, c=None:
+#                        ids,
+#                        ['month'],
+#                        10),
+#                }),
         'total_paid': fields.float('Total paid'),
         'month': fields.selection(
             MONTH,
@@ -234,7 +250,7 @@ class partner_balance(orm.Model):
             'Balance',
             ondelete="cascade"),
         'partner_id': fields.many2one('res.partner', 'Partner'),
-        'amount': fields.float('Amount'),
+        'total_owe': fields.float('Total owe'),
         'total_paid': fields.float('Total paid'),
         }
 

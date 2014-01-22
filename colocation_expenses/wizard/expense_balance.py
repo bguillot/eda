@@ -19,11 +19,11 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-
 from openerp.osv import fields, orm
 from openerp.tools.translate import _
 
-class expense_balance(orm.Model):
+
+class expense_balance(orm.TransientModel):
     _name = "expense.balance"
     _description="Expense Balance"
 
@@ -36,13 +36,23 @@ class expense_balance(orm.Model):
             month = expense['month']
         return month
 
+    def _get_default_participants(self, cr, uid, context=None):
+        expense_obj = self.pool['coloc.expense']
+        participant_ids = []
+        if context.get('active_ids'):
+            for expense in expense_obj.read(cr, uid, context['active_ids'], ['partner_id'], context=context):
+                if not expense['partner_id'][0] in participant_ids:
+                    participant_ids.append(expense['partner_id'][0])
+        return participant_ids
+
+
     _columns = {
-#        'participant_ids': fields.many2many(
-#            'res.partner',
-#            'expense_balance_partner_rel',
-#            'balance_id',
-#            'partner_id',
-#            'Partners'),
+        'participant_ids': fields.many2many(
+            'res.partner',
+            'expense_balance_partner_rel',
+            'balance_id',
+            'partner_id',
+            'Partners'),
         'month': fields.selection(
             [('1', 'January'),
              ('2', 'February'),
@@ -60,29 +70,34 @@ class expense_balance(orm.Model):
 
     _defaults={
         'month': _get_default_month,
+        'participant_ids': _get_default_participants,
         }
 
-    def _prepare_partner_expense(self, cr, uid, ids, month, context=None):
+    def _prepare_partner_balance(self, cr, uid, ids, month, attendance, partner_ids, total_attendance, context=None):
         expense_obj = self.pool['coloc.expense']
         normal_amount = 0.0
         prop_amount = 0.0
-        partner_expenses = {}
+        partner_balances = {}
+        for partner_id in partner_ids:
+            partner_balances[partner_id] = {'total_paid': 0.0,
+                                            'total_owe': 0.0}
         for expense in expense_obj.browse(cr, uid, ids, context=context):
             if expense.month != month:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _('All the expenses should be from the '
                                        'same month, you stupid fuck!'))
             partner_id = expense.partner_id.id
-            if not partner_id in partner_expenses.keys():
-                partner_expenses[partner_id] = {'normal_amount': 0.0,
-                                               'prop_amount': 0.0}
+            partner_balances[partner_id]['total_paid'] += expense.amount
             if expense.product_id.expense_type == 'courses':
                 prop_amount += expense.amount
-                partner_expenses[partner_id]['prop_amount'] += expense.amount
+                for concerned_partner in expense.concerned_partner_ids:
+                    partner_balances[concerned_partner.id]['total_owe'] += expense.amount*(attendance[concerned_partner.id]/total_attendance)
             else:
                 normal_amount += expense.amount
-                partner_expenses[partner_id]['normal_amount'] += expense.amount
-        return normal_amount, prop_amount, partner_expenses
+                nb_concerned = len(expense.concerned_partner_ids)
+                for concerned_partner in expense.concerned_partner_ids:
+                    partner_balances[concerned_partner.id]['total_owe'] += expense.amount/nb_concerned
+        return normal_amount, prop_amount, partner_balances
 
     def _prepare_attendance(self, cr, uid, partner_ids, month, context=None):
         attendance_obj = self.pool['meal.attendance']
@@ -102,53 +117,36 @@ class expense_balance(orm.Model):
             partner_attendance[attendance.partner_id.id] = attendance.meal_qty
         return total_attendance, partner_attendance
 
-    def _get_balances(self, cr, uid, partner_expenses, partner_attendance, normal_average, prop_average, context=None):
-        partner_balances = []
-        balance_ids = []
-        for partner_id, expenses in partner_expenses.iteritems():
-            if not partner_id in partner_attendance:
-                raise orm.except_orm(_('Keyboard/Chair error'),
-                                     _('You have to set up attendance for all '
-                                       'partners, you stupid fuck!'))
-            partner_normal = normal_average - expenses['normal_amount']
-            partner_prop = (prop_average*partner_attendance[partner_id]) - expenses['prop_amount']
-            partner_balance = partner_normal + partner_prop
-            partner_balances.append({
-                'partner_id': partner_id,
-                'partner_balance': partner_balance})
-            balance_ids.append((0, 0, {
-                'partner_id': partner_id,
-                'amount': partner_balance,
-                'total_paid': expenses['normal_amount'] + expenses['prop_amount']}))
-        return partner_balances, balance_ids
-
     def _get_exactmatch_transactions(self, cr, uid, partner_balances, context=None):
         transactions = []
-        for balance in partner_balances:
-            todel = False
-            partner_balance = abs(round(balance['partner_balance'], 3))
-            for other_balance in partner_balances:
-                other_partner_balance = abs(round(other_balance['partner_balance'], 3))
-                if other_balance['partner_id'] != balance['partner_id'] and partner_balance == other_partner_balance:
-                    if balance['partner_balance'] > 0:
-                        ower = balance['partner_id']
-                        receiver = other_balance['partner_id']
+        done_partner_ids = []
+        for partner_id, totals in partner_balances.iteritems():
+            if partner_id in done_partner_ids:
+                continue
+            partner_balance = totals['total_paid']-totals['total_owe']
+            partner_balance_format = abs(round(partner_balance, 3))
+            for other_partner_id, other_totals in partner_balances.iteritems():
+                other_partner_balance = other_totals['total_paid']-other_totals['total_owe']
+                other_partner_balance_format = abs(round(other_partner_balance, 3))
+                if other_partner_id != partner_id and partner_balance_format == other_partner_balance_format:
+                    if partner_balance > 0:
+                        ower = other_partner_id
+                        receiver = partner_id
                     else:
-                        ower = other_balance['partner_id']
-                        receiver = balance['partner_id']
+                        ower = partner_id
+                        receiver = other_partner_id
                     transactions.append((0, 0, {
                         'ower_id': ower,
                         'receiver_id': receiver,
-                        'amount': abs(balance['partner_balance'])}))
-                    todel = True
-            if todel:
-                del partner_balances[0]
-        return transactions
+                        'amount': abs(partner_balance)}))
+                    done_partner_ids += [partner_id, other_partner_id]
+        return transactions, done_partner_ids
 
     def _get_transactions(self, cr, uid, partner_balances, context=None):
-        transactions = self._get_exactmatch_transactions(cr, uid,
-                                                         partner_balances,
-                                                         context=context)
+        transactions, done_partner_ids = self._get_exactmatch_transactions(
+            cr, uid, partner_balances, context=context)
+        for partner_id in done_partner_ids:
+            del partner_balances[partner_id]
         return transactions
 
     def calculate_expense_balance(self, cr, uid, id, context=None):
@@ -158,16 +156,21 @@ class expense_balance(orm.Model):
         partner_obj = self.pool['res.partner']
         wizard = self.browse(cr, uid, id, context=context)[0]
         month = wizard.month
-        normal_amount, prop_amount, partner_expenses = self._prepare_partner_expense(
-            cr, uid, context['active_ids'], month, context=context)
-        partner_ids = partner_expenses.keys()
+        partner_ids = [x.id for x in wizard.participant_ids]
         total_attendance, partner_attendance = self._prepare_attendance(
             cr, uid, partner_ids, month, context=context)
+        normal_amount, prop_amount, partner_balances = self._prepare_partner_balance(
+            cr, uid, context['active_ids'], month, partner_attendance,
+            partner_ids, total_attendance, context=context)
         normal_average = normal_amount/len(partner_ids)
         prop_average = prop_amount/total_attendance
-        partner_balances, balance_ids = self._get_balances(
-            cr, uid, partner_expenses, partner_attendance, normal_average,
-            prop_average, context=context)
+        balance_ids = []
+        for partner_id, totals in partner_balances.iteritems():
+            balance_ids.append((0, 0,
+                {'partner_id': partner_id,
+                 'total_paid': totals['total_paid'],
+                 'total_owe': totals['total_owe']}))
+
         transactions = self._get_transactions(cr, uid, partner_balances,
                                              context=context)
         synthesis = ''
