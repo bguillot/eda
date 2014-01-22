@@ -148,25 +148,25 @@ class meal_attendance(orm.Model):
          'Balance has to be uniq per partner and per month!'),
     ]
 
-
     def add_meal_attendance(self, cr, uid, ids, context=None):
-        for attendance in self.browse(cr, uid, ids, context=context):
-            attendance.write({'meal_qty': attendance.meal_qty + 1})
-        return True
-
-    def remove_meal_attendance(self, cr, uid, ids, context=None):
-        for attendance in self.browse(cr, uid, ids, context=context):
-            attendance.write({'meal_qty': attendance.meal_qty - 1})
-        return True
-
-    def write(self, cr, uid, ids, vals, context=None):
         month = str(date.today().month)
         for attendance in self.browse(cr, uid, ids, context=context):
             if month != attendance.month:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _("You try to add an attendance of "
                                        "another month, you stupid fuck!"))
-        return super(meal_attendance, self).write(cr, uid, ids, vals, context=context)
+            attendance.write({'meal_qty': attendance.meal_qty + 1})
+        return True
+
+    def remove_meal_attendance(self, cr, uid, ids, context=None):
+        month = str(date.today().month)
+        for attendance in self.browse(cr, uid, ids, context=context):
+            if month != attendance.month:
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("You try to add an attendance of "
+                                       "another month, you stupid fuck!"))
+            attendance.write({'meal_qty': attendance.meal_qty - 1})
+        return True
 
 
 class balance_result(orm.Model):
