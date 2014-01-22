@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  movies_management for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+<menuitem id="menu_movie"
+          name="Movies"
+          sequence="5"
+          groups="base.group_user"/>
+
+<menuitem id="menu_movie_configuration"
+          name="Configuration"
+          parent="menu_movie"
+          sequence="100"
+          groups="base_colocation_tools.group_roomates"/>
+
+<menuitem id="menu_movie_movie"
+          name="Movies"
+          parent="menu_movie"
+          sequence="10"/>
+
+<menuitem id="menu_movie_type_config"
+          name="Movie types"
+          parent="menu_movie_configuration"
+          sequence="1"/>
+
+<menuitem action="movie_type_action_form"
+          id="menu_movie_type"
+          parent="menu_movie_type_config"
+          sequence="0"/>
+
+<menuitem action="movie_subtype_action_form"
+          id="menu_movie_subtype"
+          parent="menu_movie_type_config"
+          sequence="1"/>
+
+<menuitem action="all_movie_action_form"
+          id="menu_all_movie"
+          parent="menu_movie_movie"
+          sequence="5"/>
+
+<menuitem action="dl_movie_action_form"
+          id="menu_dl_movie"
+          parent="menu_movie_movie"
+          sequence="10"/>
+
+<menuitem action="ready_movie_action_form"
+          id="menu_ready_movie"
+          parent="menu_movie_movie"
+          sequence="15"/>
+
+<menuitem action="my_movie_action_form"
+          id="menu_my_movie"
+          parent="menu_movie_movie"
+          sequence="1"/>
+
+<menuitem action="movie_projection_action_form"
+          id="menu_movie_projection"
+          parent="menu_movie_movie"
+          sequence="20"/>
+
+
+    </data>
+</openerp>

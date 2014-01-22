@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  movies_management for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!--  VIEW FOR THE OBJECT : movie_movie -->
+
+<record id="movie_movie_search_view" model="ir.ui.view">
+    <field name="name">movie.movie.search</field>
+    <field name="model">movie.movie</field>
+    <field name="arch" type="xml">
+        <search string="Movies">
+            <field name="name"/>
+            <field name="year"/>
+            <field name="state"/>
+            <field name="type_id"/>
+            <field name="director"/>
+            <separator/>
+            <filter icon="terp-dolar_ok!" string="To download" name="to_dl"
+                domain="[('state','=', 'to_dl')]"/>
+            <filter icon="terp-dolar_ok!" string="Ready" name="ready"
+                domain="[('state','=', 'ready')]"/>
+            <newline/>
+            <group expand="1" string="Group By...">
+                <filter string="Year"
+                    name="group_partner_id"
+                    icon="terp-personal"
+                    context="{'group_by':'year'}"/>
+                <filter string="Director"
+                    icon="terp-go-month"
+                    context="{'group_by':'director'}"
+                    help="Order of Month"/>
+                <filter string="Type"
+                    context="{'group_by': 'type_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="movie_movie_form_view" model="ir.ui.view">
+    <field name="name">movie.movie.form</field>
+    <field name="model">movie.movie</field>
+    <field name="arch" type="xml">
+        <form string="Movie" version="7.0">
+            <header>
+                <button name="dl_movie" string="Download movie"
+                    type="object" states="to_dl" class="oe_highlight"
+                    groups="base_colocation_tools.group_roomates"/>
+                <button name="watch_movie" string="Watch movie"
+                    type="object" states="ready" class="oe_highlight"
+                    groups="base_colocation_tools.group_roomates"/>
+                <button name="plan_projection" string="Plan projection"
+                    type="object" states="ready,watched" class="oe_highlight"
+                    groups="base_colocation_tools.group_roomates"/>
+                <button name="already_watched" states="to_dl,ready,watched"
+                    string="Already watched" type="object" icon="gtk-go-forward"/>
+                <button name="wanna_see" states="to_dl,ready,watched"
+                    string="Want to see" type="object" icon="gtk-go-forward"/>
+                <field name="state" widget="statusbar"
+                    statusbar_visible="to_dl,ready,watched"
+                    statusbar_colors='{"to_dl":"red","watched":"blue"}'/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="sequence"/>
+                    <field name="year"/>
+                    <field name="director"/>
+                    <field name="type_id" widget="selection"/>
+                    <field name="subtype_id" widget="selection"/>
+                    <field name="language"/>
+                    <field name="synopsis"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="movie_movie_tree_view" model="ir.ui.view">
+    <field name="name">movie.movie.list</field>
+    <field name="model">movie.movie</field>
+    <field name="arch" type="xml">
+        <tree string="Movies">
+            <field name="sequence"/>
+            <field name="name"/>
+            <field name="year"/>
+            <field name="state"/>
+            <field name="type_id"/>
+            <field name="language"/>
+            <field name="director"/>
+            <button name="already_watched" states="to_dl,ready,watched"
+                string="Already watched" type="object" icon="gtk-go-forward"/>
+            <button name="wanna_see" states="to_dl,ready,watched"
+                string="Want to see" type="object" icon="gtk-go-forward"/>
+        </tree>
+    </field>
+</record>
+
+<record id="dl_movie_action_form" model="ir.actions.act_window">
+    <field name="name">Movies to download</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.movie</field>
+    <field name="context">{'search_default_to_dl':1}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_movie_search_view"/>
+</record>
+ 
+<record id="ready_movie_action_form" model="ir.actions.act_window">
+    <field name="name">Movies ready</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.movie</field>
+    <field name="context">{'search_default_ready':1}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_movie_search_view"/>
+</record>
+
+<record id="all_movie_action_form" model="ir.actions.act_window">
+    <field name="name">All Movies</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.movie</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_movie_search_view"/>
+</record>
+
+    <!-- VIEW MY MOVIES -->
+
+<record id="user_movie_form_view" model="ir.ui.view">
+    <field name="name">user.movie.form</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+        <form string="My movies" version="7.0">
+            <header>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="test" colspan="4">
+                    <field name="id"/>
+                </group>
+                <group name="want_to_see" colspan="4" string="Want to see">
+                    <field name="wished_movie_ids" nolabel="1"/>
+                </group>
+                <group name="watched" colspan="4" string="Watched">
+                    <field name="watched_movie_ids" nolabel="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="user_movie_tree_view" model="ir.ui.view">
+    <field name="name">user.movie.tree</field>
+    <field name="model">res.users</field>
+    <field name="arch" type="xml">
+        <tree string="My movies" version="7.0">
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<record id="my_movie_action_form" model="ir.actions.act_window">
+    <field name="name">My movies</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">res.users</field>
+    <field name="domain">[('id', '=', uid)]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">form,tree</field>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_my_movie_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="user_movie_form_view"/>
+    <field name="act_window_id" ref="my_movie_action_form"/>
+</record>
+<record model="ir.actions.act_window.view" id="action_my_movie_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="user_movie_tree_view"/>
+    <field name="act_window_id" ref="my_movie_action_form"/>
+</record>
+
+        <!--  VIEW FOR THE OBJECT : movie_projection -->
+
+<record id="movie_projection_search_view" model="ir.ui.view">
+    <field name="name">movie.projection.search</field>
+    <field name="model">movie.projection</field>
+    <field name="arch" type="xml">
+        <search string="Movies Projections">
+            <field name="movie_id"/>
+            <field name="date_planned"/>
+            <field name="state"/>
+            <field name="date_done"/>
+            <separator/>
+            <filter icon="terp-dolar_ok!" string="To plan" name="draft"
+                domain="[('state','=', 'draft')]"/>
+            <filter icon="terp-dolar_ok!" string="Planned" name="planned"
+                domain="[('state','=', 'planned')]"/>
+            <newline/>
+            <group expand="1" string="Group By...">
+                <filter string="Movie"
+                    name="group_movie_id"
+                    icon="terp-personal"
+                    context="{'group_by':'movie_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="movie_projection_form_view" model="ir.ui.view">
+    <field name="name">movie.projection.form</field>
+    <field name="model">movie.projection</field>
+    <field name="arch" type="xml">
+        <form string="Movie Projection" version="7.0">
+            <header>
+                <button name="action_plan" string="Plan Projection"
+                    type="object" states="draft" class="oe_highlight"
+                    groups="base_colocation_tools.group_roomates"/>
+                <button name="action_done" string="Validate Projection"
+                    type="object" states="planned" class="oe_highlight"
+                    groups="base_colocation_tools.group_roomates"/>
+                <field name="state" widget="statusbar"
+                    statusbar_visible="draft,planned,done,cancel"
+                    statusbar_colors='{"draft":"red","planned":"blue"}'/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <label for="movie_id" class="oe_edit_only"/>
+                    <h1>
+                        <field name="movie_id"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="4">
+                    <field name="date_planned"
+                        attrs="{'readonly': [('state', '!=', 'draft')]}"/>
+                    <field name="date_done"/>
+                </group>
+                <group name="users" colspan="4" string="Users">
+                    <field name="user_ids" nolabel="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="movie_projection_tree_view" model="ir.ui.view">
+    <field name="name">movie.projectino.list</field>
+    <field name="model">movie.projection</field>
+    <field name="arch" type="xml">
+        <tree string="Movie Projections">
+            <field name="movie_id"/>
+            <field name="date_planned"/>
+            <field name="date_done"/>
+            <field name="state"/>
+          </tree>
+    </field>
+</record>
+
+<record id="movie_projection_action_form" model="ir.actions.act_window">
+    <field name="name">Movies Projections</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.projection</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_projection_search_view"/>
+</record>
+
+    <!--  VIEW FOR THE OBJECT : movie.type -->
+
+<record id="movie_type_search_view" model="ir.ui.view">
+    <field name="name">movie.type.search</field>
+    <field name="model">movie.type</field>
+    <field name="arch" type="xml">
+        <search string="Movie types">
+            <field name="name"/>
+        </search>
+    </field>
+</record>
+
+<record id="movie_type_form_view" model="ir.ui.view">
+    <field name="name">movie.type.form</field>
+    <field name="model">movie.type</field>
+    <field name="arch" type="xml">
+        <form string="Movie type" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="movie_type_tree_view" model="ir.ui.view">
+    <field name="name">movie.type.list</field>
+    <field name="model">movie.type</field>
+    <field name="arch" type="xml">
+        <tree string="Movie type" editable="top">
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<record id="movie_type_action_form" model="ir.actions.act_window">
+    <field name="name">Movie types</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.type</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_type_search_view"/>
+</record>
+
+
+    <!--  VIEW FOR THE OBJECT : movie.subtype -->
+
+<record id="movie_subtype_search_view" model="ir.ui.view">
+    <field name="name">movie.subtype.search</field>
+    <field name="model">movie.subtype</field>
+    <field name="arch" type="xml">
+        <search string="Movie subtypes">
+            <field name="name"/>
+            <field name="type_id"/>
+        </search>
+    </field>
+</record>
+
+<record id="movie_subtype_form_view" model="ir.ui.view">
+    <field name="name">movie.subtype.form</field>
+    <field name="model">movie.subtype</field>
+    <field name="arch" type="xml">
+        <form string="Movie type" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="extra fields">
+                    <field name="type_id"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="movie_subtype_tree_view" model="ir.ui.view">
+    <field name="name">movie.subtype.list</field>
+    <field name="model">movie.subtype</field>
+    <field name="arch" type="xml">
+        <tree string="Movie subtype" editable="top">
+            <field name="name"/>
+            <field name="type_id"/>
+        </tree>
+    </field>
+</record>
+
+<record id="movie_subtype_action_form" model="ir.actions.act_window">
+    <field name="name">Movie subtypes</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">movie.subtype</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="movie_subtype_search_view"/>
+</record>
+
+
+    </data>
+</openerp>
