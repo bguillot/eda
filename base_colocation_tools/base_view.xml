@@ -18,8 +18,8 @@
     <field name="arch" type="xml">
         <xpath expr="//page[@string='Configuration']" position="after">
             <page name="coloc_conf" string="Colocation configuration">
-                <group name="roomates" string="Roomates">
-                    <field name="roomate_ids" nolabel="1"/>
+                <group name="flatmates" string="Flatmates">
+                    <field name="flatmate_ids" nolabel="1"/>
                 </group>
             </page>
         </xpath>

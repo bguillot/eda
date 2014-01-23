@@ -11,7 +11,7 @@
 
 <menuitem name="Coloc"
           id="menu_coloc"
-          groups="base_colocation_tools.group_roomates"/>
+          groups="base_colocation_tools.group_flatmates"/>
 
 <menuitem id="menu_partner_coloc"
           parent="menu_coloc"

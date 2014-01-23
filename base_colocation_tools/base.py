@@ -28,40 +28,40 @@ class res_company(orm.Model):
 
     def _get_company_from_partner(self, cr, uid, ids, context=None):
         company_obj = self.pool['res.company']
-        company_ids = company_obj.search(cr, uid, [('roomate_ids', 'in', ids)],
+        company_ids = company_obj.search(cr, uid, [('flatmate_ids', 'in', ids)],
                                          context=context)
         return company_ids
 
-    def _get_roomate_email(self, cr, uid, ids, name, args, context=None):
+    def _get_flatmate_email(self, cr, uid, ids, name, args, context=None):
         res = {}
         for company in self.browse(cr, uid, ids, context=context):
             emails = ''
-            for roomate in company.roomate_ids:
-                if roomate.email:
+            for flatmate in company.flatmate_ids:
+                if flatmate.email:
                     if emails:
-                        emails = emails + ', ' + roomate.email
+                        emails = emails + ', ' + flatmate.email
                     else:
-                        emails = roomate.email
+                        emails = flatmate.email
             res[company.id] = emails
         return res
 
     _columns={
-        'roomate_ids': fields.many2many(
+        'flatmate_ids': fields.many2many(
             'res.partner',
             'partner_company_rel',
             'company_id',
             'partner_id',
-            'Roomates',
+            'Flatmates',
             ),
-        'roomates_email': fields.function(
-            _get_roomate_email,
+        'flatmates_email': fields.function(
+            _get_flatmate_email,
             type='char',
-            string='Roomates emails',
+            string='Flatmates emails',
             store={
                 'res.company':
                     (lambda self, cr, uid, ids, c=None:
                         ids,
-                        ['roomate_ids'],
+                        ['flatmate_ids'],
                         10),
                 'res.partner': (_get_company_from_partner, ['email'], 20),
                 }),
