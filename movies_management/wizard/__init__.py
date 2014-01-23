@@ -20,29 +20,4 @@
 #
 ###############################################################################
 
-
-
-{
-    'name': 'movies_management',
-    'version': '0.1',
-    'category': 'Generic Modules/Others',
-    'license': 'AGPL-3',
-    'description': """empty""",
-    'author': 'Akretion',
-    'website': 'http://www.akretion.com/',
-    'depends': [
-        'base_colocation_tools',
-        'mail',
-        ], 
-    'data': [
-           'security/ir.model.access.csv',
-           'security/movie_security.xml',
-           'wizard/projection_choice_view.xml',
-           'movie_view.xml',
-           'movie_menu.xml',
-    ],
-    'demo': [],
-    'installable': True,
-    'active': False,
-}
-
+import projection_choice

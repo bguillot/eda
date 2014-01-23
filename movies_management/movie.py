@@ -22,6 +22,9 @@
 from openerp.osv import fields, orm
 from datetime import datetime, date
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools.translate import _
+from collections import defaultdict
+import operator
 
 
 class res_users(orm.Model):
@@ -48,7 +51,7 @@ class movie_movie(orm.Model):
     _description="Movies"
     _inherit = ['mail.thread', 'ir.needaction_mixin']
 
-    _order = "sequence desc"
+    _order = "sequence desc, state asc"
 
     def _get_years(self, cr, uid, context=None):
         current_year = date.today().year
@@ -62,11 +65,11 @@ class movie_movie(orm.Model):
     def _get_sequence(self, cr, uid, ids, name, args, context=None):
         res = {}
         for movie in self.browse(cr, uid, ids, context=context):
-            res[movie.id] = 10 + len(movie.watcher_ids)
+            res[movie.id] = 10 + (movie.watcher_ids and len(movie.watcher_ids) or 0.0)
         return res
 
     _columns={
-        'name': fields.char('Name', size=64),
+        'name': fields.char('Name', size=64, required=True),
         'type_id': fields.many2one(
             'movie.type',
             'Type',
@@ -110,7 +113,7 @@ class movie_movie(orm.Model):
             store={
                 'movie.movie': (
                     lambda self, cr, uid, ids, c=None: ids,
-                    ['watcher_ids'],
+                    ['watcher_ids', 'name'],
                     10),})
         }
 
@@ -118,6 +121,11 @@ class movie_movie(orm.Model):
         'state': 'to_dl',
         }
 
+    _sql_constraints = [
+        ('name_year_uniq',
+         'unique(name, year)',
+         'Movie already created with this name and year!'),
+    ]
     def dl_movie(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'ready'}, context=context)
         return True
@@ -142,7 +150,7 @@ class movie_movie(orm.Model):
             proj_vals = {
                 'movie_id': movie.id,
                 'state': 'draft',
-                'user_ids': [(6, 0, [x.id for x in movie.watcher_ids])]
+                'planned_user_ids': [(6, 0, [x.id for x in movie.watcher_ids])]
                 }
             proj_id = proj_obj.create(cr, uid, proj_vals, context=context)
         model, view_id = model_data_obj.get_object_reference(
@@ -155,7 +163,6 @@ class movie_movie(orm.Model):
             'res_id': proj_id,
             'type': 'ir.actions.act_window',
              }
-
 
 
 class movie_type(orm.Model):
@@ -180,23 +187,104 @@ class movie_subtype(orm.Model):
 class movie_projection(orm.Model):
     _name="movie.projection"
     _description="Movie Projection"
+    _inherit = ['mail.thread', 'ir.needaction_mixin']
+
+    _order ="date_planned asc, best_date asc, ready_to_plan desc"
+
+    def _get_best_date(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for proj in self.browse(cr, uid, ids, context=context):
+            dates = defaultdict(int)
+            for choice in proj.choice_ids:
+                if choice.state == 'approved':
+                    dates[choice.date] += 1
+            if dates:
+                res[proj.id] = sorted(dates.iteritems(),
+                                      key=operator.itemgetter(1),
+                                      reverse=True)[0][0]
+            else:
+                res[proj.id] = False
+        return res
+
+    def _get_ready_to_plan(self, cr, uid, ids, name, args, context=None):
+        res = {}
+        for proj in self.browse(cr, uid, ids, context=context):
+            res[proj.id] = False
+            if proj.best_date:
+                res[proj.id] = True
+                for choice in proj.choice_ids:
+                    if proj.best_date == choice.date and choice.state != 'approved':
+                        res[proj.id] = False
+                        break
+        return res
+
+    def _get_proj_from_choice(self, cr, uid, ids, context=None):
+        proj_obj = self.pool['movie.projection']
+        proj_ids = proj_obj.search(cr, uid, [('choice_ids', 'in', ids)],
+                                   context=context)
+        return proj_ids
 
     _columns = {
         'date_done': fields.datetime('Date done', readonly=True),
         'date_planned': fields.datetime('Date planned'),
-        'movie_id': fields.many2one('movie.movie', 'Movie', required=True),
+        'movie_id': fields.many2one(
+            'movie.movie',
+            'Movie',
+            required=True,
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
         'state': fields.selection(
             [('draft', 'Draft'),
              ('planned', 'Planned'),
              ('done', 'Done'),
              ('cancel', 'Cancel')],
             'State'),
-        'user_ids': fields.many2many(
+        'planned_user_ids': fields.many2many(
             'res.users',
-            'user_projection_rel',
+            'planned_user_projection_rel',
             'projection_id',
             'user_id',
             'Users'),
+        'actual_user_ids': fields.many2many(
+            'res.users',
+            'actual_user_projection_rel',
+            'projection_id',
+            'user_id',
+            'Users'),
+        'choice_ids': fields.one2many(
+            'projection.choice',
+            'projection_id',
+            'Choices',
+            readonly=True,
+            states={'draft': [('readonly', False)]}),
+        'best_date': fields.function(
+            _get_best_date,
+            type="date",
+            string="Best Date",
+            store={
+                'movie.projection': (
+                    lambda self, cr, uid, ids, c=None: ids,
+                    ['choice_ids'],
+                    10),
+                'projection.choice': (
+                    _get_proj_from_choice,
+                    ['state'],
+                    20)
+                }),
+        'ready_to_plan': fields.function(
+            _get_ready_to_plan,
+            type="boolean",
+            string="Ready to plan",
+            store={
+                'movie.projection': (
+                    lambda self, cr, uid, ids, c=None: ids,
+                    ['choice_ids','best_date'],
+                    10),
+                'projection.choice': (
+                    _get_proj_from_choice,
+                    ['state'],
+                    20)
+                }),
         }
 
     _defaults = {
@@ -204,7 +292,19 @@ class movie_projection(orm.Model):
         }
 
     def action_plan(self, cr, uid, ids, context=None):
+        for proj in self.browse(cr, uid, ids, context=context):
+            if not proj.date_planned:
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("You have to set the date planned "
+                                       "before planning the projection, "
+                                       "you stupid fuck!"))
         self.write(cr, uid, ids, {'state': 'planned'}, context=context)
+        return True
+
+    def action_unplan(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids,
+                   {'state': 'draft', 'date_planned': False},
+                   context=context)
         return True
 
     def action_done(self, cr, uid, ids, context=None):
@@ -215,9 +315,66 @@ class movie_projection(orm.Model):
                 }
             proj.write(write_vals, context=context)
             proj.movie_id.write({'state': 'watched'}, context=context)
-            for user in proj.user_ids:
+            if not proj.actual_user_ids:
+                raise orm.except_orm(_('Keyboard/Chair error'),
+                                     _("Nobody watched the movie ? "
+                                       "Of course not, you stupid fuck!"))
+            for user in proj.actual_user_ids:
                 user.write({
                     'wished_movie_ids': [(3, proj.movie_id.id)],
                     'watched_movie_ids': [(4, proj.movie_id.id)]},
                     context=context)
+                proj.movie_id.write({
+                    'watcher_ids': [(3, user.id)],
+                    'wached_user_ids': [(4, user.id)]},
+                    context=context)
+        return True
+
+    def cancel(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'cancel'}, context=context)
+        return True
+
+
+class projection_choice(orm.Model):
+    _name = "projection.choice"
+    _description = "Projection choice"
+
+    _order ='state asc'
+
+    _columns = {
+        'user_id': fields.many2one('res.users', 'User', required=True),
+        'date': fields.date(
+            'Date',
+            required=True,
+            states={'approved': [('readonly', True)]}),
+        'projection_id': fields.many2one(
+            'movie.projection',
+            'Projection',
+            required=True,
+            readonly=True,
+            ondelete='cascade'),
+        'state': fields.selection(
+            [('unchoosed', 'Unchoosed'),
+             ('approved', 'Approved'),
+             ('refused', 'Refused')],
+            'State'),
+        'movie_id': fields.related(
+            'projection_id',
+            'movie_id',
+            type='many2one',
+            relation='movie.movie',
+            string='Movie',
+            readonly=True),
+        }
+
+    _defaults = {
+        'state': 'unchoosed',
+        }
+
+    def refuse(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'refused'}, context=context)
+        return True
+
+    def approve(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'approved'}, context=context)
         return True

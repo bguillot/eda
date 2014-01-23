@@ -51,15 +51,15 @@
             <header>
                 <button name="dl_movie" string="Download movie"
                     type="object" states="to_dl" class="oe_highlight"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"/>
                 <button name="watch_movie" string="Watch movie"
                     type="object" states="ready" class="oe_highlight"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"/>
                 <button name="plan_projection" string="Plan projection"
                     type="object" states="ready,watched" class="oe_highlight"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"/>
                 <button name="already_watched" states="to_dl,ready,watched"
-                    string="Already watched" type="object" icon="gtk-go-forward"/>
+                    string="Already watched" type="object" icon="gtk-apply"/>
                 <button name="wanna_see" states="to_dl,ready,watched"
                     string="Want to see" type="object" icon="gtk-go-forward"/>
                 <field name="state" widget="statusbar"
@@ -91,7 +91,7 @@
     <field name="name">movie.movie.list</field>
     <field name="model">movie.movie</field>
     <field name="arch" type="xml">
-        <tree string="Movies">
+        <tree string="Movies" colors="green:state=='ready';red:state == 'to_dl';blue:state=='watched'">
             <field name="sequence"/>
             <field name="name"/>
             <field name="year"/>
@@ -100,7 +100,7 @@
             <field name="language"/>
             <field name="director"/>
             <button name="already_watched" states="to_dl,ready,watched"
-                string="Already watched" type="object" icon="gtk-go-forward"/>
+                string="Already watched" type="object" icon="gtk-apply"/>
             <button name="wanna_see" states="to_dl,ready,watched"
                 string="Want to see" type="object" icon="gtk-go-forward"/>
         </tree>
@@ -237,10 +237,20 @@
             <header>
                 <button name="action_plan" string="Plan Projection"
                     type="object" states="draft" class="oe_highlight"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"/>
                 <button name="action_done" string="Validate Projection"
                     type="object" states="planned" class="oe_highlight"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"
+                    icon="gtk-media-play"/>
+                <button name="action_unplan" string="Unplan Projection"
+                    type="object" states="planned" class="oe_highlight"
+                    groups="base_colocation_tools.group_flatmates"/>
+                <button name="%(action_generate_projection_choice)d"
+                    string="Generate dates" type="action" target="new"
+                    groups="base_colocation_tools.group_flatmates" states="draft"/>
+                <button name="cancel" states="draft,planned"
+                    string="Cancel" type="object"
+                    groups="base_colocation_tools.group_flatmates"/>
                 <field name="state" widget="statusbar"
                     statusbar_visible="draft,planned,done,cancel"
                     statusbar_colors='{"draft":"red","planned":"blue"}'/>
@@ -252,13 +262,38 @@
                         <field name="movie_id"/>
                     </h1>
                 </div>
-                <group name="extra_fields" colspan="4">
+                <group name="extra_fields" colspan="2">
                     <field name="date_planned"
                         attrs="{'readonly': [('state', '!=', 'draft')]}"/>
                     <field name="date_done"/>
                 </group>
-                <group name="users" colspan="4" string="Users">
-                    <field name="user_ids" nolabel="1"/>
+                <group name="plan_fields" colspan="2">
+                    <field name="best_date"/>
+                    <field name="ready_to_plan"/>
+                </group>
+                <group name="users" colspan="4" string="Initial Users"
+                    attrs="{'invisible': [('state', 'in', ['done', 'planned'])]}">
+                    <field name="planned_user_ids" nolabel="1"
+                    attrs="{'readonly': [('state', 'in', ['done', 'planned', 'cancel'])]}"/>
+                </group>
+                <group name="actual_users" colspan="4" string="Actual Users"
+                    attrs="{'invisible': [('state', '=', 'draft')]}">
+                    <field name="actual_user_ids" nolabel="1"
+                    attrs="{'readonly': [('state', '=', 'cancel')]}"/>
+                </group>
+                <group name="choices" colspan="4" string="Choices">
+                    <field name="choice_ids" nolabel="1">
+                        <tree editable="top" colors="green:state=='approved';red:state == 'refused';grey:state=='unchoosed'">
+                            <field name="user_id"/>
+                            <field name="date"/>
+                            <field name="state"/>
+                        </tree>
+                        <form>
+                            <field name="user_id"/>
+                            <field name="date"/>
+                            <field name="state"/>
+                        </form>
+                    </field>
                 </group>
             </sheet>
         </form>
@@ -266,14 +301,16 @@
 </record>
 
 <record id="movie_projection_tree_view" model="ir.ui.view">
-    <field name="name">movie.projectino.list</field>
+    <field name="name">movie.projection.list</field>
     <field name="model">movie.projection</field>
     <field name="arch" type="xml">
-        <tree string="Movie Projections">
+        <tree string="Movie Projections" colors="green:ready_to_plan==True">
             <field name="movie_id"/>
             <field name="date_planned"/>
             <field name="date_done"/>
             <field name="state"/>
+            <field name="best_date"/>
+            <field name="ready_to_plan"/>
           </tree>
     </field>
 </record>
@@ -282,11 +319,68 @@
     <field name="name">Movies Projections</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">movie.projection</field>
-    <field name="context">{}</field>
+    <field name="context">{'search_default_draft': 1, 'search_default_planned': 1}</field>
     <field name="domain">[]</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
     <field name="search_view_id" ref="movie_projection_search_view"/>
+</record>
+
+<act_window
+    context="{'search_default_projection_id': [active_id], 'default_projection_id': active_id}"
+    id="act_projection_choice_open"
+    name="Projection choice"
+    res_model="projection.choice"
+    src_model="movie.projection"/>
+
+        <!--  VIEW FOR THE OBJECT : projection_choice -->
+
+<record id="projection_choice_search_view" model="ir.ui.view">
+    <field name="name">projection.choice.search</field>
+    <field name="model">projection.choice</field>
+    <field name="arch" type="xml">
+        <search string="Projections Choices">
+            <field name="projection_id"/>
+            <field name="date"/>
+            <field name="state"/>
+            <field name="movie_id"/>
+            <separator/>
+            <filter icon="terp-dolar_ok!" string="To choose" name="unchoosed"
+                domain="[('state','=', 'unchoosed')]"/>
+            <filter icon="terp-dolar_ok!" string="Approved" name="approved"
+                domain="[('state','=', 'approved')]"/>
+            <filter icon="terp-dolar_ok!" string="Refused" name="refused"
+                domain="[('state','=', 'refused')]"/>
+            <newline/>
+            <group expand="1" string="Group By...">
+                <filter string="Movie"
+                    name="group_movie_id"
+                    icon="terp-personal"
+                    context="{'group_by':'movie_id'}"/>
+                <filter string="Projection"
+                    name="group_projection_id"
+                    icon="terp-personal"
+                    context="{'group_by':'projection_id'}"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="projection_choice_tree_view" model="ir.ui.view">
+    <field name="name">projection.choice.list</field>
+    <field name="model">projection.choice</field>
+    <field name="arch" type="xml">
+        <tree string="Projections Choices">
+            <field name="projection_id"/>
+            <field name="movie_id"/>
+            <field name="date"/>
+            <field name="state"/>
+            <button name="approve" states="unchoosed,refused"
+                string="Approve" type="object" icon="gtk-yes"/>
+            <button name="refuse" states="unchoosed,approved"
+                string="Refuse" type="object" icon="gtk-no"/>
+          </tree>
+    </field>
 </record>
 
     <!--  VIEW FOR THE OBJECT : movie.type -->

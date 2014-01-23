@@ -1,9 +1,11 @@
 id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
-access_movie_manager,movie manager,movies_management.model_movie_movie,base_colocation_tools.group_roomates,1,1,1,1
-access_movie_type_manager,movie type manager,movies_management.model_movie_type,base_colocation_tools.group_roomates,1,1,1,1
-access_movie_subtype_manager,movie subtype manager,movies_management.model_movie_subtype,base_colocation_tools.group_roomates,1,1,1,1
-access_movie_projection_manager,movie projection manager,movies_management.model_movie_projection,base_colocation_tools.group_roomates,1,1,1,1
-access_movie_user,movie user,movies_management.model_movie_movie,base.group_user,1,0,0,0
+access_movie_manager,movie manager,movies_management.model_movie_movie,base_colocation_tools.group_flatmates,1,1,1,1
+access_movie_type_manager,movie type manager,movies_management.model_movie_type,base_colocation_tools.group_flatmates,1,1,1,1
+access_movie_subtype_manager,movie subtype manager,movies_management.model_movie_subtype,base_colocation_tools.group_flatmates,1,1,1,1
+access_movie_projection_manager,movie projection manager,movies_management.model_movie_projection,base_colocation_tools.group_flatmates,1,1,1,1
+access_projection_choice_manager,projection choice manager,movies_management.model_projection_choice,base_colocation_tools.group_flatmates,1,1,1,1
+access_movie_user,movie user,movies_management.model_movie_movie,base.group_user,1,1,1,0
 access_movie_subtype_user,movie subtype user,movies_management.model_movie_subtype,base.group_user,1,0,0,0
 access_movie_type_user,movie type user,movies_management.model_movie_type,base.group_user,1,0,0,0
 access_movie_projection_user,movie projection user,movies_management.model_movie_projection,base.group_user,1,0,0,0
+access_projection_choice_user,projection choice user,movies_management.model_projection_choice,base.group_user,1,1,1,1

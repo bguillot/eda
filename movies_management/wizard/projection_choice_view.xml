@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  movies_management for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!--  VIEW FOR THE WIZARD : generate_projection -->
+
+        <record id="action_generate_projection_choice" model="ir.actions.act_window">
+            <field name="name">Generate Choices</field>
+            <field name="res_model">generate.projection.choice</field>
+            <field name="src_model">movie.projection</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="generate_date_form" model="ir.ui.view">
+            <field name="name">generate.projection.date.form</field>
+            <field name="model">generate.projection.choice</field>
+            <field name="arch" type="xml">
+                <form string="Generate Choices" version="7.0">
+                    <group name="dates" String="Dates">
+                        <field name="dates" colspan="4" nolabel="1"
+                            mode="tree" width="700" height="700"
+                            editable="top"/>
+                    </group>
+                    <group name="users" string="Users">
+                        <field name="user_ids" colspan="4" nolabel="1"
+                            mode="tree" width="700" height="700"/>
+                    </group>
+                    <footer>
+                        <button name="generate_dates" string="Validate"
+                            type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="projection_dates_tree_view" model="ir.ui.view">
+            <field name="name">projection.dates.tree</field>
+            <field name="model">projection.dates</field>
+            <field name="arch" type="xml">
+                <tree editable="bottom" string="Dates">
+                    <field name="date"/>
+                </tree>
+            </field>
+        </record>
+
+    </data>
+</openerp>

@@ -18,7 +18,7 @@
           name="Configuration"
           parent="menu_movie"
           sequence="100"
-          groups="base_colocation_tools.group_roomates"/>
+          groups="base_colocation_tools.group_flatmates"/>
 
 <menuitem id="menu_movie_movie"
           name="Movies"
