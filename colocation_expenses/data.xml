@@ -41,14 +41,14 @@
     <field name="name">Expense - Attedance Reminder</field>
     <field name="email_from">${object.email or 'admin@erpcoloc.com'}</field>
     <field name="subject">[Erp Coloc] Expense and attendance reminder</field>
-    <field name="email_to">${object.roomates_email}</field>
+    <field name="email_to">${object.flatmates_email}</field>
     <field name="model_id" ref="base.model_res_company"/>
     <field name="auto_delete" eval="True"/>
     <field name="lang">fr_FR</field>
     <field name="body_html"><![CDATA[
 <div style="font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; ">
 
-    <p>Hello Roomates,</p>
+    <p>Hello Flatmates,</p>
 
 <p>Don't forget to add your expenses and meal attendances in the coloc erp ! </p>
 

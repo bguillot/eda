@@ -54,7 +54,7 @@ class coloc_expense(orm.Model):
 
     def _get_default_concerned_partners(self, cr, uid, context=None):
         user = self.pool['res.users'].browse(cr, uid, uid, context=context)
-        partners = user.company_id.roomate_ids
+        partners = user.company_id.flatmate_ids
         partner_ids  = [x.id for x in partners]
         return partner_ids
 

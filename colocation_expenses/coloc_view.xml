@@ -23,6 +23,13 @@
     </field>
 </record>
 
+<act_window
+    context="{'search_default_product_id': [active_id], 'default_product_id': active_id}"
+    id="act_product_expense_open"
+    name="Expenses"
+    res_model="coloc.expense"
+    src_model="product.product"/>
+
 <record id="coloc_expense_product_action" model="ir.actions.act_window">
     <field name="name">Products Expenses</field>
     <field name="type">ir.actions.act_window</field>
@@ -53,6 +60,7 @@
             <field name="month" string="Month"/>
             <field name="partner_id"/>
             <field name="balance_id"/>
+            <field name="product_id"/>
             <separator/>
             <filter icon="terp-dolar_ok!" string="Unbalanced" name="unbalanced"
                 domain="[('balance_id','=', False)]"/>
@@ -302,7 +310,7 @@
             <header>
                 <button name="pay_balance" states="to_pay" class="oe_highlight"
                     string="Pay Balance Result" type="object"
-                    groups="base_colocation_tools.group_roomates"/>
+                    groups="base_colocation_tools.group_flatmates"/>
                 <field name="state"
                     widget="statusbar"
                     statusbar_visible="to_pay,paid"
@@ -394,6 +402,13 @@
     <field name="view_id" ref="balance_result_tree_view"/>
     <field name="act_window_id" ref="balance_result_action_form"/>
 </record>
+
+<act_window
+    context="{'search_default_balance_id': [active_id], 'default_balance_id': active_id}"
+    id="act_balance_result_expense_open"
+    name="Expenses"
+    res_model="coloc.expense"
+    src_model="balance.result"/>
 
     <!--  VIEW FOR THE OBJECT : automatic.expense -->
 
