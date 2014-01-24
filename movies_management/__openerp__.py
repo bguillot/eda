@@ -40,6 +40,7 @@
            'wizard/projection_choice_view.xml',
            'movie_view.xml',
            'movie_menu.xml',
+           'data.xml',
     ],
     'demo': [],
     'installable': True,

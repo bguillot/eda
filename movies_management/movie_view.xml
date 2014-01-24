@@ -34,8 +34,7 @@
                     context="{'group_by':'year'}"/>
                 <filter string="Director"
                     icon="terp-go-month"
-                    context="{'group_by':'director'}"
-                    help="Order of Month"/>
+                    context="{'group_by':'director'}"/>
                 <filter string="Type"
                     context="{'group_by': 'type_id'}"/>
             </group>
@@ -67,6 +66,7 @@
                     statusbar_colors='{"to_dl":"red","watched":"blue"}'/>
             </header>
             <sheet>
+                <field name="poster" widget="image" class="oe_avatar oe_left"/>
                 <div class="oe_title">
                     <label for="name" class="oe_edit_only"/>
                     <h1>
@@ -83,6 +83,11 @@
                     <field name="synopsis"/>
                 </group>
             </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers"
+                    groups="base_colocation_tools.group_flatshare_user"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
         </form>
     </field>
 </record>
@@ -92,13 +97,13 @@
     <field name="model">movie.movie</field>
     <field name="arch" type="xml">
         <tree string="Movies" colors="green:state=='ready';red:state == 'to_dl';blue:state=='watched'">
-            <field name="sequence"/>
+            <field name="sequence" invisible="1"/>
             <field name="name"/>
             <field name="year"/>
-            <field name="state"/>
             <field name="type_id"/>
             <field name="language"/>
             <field name="director"/>
+            <field name="state"/>
             <button name="already_watched" states="to_dl,ready,watched"
                 string="Already watched" type="object" icon="gtk-apply"/>
             <button name="wanna_see" states="to_dl,ready,watched"
@@ -139,6 +144,14 @@
     <field name="view_mode">tree,form</field>
     <field name="search_view_id" ref="movie_movie_search_view"/>
 </record>
+
+<act_window
+    context="{'search_default_movie_id': [active_id], 'default_movie_id': active_id}"
+    id="act_movie_projection_open"
+    name="Movie Projections"
+    res_model="movie.projection"
+    src_model="movie.movie"/>
+<!--    view_mode="calendar,tree,form"/>-->
 
     <!-- VIEW MY MOVIES -->
 
@@ -213,6 +226,8 @@
             <field name="date_planned"/>
             <field name="state"/>
             <field name="date_done"/>
+            <field name="planned_user_ids"/>
+            <field name="actual_user_ids"/>
             <separator/>
             <filter icon="terp-dolar_ok!" string="To plan" name="draft"
                 domain="[('state','=', 'draft')]"/>
@@ -296,6 +311,10 @@
                     </field>
                 </group>
             </sheet>
+            <div class="oe_chatter">
+                <field name="message_follower_ids" widget="mail_followers" groups="base_colocation_tools.group_flatshare_user"/>
+                <field name="message_ids" widget="mail_thread"/>
+            </div>
         </form>
     </field>
 </record>
@@ -308,9 +327,9 @@
             <field name="movie_id"/>
             <field name="date_planned"/>
             <field name="date_done"/>
-            <field name="state"/>
             <field name="best_date"/>
             <field name="ready_to_plan"/>
+            <field name="state"/>
           </tree>
     </field>
 </record>
@@ -331,7 +350,8 @@
     id="act_projection_choice_open"
     name="Projection choice"
     res_model="projection.choice"
-    src_model="movie.projection"/>
+    src_model="movie.projection"
+    view_mode="calendar,tree,form"/>
 
         <!--  VIEW FOR THE OBJECT : projection_choice -->
 
@@ -366,6 +386,38 @@
     </field>
 </record>
 
+<record id="projection_choice_form_view" model="ir.ui.view">
+    <field name="name">projection.choice.form</field>
+    <field name="model">projection.choice</field>
+    <field name="arch" type="xml">
+        <form string="Projection Choice" version="7.0">
+            <header>
+                <button name="approve" states="unchoosed,refused"
+                    string="Approve" type="object" icon="gtk-yes"
+                    groups="base_colocation_tools.group_flatshare_user"/>
+                <button name="refuse" states="unchoosed,approved"
+                    string="Refuse" type="object" icon="gtk-no"
+                    groups="base_colocation_tools.group_flatshare_user"/>
+                <field name="state" widget="statusbar"
+                    statusbar_visible="unchoosed,approved,refused"
+                    statusbar_colors='{"refused":"red","unchoosed":"blue"}'/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <label for="date" class="oe_edit_only"/>
+                    <h1>
+                        <field name="date"/>
+                    </h1>
+                </div>
+                <group name="extra_fields" colspan="2">
+                    <field name="movie_id"/>
+                    <field name="user_id" readonly="1"/>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
 <record id="projection_choice_tree_view" model="ir.ui.view">
     <field name="name">projection.choice.list</field>
     <field name="model">projection.choice</field>
@@ -380,6 +432,17 @@
             <button name="refuse" states="unchoosed,approved"
                 string="Refuse" type="object" icon="gtk-no"/>
           </tree>
+    </field>
+</record>
+
+<record id="projection_choice_calendar_view" model="ir.ui.view">
+    <field name="name">projection.choice.calendar</field>
+    <field name="model">projection.choice</field>
+    <field name="arch" type="xml">
+        <calendar color="user_id" date_start="date" date_stop="date" day_length="12" string="Projections Choices">
+            <field name="movie_id"/>
+            <field name="state"/>
+          </calendar>
     </field>
 </record>
 

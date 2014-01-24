@@ -73,7 +73,9 @@ class generate_projection_choice(orm.TransientModel):
             context = {}
         proj_id = context.get('active_id')
         wizard = self.browse(cr, uid, ids[0], context=context)
+        email_to = ""
         for user in wizard.user_ids:
+            email_to += "%s, " % user.partner_id.email
             for date in wizard.dates:
                 vals = {
                     'projection_id': proj_id,
@@ -83,4 +85,9 @@ class generate_projection_choice(orm.TransientModel):
                     }
                 self.pool['projection.choice'].create(cr, uid, vals,
                                                       context=context)
+        context['email_to'] = email_to
+        template_id = self.pool['ir.model.data'].get_object_reference(cr, uid,
+            'movies_management', 'start_planning_projection_template')[1]
+        self.pool.get('email.template').send_mail(cr, uid, template_id,
+            proj_id, force_send=False, context=context)
         return {'type': 'ir.actions.act_window_close'}

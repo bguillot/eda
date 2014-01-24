@@ -70,6 +70,7 @@ class movie_movie(orm.Model):
 
     _columns={
         'name': fields.char('Name', size=64, required=True),
+        'poster': fields.binary('Poster'),
         'type_id': fields.many2one(
             'movie.type',
             'Type',
@@ -194,28 +195,24 @@ class movie_projection(orm.Model):
     def _get_best_date(self, cr, uid, ids, name, args, context=None):
         res = {}
         for proj in self.browse(cr, uid, ids, context=context):
+            res[proj.id] = {}
+            initial_user_ids = [x.id for x in proj.planned_user_ids]
             dates = defaultdict(int)
+            users = defaultdict(list)
             for choice in proj.choice_ids:
                 if choice.state == 'approved':
                     dates[choice.date] += 1
+                    users[choice.date].append(choice.user_id.id)
+            best_date = False
             if dates:
-                res[proj.id] = sorted(dates.iteritems(),
-                                      key=operator.itemgetter(1),
-                                      reverse=True)[0][0]
-            else:
-                res[proj.id] = False
-        return res
-
-    def _get_ready_to_plan(self, cr, uid, ids, name, args, context=None):
-        res = {}
-        for proj in self.browse(cr, uid, ids, context=context):
-            res[proj.id] = False
-            if proj.best_date:
-                res[proj.id] = True
-                for choice in proj.choice_ids:
-                    if proj.best_date == choice.date and choice.state != 'approved':
-                        res[proj.id] = False
-                        break
+                best_date = sorted(dates.iteritems(),
+                                   key=operator.itemgetter(1),
+                                   reverse=True)[0][0]
+            ready= False
+            if best_date and users[best_date] == initial_user_ids:
+                ready = True
+            res[proj.id]['best_date'] = best_date
+            res[proj.id]['ready_to_plan'] = ready
         return res
 
     def _get_proj_from_choice(self, cr, uid, ids, context=None):
@@ -244,13 +241,13 @@ class movie_projection(orm.Model):
             'planned_user_projection_rel',
             'projection_id',
             'user_id',
-            'Users'),
+            'Planned Users'),
         'actual_user_ids': fields.many2many(
             'res.users',
             'actual_user_projection_rel',
             'projection_id',
             'user_id',
-            'Users'),
+            'Actual Users'),
         'choice_ids': fields.one2many(
             'projection.choice',
             'projection_id',
@@ -261,6 +258,7 @@ class movie_projection(orm.Model):
             _get_best_date,
             type="date",
             string="Best Date",
+            multi="best_date",
             store={
                 'movie.projection': (
                     lambda self, cr, uid, ids, c=None: ids,
@@ -272,9 +270,10 @@ class movie_projection(orm.Model):
                     20)
                 }),
         'ready_to_plan': fields.function(
-            _get_ready_to_plan,
+            _get_best_date,
             type="boolean",
             string="Ready to plan",
+            multi="best_date",
             store={
                 'movie.projection': (
                     lambda self, cr, uid, ids, c=None: ids,
@@ -285,10 +284,12 @@ class movie_projection(orm.Model):
                     ['state'],
                     20)
                 }),
+        'company_id': fields.many2one('res.company', 'Company'),
         }
 
     _defaults = {
         'state': 'draft',
+        'company_id': 1,  # TODO method get company
         }
 
     def action_plan(self, cr, uid, ids, context=None):
@@ -298,6 +299,14 @@ class movie_projection(orm.Model):
                                      _("You have to set the date planned "
                                        "before planning the projection, "
                                        "you stupid fuck!"))
+            email_to = ""
+            for user in proj.planned_user_ids:
+                email_to += "%s, " % user.partner_id.email
+            context['email_to'] = email_to
+            template_id = self.pool['ir.model.data'].get_object_reference(cr, uid,
+                'movies_management', 'planned_projection_template')[1]
+            self.pool.get('email.template').send_mail(cr, uid, template_id,
+                proj.id, force_send=False, context=context)
         self.write(cr, uid, ids, {'state': 'planned'}, context=context)
         return True
 
@@ -326,7 +335,7 @@ class movie_projection(orm.Model):
                     context=context)
                 proj.movie_id.write({
                     'watcher_ids': [(3, user.id)],
-                    'wached_user_ids': [(4, user.id)]},
+                    'watched_user_ids': [(4, user.id)]},
                     context=context)
         return True
 
