@@ -1,0 +1,799 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* movies_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-24 17:02+0000\n"
+"PO-Revision-Date: 2014-01-24 17:02+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "To plan"
+msgstr "A définir"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: view:movie.projection:0
+#: view:projection.choice:0
+msgid "Group By..."
+msgstr "Grouper par..."
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_movie_projection
+#: view:movie.projection:0
+msgid "Movie Projection"
+msgstr "Projection de film"
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_generate_projection_choice
+msgid "Generate Projection choice"
+msgstr "Générer les choix de projection"
+
+#. module: movies_management
+#: view:movie.subtype:0
+#: view:movie.type:0
+msgid "Movie type"
+msgstr "Type de film"
+
+#. module: movies_management
+#: field:movie.movie,message_unread:0
+#: field:movie.projection,message_unread:0
+msgid "Unread Messages"
+msgstr "Messages non lus"
+
+#. module: movies_management
+#: field:movie.projection,company_id:0
+msgid "Company"
+msgstr "Société"
+
+#. module: movies_management
+#: view:movie.movie:0
+msgid "Plan projection"
+msgstr "Planifier la projection"
+
+#. module: movies_management
+#: sql_constraint:movie.movie:0
+msgid "Movie already created with this name and year!"
+msgstr "Un film a déjà été créé avec ce nom et cette année!"
+
+#. module: movies_management
+#: help:movie.movie,watcher_ids:0
+msgid "Persons who want to watch the movie"
+msgstr "Les pelo qui veulent voir le film"
+
+#. module: movies_management
+#: view:generate.projection.choice:0
+msgid "Validate"
+msgstr "Se oualide"
+
+#. module: movies_management
+#: view:projection.choice:0
+#: selection:projection.choice,state:0
+msgid "Approved"
+msgstr "Approuvé"
+
+#. module: movies_management
+#: view:projection.choice:0
+msgid "Refuse"
+msgstr "Refuser"
+
+#. module: movies_management
+#: field:movie.movie,message_ids:0
+#: field:movie.projection,message_ids:0
+msgid "Messages"
+msgstr "Messages"
+
+#. module: movies_management
+#: view:movie.movie:0
+msgid "Already watched"
+msgstr "Déjà vu"
+
+#. module: movies_management
+#: selection:movie.movie,language:0
+msgid "VOSTFR"
+msgstr "VOSTFR"
+
+#. module: movies_management
+#: view:movie.projection:0
+#: field:movie.projection,choice_ids:0
+msgid "Choices"
+msgstr "Choix"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.movie_projection_action_form
+#: model:ir.ui.menu,name:movies_management.menu_movie_projection
+#: view:movie.projection:0
+msgid "Movies Projections"
+msgstr "Projections de films"
+
+#. module: movies_management
+#: help:movie.movie,message_unread:0
+#: help:movie.projection,message_unread:0
+msgid "If checked new messages require your attention."
+msgstr "If checked new messages require your attention."
+
+#. module: movies_management
+#: field:res.users,wished_movie_ids:0
+msgid "Wished movies"
+msgstr "Films à voir"
+
+#. module: movies_management
+#: help:movie.movie,watched_user_ids:0
+msgid "Persons who have already watched the movie"
+msgstr "Gonzes ayant déjà vu le film"
+
+#. module: movies_management
+#: field:projection.dates,generate_projection_id:0
+msgid "Generate projection"
+msgstr "Créer un projection"
+
+#. module: movies_management
+#: help:movie.movie,message_summary:0
+#: help:movie.projection,message_summary:0
+msgid "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+msgstr "Holds the Chatter summary (number of messages, ...). This summary is directly in html format in order to be inserted in kanban views."
+
+#. module: movies_management
+#: model:email.template,subject:movies_management.planned_projection_template
+msgid "[Erp Coloc] Movie projection planned"
+msgstr "[Erp Coloc] Projection d'un film planifiée"
+
+#. module: movies_management
+#: view:movie.movie:0
+msgid "Ready"
+msgstr "Prêt"
+
+#. module: movies_management
+#: selection:movie.movie,state:0
+#: view:res.users:0
+msgid "Watched"
+msgstr "Vu"
+
+#. module: movies_management
+#: field:movie.projection,date_planned:0
+msgid "Date planned"
+msgstr "Date planifiée"
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_projection_dates
+msgid "Projection dates"
+msgstr "Dates de projections"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.act_movie_projection_open
+#: view:movie.projection:0
+msgid "Movie Projections"
+msgstr "Projections de films"
+
+#. module: movies_management
+#: field:movie.movie,state:0
+#: field:movie.projection,state:0
+#: field:projection.choice,state:0
+msgid "State"
+msgstr "Etat"
+
+#. module: movies_management
+#: field:movie.movie,message_follower_ids:0
+#: field:movie.projection,message_follower_ids:0
+msgid "Followers"
+msgstr "Followers"
+
+#. module: movies_management
+#: selection:movie.movie,state:0
+msgid "Ready to be watched"
+msgstr "Prêt à être vu"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: field:movie.movie,type_id:0
+#: field:movie.subtype,type_id:0
+msgid "Type"
+msgstr "Type"
+
+#. module: movies_management
+#: view:generate.projection.choice:0
+#: model:ir.actions.act_window,name:movies_management.action_generate_projection_choice
+msgid "Generate Choices"
+msgstr "Génerer les choix"
+
+#. module: movies_management
+#: selection:projection.choice,state:0
+msgid "Unchoosed"
+msgstr "Non décidé"
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_movie_subtype
+msgid "Movie Subtype"
+msgstr "Sous-type"
+
+#. module: movies_management
+#: model:ir.ui.menu,name:movies_management.menu_movie_configuration
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "Plan Projection"
+msgstr "Planifier la projection"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "Initial Users"
+msgstr "Utilisateurs initiaux"
+
+#. module: movies_management
+#: field:generate.projection.choice,dates:0
+#: view:projection.dates:0
+msgid "Dates"
+msgstr "Dates"
+
+#. module: movies_management
+#: field:res.users,watched_movie_ids:0
+msgid "Watched movies"
+msgstr "Films vus"
+
+#. module: movies_management
+#: help:movie.movie,year:0
+msgid "Year of release"
+msgstr "Année de sortie"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "Generate dates"
+msgstr "Génerer les dates"
+
+#. module: movies_management
+#: view:movie.movie:0
+msgid "Download movie"
+msgstr "Télécharger le film"
+
+#. module: movies_management
+#: view:movie.projection:0
+#: selection:movie.projection,state:0
+msgid "Planned"
+msgstr "Planifiée"
+
+#. module: movies_management
+#: view:movie.subtype:0
+msgid "Movie subtype"
+msgstr "Sous-type de film"
+
+#. module: movies_management
+#: code:addons/movies_management/movie.py:299
+#, python-format
+msgid "You have to set the date planned before planning the projection, you stupid fuck!"
+msgstr "Tu dois définir une date pour la projection, mange gadin!"
+
+#. module: movies_management
+#: view:generate.projection.choice:0
+msgid "or"
+msgstr "ou"
+
+#. module: movies_management
+#: selection:movie.movie,language:0
+msgid "FR"
+msgstr "FR"
+
+#. module: movies_management
+#: field:movie.movie,watched_user_ids:0
+msgid "Already watched users"
+msgstr "Utilisateurs ayant déjà vu"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "Unplan Projection"
+msgstr "Déplanifier la projection"
+
+#. module: movies_management
+#: selection:movie.projection,state:0
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.dl_movie_action_form
+#: model:ir.ui.menu,name:movies_management.menu_dl_movie
+msgid "Movies to download"
+msgstr "Films à télécharger"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: field:movie.movie,director:0
+msgid "Director"
+msgstr "Réalisateur"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.my_movie_action_form
+#: model:ir.ui.menu,name:movies_management.menu_my_movie
+#: view:res.users:0
+msgid "My movies"
+msgstr "Mes films"
+
+#. module: movies_management
+#: view:movie.projection:0
+msgid "Validate Projection"
+msgstr "Valider la projection"
+
+#. module: movies_management
+#: field:movie.movie,message_is_follower:0
+#: field:movie.projection,message_is_follower:0
+msgid "Is a Follower"
+msgstr "Is a Follower"
+
+#. module: movies_management
+#: field:projection.choice,user_id:0
+msgid "User"
+msgstr "Gonze"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.ready_movie_action_form
+#: model:ir.ui.menu,name:movies_management.menu_ready_movie
+msgid "Movies ready"
+msgstr "Films prêts"
+
+#. module: movies_management
+#: field:projection.choice,date:0
+#: field:projection.dates,date:0
+msgid "Date"
+msgstr "Date"
+
+#. module: movies_management
+#: view:movie.projection:0
+#: field:movie.projection,actual_user_ids:0
+msgid "Actual Users"
+msgstr "Gonzes à la projection"
+
+#. module: movies_management
+#: field:movie.projection,planned_user_ids:0
+msgid "Planned Users"
+msgstr "Gonzes prévus"
+
+#. module: movies_management
+#: field:movie.movie,language:0
+msgid "Language"
+msgstr "Langue"
+
+#. module: movies_management
+#: field:movie.movie,message_summary:0
+#: field:movie.projection,message_summary:0
+msgid "Summary"
+msgstr "Résumé"
+
+#. module: movies_management
+#: field:movie.movie,subtype_id:0
+msgid "Subtype"
+msgstr "Sous-type"
+
+#. module: movies_management
+#: field:movie.movie,synopsis:0
+msgid "Synopsis"
+msgstr "Synopsis"
+
+#. module: movies_management
+#: view:movie.movie:0
+msgid "Watch movie"
+msgstr "Regarder le film"
+
+#. module: movies_management
+#: view:projection.choice:0
+#: field:projection.choice,projection_id:0
+msgid "Projection"
+msgstr "Projection"
+
+#. module: movies_management
+#: code:addons/movies_management/movie.py:298
+#: code:addons/movies_management/movie.py:328
+#, python-format
+msgid "Keyboard/Chair error"
+msgstr "Erreur Clavier/Chaise"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.movie_subtype_action_form
+#: model:ir.ui.menu,name:movies_management.menu_movie_subtype
+#: view:movie.subtype:0
+msgid "Movie subtypes"
+msgstr "Sous-type de film"
+
+#. module: movies_management
+#: selection:movie.projection,state:0
+msgid "Done"
+msgstr "Terminé"
+
+#. module: movies_management
+#: field:movie.movie,last_projection_date:0
+msgid "Last projection date"
+msgstr "Date de dernière projection"
+
+#. module: movies_management
+#: view:generate.projection.choice:0
+#: view:movie.projection:0
+#: selection:movie.projection,state:0
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: movies_management
+#: field:movie.projection,date_done:0
+msgid "Date done"
+msgstr "Date de visionnage"
+
+#. module: movies_management
+#: view:projection.choice:0
+msgid "To choose"
+msgstr "A choisir"
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_movie_type
+msgid "Movie Type"
+msgstr "Type de film"
+
+#. module: movies_management
+#: field:movie.projection,ready_to_plan:0
+msgid "Ready to plan"
+msgstr "Prêt à être planifier"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: view:movie.projection:0
+#: field:movie.projection,movie_id:0
+#: view:projection.choice:0
+#: field:projection.choice,movie_id:0
+msgid "Movie"
+msgstr "Film"
+
+#. module: movies_management
+#: model:email.template,body_html:movies_management.start_planning_projection_template
+msgid "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <p>Hello Cinema lovers,</p>\n"
+"\n"
+"    <p>A movie projection has been started in ${object.company_id.name} ! </p>\n"
+"\n"
+"    <br/>\n"
+"    <div style=\"float:right\">\n"
+"        <p><img src=\" data:image/png;base64, ${object.movie_id.poster}\" height=\"100px\" width=\"100px\"/></p>\n"
+"    </div>\n"
+"    <p>It it ${object.movie_id.name}.</p>\n"
+"\n"
+"    <p>It's time to go in the ERP and fill when you're available.</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <p>If you have any question, do not hesitate to contact us.</p>\n"
+"    <p>For further information about the movie ${object.movie_id.name} we invite you to look into the ERP.</p>\n"
+"    <p>Thank you for choosing ${object.company_id.name or 'us'}!</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if object.company_id.street:\n"
+"            ${object.company_id.street}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.street2:\n"
+"            ${object.company_id.street2}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.city or object.company_id.zip:\n"
+"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.country_id:\n"
+"            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if object.company_id.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Phone:&nbsp; ${object.company_id.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if object.company_id.website:\n"
+"            <div>\n"
+"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p style=\"float:right\"><img src=\" data:image/png;base64, ${object.company_id.logo}\" height=\"100px\" width=\"100px\"/></p>\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"        "
+msgstr "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <p>Salut les cinéphiles,</p>\n"
+"\n"
+"    <p>On a prévu de regarder un film à ${object.company_id.name} !</p>\n"
+"\n"
+"    <br/>\n"
+"    <div style=\"float:right\">\n"
+"        <p><img src=\" data:image/png;base64, ${object.movie_id.poster}\" height=\"100px\" width=\"100px\"/></p>\n"
+"    </div>\n"
+"    <p>Il s'agit de ${object.movie_id.name}.</p>\n"
+"\n"
+"    <p>C'est le moment d'aller sur l'ERP et de dire quand vous êtes dispo.</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <p>Si vous avez des questions n'hésiter pas à nous contacter.</p>\n"
+"    <p>Pour plus d'informations sur le film ${object.movie_id.name}, nous vous invitons à jeter un oeil dans l'ERP.</p>\n"
+"    <p>Merci d'avoir choisi ${object.company_id.name or 'us'}!</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if object.company_id.street:\n"
+"            ${object.company_id.street}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.street2:\n"
+"            ${object.company_id.street2}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.city or object.company_id.zip:\n"
+"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.country_id:\n"
+"            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if object.company_id.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Phone:&nbsp; ${object.company_id.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if object.company_id.website:\n"
+"            <div>\n"
+"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p style=\"float:right\"><img src=\" data:image/png;base64, ${object.company_id.logo}\" height=\"100px\" width=\"100px\"/></p>\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"        "
+
+#. module: movies_management
+#: field:movie.movie,watcher_ids:0
+msgid "Watchers"
+msgstr "Voyeurs"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.act_projection_choice_open
+#: model:ir.model,name:movies_management.model_projection_choice
+msgid "Projection choice"
+msgstr "Choix de projection"
+
+#. module: movies_management
+#: selection:movie.movie,language:0
+msgid "VOSTEN"
+msgstr "VOSTEN"
+
+#. module: movies_management
+#: view:generate.projection.choice:0
+#: field:generate.projection.choice,user_ids:0
+#: model:ir.model,name:movies_management.model_res_users
+msgid "Users"
+msgstr "Utilisateurs"
+
+#. module: movies_management
+#: field:movie.movie,poster:0
+msgid "Poster"
+msgstr "Affiche"
+
+#. module: movies_management
+#: view:projection.choice:0
+#: selection:projection.choice,state:0
+msgid "Refused"
+msgstr "Refusé"
+
+#. module: movies_management
+#: model:email.template,body_html:movies_management.planned_projection_template
+msgid "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <p>Hello Cinema lovers,</p>\n"
+"\n"
+"    <p> The next projection of ${object.movie_id.name} has been settled the %{object.date_planned} ! </p>\n"
+"\n"
+"    <p>You can note it in your agenda.</p>\n"
+"    <p>Don't forget to tell us if you can't come.</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <p>If you have any question, do not hesitate to contact us.</p>\n"
+"    <p>For further information about the movie ${object.movie_id.name} we invite you to look into the ERP.</p>\n"
+"    <p>Thank you for choosing ${object.company_id.name or 'us'}!</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if object.company_id.street:\n"
+"            ${object.company_id.street}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.street2:\n"
+"            ${object.company_id.street2}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.city or object.company_id.zip:\n"
+"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.country_id:\n"
+"            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if object.company_id.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Phone:&nbsp; ${object.company_id.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if object.company_id.website:\n"
+"            <div>\n"
+"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p style=\"float:right\"><img src=\" data:image/png;base64, ${object.company_id.logo}\" height=\"100px\" width=\"100px\"/></p>\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"        "
+msgstr "\n"
+"<div style=\"font-family: 'Lucica Grande', Ubuntu, Arial, Verdana, sans-serif; font-size: 12px; color: rgb(34, 34, 34); background-color: #FFF; \">\n"
+"\n"
+"    <p>Salut les cinéphiles,</p>\n"
+"\n"
+"    <p>La prochaine projection de ${object.movie_id.name} aura lieu le %{object.date_planned} ! </p>\n"
+"\n"
+"    <p>Vous pouvez le noter dans votre agenda.</p>\n"
+"    <p>N'oubliez pas de nous prévenir si jamais vous ne pouvez pas venir.</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <p>Si vous avez des questions n'hésiter pas à nous contacter.</p>\n"
+"    <p>Pour plus d'informations sur le film ${object.movie_id.name}, nous vous invitons à jeter un oeil dans l'ERP.</p>\n"
+"    <p>Merci d'avoir choisi ${object.company_id.name or 'us'}!</p>\n"
+"    <br/>\n"
+"    <br/>\n"
+"    <div style=\"width: 375px; margin: 0px; padding: 0px; background-color: #8E0000; border-top-left-radius: 5px 5px; border-top-right-radius: 5px 5px; background-repeat: repeat no-repeat;\">\n"
+"        <h3 style=\"margin: 0px; padding: 2px 14px; font-size: 12px; color: #DDD;\">\n"
+"            <strong style=\"text-transform:uppercase;\">${object.company_id.name}</strong></h3>\n"
+"    </div>\n"
+"    <div style=\"width: 347px; margin: 0px; padding: 5px 14px; line-height: 16px; background-color: #F2F2F2;\">\n"
+"        <span style=\"color: #222; margin-bottom: 5px; display: block; \">\n"
+"        % if object.company_id.street:\n"
+"            ${object.company_id.street}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.street2:\n"
+"            ${object.company_id.street2}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.city or object.company_id.zip:\n"
+"            ${object.company_id.zip} ${object.company_id.city}<br/>\n"
+"        % endif\n"
+"        % if object.company_id.country_id:\n"
+"            ${object.company_id.state_id and ('%s, ' % object.company_id.state_id.name) or ''} ${object.company_id.country_id.name or ''}<br/>\n"
+"        % endif\n"
+"        </span>\n"
+"        % if object.company_id.phone:\n"
+"            <div style=\"margin-top: 0px; margin-right: 0px; margin-bottom: 0px; margin-left: 0px; padding-top: 0px; padding-right: 0px; padding-bottom: 0px; padding-left: 0px; \">\n"
+"                Phone:&nbsp; ${object.company_id.phone}\n"
+"            </div>\n"
+"        % endif\n"
+"        % if object.company_id.website:\n"
+"            <div>\n"
+"                Web :&nbsp;<a href=\"${object.company_id.website}\">${object.company_id.website}</a>\n"
+"            </div>\n"
+"        %endif\n"
+"        <p style=\"float:right\"><img src=\" data:image/png;base64, ${object.company_id.logo}\" height=\"100px\" width=\"100px\"/></p>\n"
+"        <p></p>\n"
+"    </div>\n"
+"</div>\n"
+"        "
+
+#. module: movies_management
+#: code:addons/movies_management/movie.py:329
+#, python-format
+msgid "Nobody watched the movie ? Of course not, you stupid fuck!"
+msgstr "Y'avait personne à la projection ? Bien sur que si connard!"
+
+#. module: movies_management
+#: field:movie.movie,name:0
+#: field:movie.subtype,name:0
+#: field:movie.type,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: view:res.users:0
+msgid "Want to see"
+msgstr "Je veux le voir"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.all_movie_action_form
+#: model:ir.ui.menu,name:movies_management.menu_all_movie
+msgid "All Movies"
+msgstr "Tous les films"
+
+#. module: movies_management
+#: selection:movie.movie,language:0
+msgid "VO"
+msgstr "VO"
+
+#. module: movies_management
+#: model:ir.model,name:movies_management.model_movie_movie
+#: model:ir.ui.menu,name:movies_management.menu_movie
+#: model:ir.ui.menu,name:movies_management.menu_movie_movie
+#: view:movie.movie:0
+msgid "Movies"
+msgstr "Films"
+
+#. module: movies_management
+#: model:email.template,subject:movies_management.start_plannification_projection_template
+#: model:email.template,subject:movies_management.start_planning_projection_template
+msgid "[Erp Coloc] Planification of movie projection"
+msgstr "[Erp Coloc] Planification d'une projection de film"
+
+#. module: movies_management
+#: view:projection.choice:0
+msgid "Approve"
+msgstr "Approuvé"
+
+#. module: movies_management
+#: help:movie.movie,message_ids:0
+#: help:movie.projection,message_ids:0
+msgid "Messages and communication history"
+msgstr "Messages and communication history"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: selection:movie.movie,state:0
+msgid "To download"
+msgstr "A télécharger"
+
+#. module: movies_management
+#: field:movie.movie,sequence:0
+msgid "Sequence"
+msgstr "Séquence"
+
+#. module: movies_management
+#: view:projection.choice:0
+msgid "Projections Choices"
+msgstr "Choix de projections"
+
+#. module: movies_management
+#: field:movie.projection,best_date:0
+msgid "Best Date"
+msgstr "Meilleur date"
+
+#. module: movies_management
+#: view:movie.movie:0
+#: field:movie.movie,year:0
+msgid "Year"
+msgstr "Année"
+
+#. module: movies_management
+#: model:ir.actions.act_window,name:movies_management.movie_type_action_form
+#: model:ir.ui.menu,name:movies_management.menu_movie_type
+#: model:ir.ui.menu,name:movies_management.menu_movie_type_config
+#: view:movie.type:0
+msgid "Movie types"
+msgstr "Types de films"
+
+#. module: movies_management
+#: view:projection.choice:0
+msgid "Projection Choice"
+msgstr "Choix de projection"
+
