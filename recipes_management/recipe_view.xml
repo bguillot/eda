@@ -1,0 +1,228 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  recipes_management for OpenERP
+  Copyright (C) 2014 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+<record id="coloc_ingredient_action_form" model="ir.actions.act_window">
+    <field name="name">Ingredients</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">product.product</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form,kanban</field>
+    <field name="context">{"default_type":"product","default_procure_method":"make_to_stock","supply_method":"buy"}</field>
+    <field name="domain">[('type','=','product')]</field>
+    <field name="view_id" ref="product.product_product_tree_view"/>
+    <field name="search_view_id" ref="product.product_search_form_view"/>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to define a new product.
+      </p><p>
+        You must define an ingredient for the recipes.
+      </p>
+    </field>
+</record>
+
+
+        <!-- INHERITED VIEW FOR THE OBJECT : mrp_bom -->
+
+<record id="coloc_recipe_form_view" model="ir.ui.view">
+    <field name="name">recipes_management.mrp.bom.form</field>
+    <field name="model">mrp.bom</field>
+    <field name="arch" type="xml">
+        <form string="Recipe" version="7.0">
+            <sheet>
+                <field name="image" widget="image" class="oe_avatar oe_left"/>
+                <div class="oe_title">
+                    <div class="oe_edit_only">
+                        <label for="product_id" string="Recipe"/>
+                    </div>
+                    <h1>
+                        <field name="product_id" string="Recipe"
+                            on_change="onchange_product_id(product_id, name, context)"
+                            context="{'default_supply_method':'produce','default_procure_method':'make_to_order','default_recipe':True,'default_type':'product','force_product_uom':'product_uom_persons'}"
+                            domain="[('recipe', '=', True)]"/>
+                    </h1>
+                    <label for="product_qty" string="Quantity for" class="oe_inline"/>
+                    <div>
+                        <field name="product_qty" class="oe_inline"/>
+                        <field name="product_uom" class="oe_inline"
+                            on_change="onchange_uom(product_id, product_uom)"/>
+                    </div>
+                </div>
+                <group>
+                    <field name="season"/>
+                    <field name="difficulty"/>
+                    <field name="last_date_done"/>
+                </group>
+                <group invisible="1">
+                    <label for="product_uos_qty" groups="product.group_uos"/>
+                    <div groups="product.group_uos" >
+                        <field name="product_uos_qty"
+                            class="oe_inline"/>
+                        <label string="-" attrs="{'invisible':[('product_uos','=',False)]}" class="oe_inline"/>
+                        <field name="product_uos" class="oe_inline"/>
+                    </div>
+                    <label for="routing_id" class="oe_inline" groups="mrp.group_mrp_routings"/>
+                    <div groups="mrp.group_mrp_routings">
+                        <field name="routing_id" class="oe_inline"/>
+                    </div>
+                </group>
+                <group invisible="1">
+                    <field name="name" groups="base.group_no_one"/>
+                    <field name="code" string="Reference" invisible="1"/>
+                    <field name="type"/>
+                    <p colspan="2" class="oe_grey" attrs="{'invisible': [('type','=','normal')]}">
+                        When processing a sales order for this product, the delivery order
+                        will contain the raw materials, instead of the finished product.
+                    </p>
+                    <field name="company_id" groups="base.group_multi_company" widget="selection"/>
+                </group>
+                <notebook>
+                    <page string="Ingredients">
+                        <field name="bom_lines" widget="one2many_list">
+                            <tree string="Ingredients" editable="bottom">
+                                <field name="product_id"
+                                    context="{'default_supply_method':'buy', 'default_procure_method':'make_to_stock','default_type':'product'}"
+                                    domain="[('recipe', '=', False)]"
+                                    on_change="onchange_product_id(product_id, name)"/>
+                                <field name="product_qty"/>
+                                <field name="product_uom"
+                                    on_change="onchange_uom(product_id, product_uom)"
+                                    groups="product.group_uom"/>
+                                <field name="name" invisible="1"/>
+                                <field name="date_start" invisible="1"/>
+                                <field name="date_stop" invisible="1"/>
+                            </tree>
+                        </field>
+                    </page>
+                    <page string="Properties" groups="product.group_mrp_properties">
+                        <group>
+                            <group>
+                                <field name="position"/>
+                                <field name="bom_id"/>
+                                <field name="sequence"/>
+                                <field name="active"/>
+                            </group>
+                            <group>
+                                <field name="date_start"/>
+                                <field name="date_stop"/>
+                                <field name="product_rounding"/>
+                                <field name="product_efficiency"/>
+                            </group>
+                        </group>
+                        <separator string="Properties"/>
+                        <field name="property_ids" widget="many2many_tags"/>
+                    </page>
+                </notebook>
+            </sheet>
+            <div class="oe_chatter">
+                    <field name="message_follower_ids" widget="mail_followers"/>
+                    <field name="message_ids" colspan="4" widget="mail_thread" nolabel="1"/>
+            </div>
+        </form>
+    </field>
+</record>
+
+<record id="coloc_recipe_search_view" model="ir.ui.view">
+    <field name="name">coloc.recipe.search</field>
+    <field name="model">mrp.bom</field>
+    <field name="arch" type="xml">
+        <search string="Search Recipe">
+            <field name="name" string="Recipes" filter_domain="['|',('name','ilike',self),('code','ilike',self)]"/>
+            <field name="bom_lines" string="Ingredients"/>
+            <field name="product_id"/>
+            <field name="company_id" groups="base.group_multi_company"/>
+            <field name="last_date_done"/>
+            <field name="season"/>
+            <field name="difficulty"/>
+            <group expand="0" string="Group By...">
+                <filter string="Product" icon="terp-accessories-archiver" domain="[]" context="{'group_by':'product_id'}"/>
+                <filter string='Default Unit of Measure' icon="terp-mrp" domain="[]" context="{'group_by' : 'product_uom'}"/>
+                <filter string="Routing" icon="terp-stock_align_left_24" domain="[]" context="{'group_by':'routing_id'}"/>
+                <filter string='Type' icon="terp-stock_symbol-selection" domain="[]" context="{'group_by' : 'type'}"/>
+                <filter string="Date" icon="terp-go-month" domain="[]" context="{'group_by':'date_start'}" help="Starting Date"/>
+            </group>
+        </search>
+    </field>
+</record>
+
+<record id="coloc_recipe_tree_view" model="ir.ui.view">
+    <field name="name">coloc.recipe.tree</field>
+    <field name="model">mrp.bom</field>
+    <field name="field_parent">child_complete_ids</field>
+    <field name="arch" type="xml">
+        <tree string="Recipes" colors="blue:method">
+            <field name="sequence" invisible="1"/>
+            <field name="name" invisible="1"/>
+            <field name="product_id" string="Name"/>
+            <field name="product_qty" string="Number of persons"/>
+            <field name="product_uom" groups="product.group_uom" invisible="1"/>
+            <field name="difficulty"/>
+            <field name="last_date_done"/>
+            <field name="code" invisible="1"/>
+            <field name="type" invisible="1"/>
+            <field name="method" invisible="1"/>
+            <field name="routing_id" invisible="1" groups="mrp.group_mrp_routings"/>
+            <field name="date_start" invisible="1"/>
+            <field name="date_stop" invisible="1"/>
+        </tree>
+    </field>
+</record>
+
+<record id="coloc_recipe_action_form" model="ir.actions.act_window">
+    <field name="name">Recipes</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">mrp.bom</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form,kanban</field>
+    <field name="context">{"default_type":"phantom"}</field>
+    <field name="domain">[('type','=','phantom')]</field>
+    <field name="search_view_id" ref="coloc_recipe_search_view"/>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to define a new recipe.
+      </p><p>
+        You must define a recipe for to help for the shopping.
+      </p>
+    </field>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_coloc_recipe_form_view">
+    <field name="sequence" eval="2"/>
+    <field name="view_mode">form</field>
+    <field name="view_id" ref="coloc_recipe_form_view"/>
+    <field name="act_window_id" ref="coloc_recipe_action_form"/>
+</record>
+
+<record model="ir.actions.act_window.view" id="action_coloc_recipe_tree_view">
+    <field name="sequence" eval="1"/>
+    <field name="view_mode">tree</field>
+    <field name="view_id" ref="coloc_recipe_tree_view"/>
+    <field name="act_window_id" ref="coloc_recipe_action_form"/>
+</record>
+
+<menuitem id="menu_recipes"
+          name="Recipes"
+          parent="base_colocation_tools.menu_coloc"
+          sequence="10"/>
+
+<menuitem action="coloc_recipe_action_form"
+          id="menu_coloc_recipe"
+          parent="menu_recipes"
+          sequence="0"
+          groups="base_colocation_tools.group_flatmates"/>
+
+<menuitem action="coloc_ingredient_action_form"
+          id="menu_coloc_ingredient"
+          parent="menu_recipes"
+          sequence="10"
+          groups="base_colocation_tools.group_flatmates"/>
+
+    </data>
+</openerp>

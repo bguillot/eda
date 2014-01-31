@@ -1,0 +1,216 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* recipes_management
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-01-31 10:41+0000\n"
+"PO-Revision-Date: 2014-01-31 10:41+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: recipes_management
+#: selection:mrp.bom,season:0
+msgid "Winter"
+msgstr "Hiver"
+
+#. module: recipes_management
+#: model:ir.actions.act_window,name:recipes_management.coloc_ingredient_action_form
+#: model:ir.ui.menu,name:recipes_management.menu_coloc_ingredient
+#: view:mrp.bom:0
+msgid "Ingredients"
+msgstr "Ingrédients"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "When processing a sales order for this product, the delivery order\n"
+"                        will contain the raw materials, instead of the finished product."
+msgstr "When processing a sales order for this product, the delivery order\n"
+"                        will contain the raw materials, instead of the finished product."
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Group By..."
+msgstr "Regrouper par..."
+
+#. module: recipes_management
+#: selection:mrp.bom,difficulty:0
+msgid "Very Low"
+msgstr "Très facile et rapide"
+
+#. module: recipes_management
+#: selection:mrp.bom,difficulty:0
+msgid "Low"
+msgstr "Facile"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Type"
+msgstr "Type"
+
+#. module: recipes_management
+#: selection:mrp.bom,season:0
+msgid "Autumn"
+msgstr "Automne"
+
+#. module: recipes_management
+#: model:ir.model,name:recipes_management.model_product_product
+#: view:mrp.bom:0
+msgid "Product"
+msgstr "Article"
+
+#. module: recipes_management
+#: field:mrp.bom,difficulty:0
+msgid "Difficulty/time"
+msgstr "Difficulté et rapidité"
+
+#. module: recipes_management
+#: field:mrp.bom,season:0
+msgid "Season"
+msgstr "Saison"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Date"
+msgstr "Date"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Default Unit of Measure"
+msgstr "Unité de mesure par défaut"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Properties"
+msgstr "Propriétés"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: recipes_management
+#: model:ir.actions.act_window,help:recipes_management.coloc_ingredient_action_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"        Click to define a new product.\n"
+"      </p><p>\n"
+"        You must define an ingredient for the recipes.\n"
+"      </p>\n"
+"    "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"        Cliquer ici pour créer un nouvel article.\n"
+"      </p><p>\n"
+"        Vous devez définir un ingrédient pour els recettes.\n"
+"      </p>\n"
+"    "
+
+#. module: recipes_management
+#: model:ir.actions.act_window,name:recipes_management.coloc_recipe_action_form
+#: model:ir.ui.menu,name:recipes_management.menu_coloc_recipe
+#: model:ir.ui.menu,name:recipes_management.menu_recipes
+#: view:mrp.bom:0
+msgid "Recipes"
+msgstr "Recettes"
+
+#. module: recipes_management
+#: model:ir.model,name:recipes_management.model_product_template
+msgid "Product Template"
+msgstr "Modèle d'article"
+
+#. module: recipes_management
+#: selection:mrp.bom,season:0
+msgid "Summer"
+msgstr "Eté"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Quantity for"
+msgstr "Quantités pour"
+
+#. module: recipes_management
+#: model:ir.actions.act_window,help:recipes_management.coloc_recipe_action_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"        Click to define a new recipe.\n"
+"      </p><p>\n"
+"        You must define a recipe for to help for the shopping.\n"
+"      </p>\n"
+"    "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"        Cliquer ici pour définir une nouvelle recette.\n"
+"      </p><p>\n"
+"        Vous devez définir des recette pour vous aider pour les courses.\n"
+"      </p>\n"
+"    "
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Reference"
+msgstr "Référence"
+
+#. module: recipes_management
+#: model:ir.model,name:recipes_management.model_mrp_bom
+msgid "Bill of Material"
+msgstr "Recette"
+
+#. module: recipes_management
+#: selection:mrp.bom,season:0
+msgid "Spring"
+msgstr "Printemps"
+
+#. module: recipes_management
+#: field:mrp.bom,image:0
+msgid "Image"
+msgstr "Image"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+#: field:product.product,recipe:0
+msgid "Recipe"
+msgstr "Recette"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Starting Date"
+msgstr "Date de début"
+
+#. module: recipes_management
+#: selection:mrp.bom,difficulty:0
+msgid "High"
+msgstr "Assez dur"
+
+#. module: recipes_management
+#: selection:mrp.bom,difficulty:0
+msgid "Middle"
+msgstr "Moyen"
+
+#. module: recipes_management
+#: selection:mrp.bom,difficulty:0
+msgid "Very high"
+msgstr "Très dur et long (CMB)"
+
+#. module: recipes_management
+#: field:mrp.bom,last_date_done:0
+msgid "Last date done"
+msgstr "Fait le"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Search Recipe"
+msgstr "Rechercher une recette"
+
+#. module: recipes_management
+#: model:product.uom,name:recipes_management.product_uom_persons
+msgid "Person(s)"
+msgstr "Personne(s)"
+
+#. module: recipes_management
+#: view:mrp.bom:0
+msgid "Routing"
+msgstr "Gamme"
+

@@ -1,0 +1,2 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_mrp_bom_manager,mrp bom manager,recipes_management.model_mrp_bom,base_colocation_tools.group_flatmates,1,1,1,1

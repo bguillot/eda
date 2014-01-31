@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data noupdate="1">
+
+<record id="product_uom_persons" model="product.uom">
+        <field name="category_id" ref="product.product_uom_categ_unit"/>
+        <field name="name">Person(s)</field>
+        <field name="factor" eval="1.0"/>
+        <field name="rounding" eval="1.0"/>
+</record>
+
+    </data>
+</openerp>
