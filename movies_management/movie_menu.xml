@@ -35,11 +35,6 @@
           parent="menu_movie_type_config"
           sequence="0"/>
 
-<menuitem action="movie_subtype_action_form"
-          id="menu_movie_subtype"
-          parent="menu_movie_type_config"
-          sequence="1"/>
-
 <menuitem action="all_movie_action_form"
           id="menu_all_movie"
           parent="menu_movie_movie"

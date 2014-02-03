@@ -57,6 +57,9 @@
                 <button name="plan_projection" string="Plan projection"
                     type="object" states="ready,watched" class="oe_highlight"
                     groups="base_colocation_tools.group_flatmates"/>
+                <button name="reset_to_draft" string="Reset to draft"
+                    type="object" states="ready"
+                    groups="base_colocation_tools.group_flatmates"/>
                 <button name="already_watched" states="to_dl,ready,watched"
                     string="Already watched" type="object" icon="gtk-apply"/>
                 <button name="wanna_see" states="to_dl,ready,watched"
@@ -77,8 +80,7 @@
                     <field name="sequence"/>
                     <field name="year"/>
                     <field name="director"/>
-                    <field name="type_id" widget="selection"/>
-                    <field name="subtype_id" widget="selection"/>
+                    <field name="type_id" widget="many2many_tags"/>
                     <field name="language"/>
                     <field name="synopsis"/>
                 </group>
@@ -439,7 +441,7 @@
     <field name="name">projection.choice.calendar</field>
     <field name="model">projection.choice</field>
     <field name="arch" type="xml">
-        <calendar color="user_id" date_start="date" date_stop="date" day_length="12" string="Projections Choices">
+        <calendar color="state" date_start="date" date_stop="date" day_length="4" string="Projections Choices">
             <field name="movie_id"/>
             <field name="state"/>
           </calendar>
@@ -495,63 +497,6 @@
     <field name="view_mode">tree,form</field>
     <field name="search_view_id" ref="movie_type_search_view"/>
 </record>
-
-
-    <!--  VIEW FOR THE OBJECT : movie.subtype -->
-
-<record id="movie_subtype_search_view" model="ir.ui.view">
-    <field name="name">movie.subtype.search</field>
-    <field name="model">movie.subtype</field>
-    <field name="arch" type="xml">
-        <search string="Movie subtypes">
-            <field name="name"/>
-            <field name="type_id"/>
-        </search>
-    </field>
-</record>
-
-<record id="movie_subtype_form_view" model="ir.ui.view">
-    <field name="name">movie.subtype.form</field>
-    <field name="model">movie.subtype</field>
-    <field name="arch" type="xml">
-        <form string="Movie type" version="7.0">
-            <sheet>
-                <div class="oe_title">
-                    <label for="name" class="oe_edit_only"/>
-                    <h1>
-                        <field name="name"/>
-                    </h1>
-                </div>
-                <group name="extra fields">
-                    <field name="type_id"/>
-                </group>
-            </sheet>
-        </form>
-    </field>
-</record>
-
-<record id="movie_subtype_tree_view" model="ir.ui.view">
-    <field name="name">movie.subtype.list</field>
-    <field name="model">movie.subtype</field>
-    <field name="arch" type="xml">
-        <tree string="Movie subtype" editable="top">
-            <field name="name"/>
-            <field name="type_id"/>
-        </tree>
-    </field>
-</record>
-
-<record id="movie_subtype_action_form" model="ir.actions.act_window">
-    <field name="name">Movie subtypes</field>
-    <field name="type">ir.actions.act_window</field>
-    <field name="res_model">movie.subtype</field>
-    <field name="context">{}</field>
-    <field name="domain">[]</field>
-    <field name="view_type">form</field>
-    <field name="view_mode">tree,form</field>
-    <field name="search_view_id" ref="movie_subtype_search_view"/>
-</record>
-
 
     </data>
 </openerp>

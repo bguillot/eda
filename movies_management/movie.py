@@ -21,7 +21,7 @@
 ###############################################################################
 from openerp.osv import fields, orm
 from datetime import datetime, date
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT, DEFAULT_SERVER_DATE_FORMAT
 from openerp.tools.translate import _
 from collections import defaultdict
 import operator
@@ -69,24 +69,32 @@ class movie_movie(orm.Model):
         return res
 
     _columns={
-        'name': fields.char('Name', size=64, required=True),
+        'name': fields.char('Name', size=64,
+            required=True,
+            readonly=True,
+            states={'to_dl': [('readonly', False)]}),
         'poster': fields.binary('Poster'),
-        'type_id': fields.many2one(
+        'type_id': fields.many2many(
             'movie.type',
+            'movie_type_rel',
+            'movie_id',
+            'type_id',
             'Type',
-            required=True),
-        'subtype_id': fields.many2one(
-            'movie.subtype',
-            'Subtype',
-            domain="[('type_id', '=', type_id)]"),
-#        TODO http://fr.wikipedia.org/wiki/Genre_cin%C3%A9matographique
-        'year': fields.selection(_get_years, 'Year', help='Year of release'),
+            required=True,
+            readonly=True,
+            states={'to_dl': [('readonly', False)]}),
+        'year': fields.selection(_get_years, 'Year',
+            readonly=True,
+            states={'to_dl': [('readonly', False)]},
+            help='Year of release'),
         'synopsis': fields.text('Synopsis'),
         'state': fields.selection(
             [('to_dl', 'To download'),
              ('ready', 'Ready to be watched'),
              ('watched', 'Watched')],
-            'State', required=True),
+            'State',
+            required=True,
+            readonly=True),
         'last_projection_date': fields.date('Last projection date'),
         'watcher_ids': fields.many2many(
             'res.users',
@@ -108,7 +116,9 @@ class movie_movie(orm.Model):
              ('fr', 'FR'),
              ('vostfr','VOSTFR'),
              ('vosten', 'VOSTEN')],
-            'Language'),
+            'Language',
+            readonly=True,
+            states={'to_dl': [('readonly', False)]}),
         'sequence': fields.function(_get_sequence, type="integer",
             string="Sequence",
             store={
@@ -127,8 +137,13 @@ class movie_movie(orm.Model):
          'unique(name, year)',
          'Movie already created with this name and year!'),
     ]
+
     def dl_movie(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'ready'}, context=context)
+        return True
+
+    def reset_to_draft(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'to_dl'}, context=context)
         return True
 
     def watch_movie(self, cr, uid, ids, context=None):
@@ -171,17 +186,7 @@ class movie_type(orm.Model):
     _description="Movie Type"
 
     _columns={
-        'name': fields.char('Name', size=64, required=True),
-        }
-
-
-class movie_subtype(orm.Model):
-    _name="movie.subtype"
-    _description="Movie Subtype"
-
-    _columns={
-        'name': fields.char('Name', size=64, required=True),
-        'type_id': fields.many2one('movie.type', 'Type', required=True),
+        'name': fields.char('Name', size=64, translate=True, required=True),
         }
 
 
@@ -209,7 +214,7 @@ class movie_projection(orm.Model):
                                    key=operator.itemgetter(1),
                                    reverse=True)[0][0]
             ready= False
-            if best_date and users[best_date] == initial_user_ids:
+            if best_date and set(users[best_date]) == set(initial_user_ids):
                 ready = True
             res[proj.id]['best_date'] = best_date
             res[proj.id]['ready_to_plan'] = ready
@@ -317,13 +322,16 @@ class movie_projection(orm.Model):
         return True
 
     def action_done(self, cr, uid, ids, context=None):
+        today = date.today().strftime(DEFAULT_SERVER_DATE_FORMAT)
+        now = datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT)
         for proj in self.browse(cr, uid, ids, context=context):
             write_vals = {
-                'date_done': datetime.now().strftime(DEFAULT_SERVER_DATETIME_FORMAT),
+                'date_done': now,
                 'state': 'done',
                 }
             proj.write(write_vals, context=context)
-            proj.movie_id.write({'state': 'watched'}, context=context)
+            proj.movie_id.write({'state': 'watched',
+                                 'last_projection_date': today}, context=context)
             if not proj.actual_user_ids:
                 raise orm.except_orm(_('Keyboard/Chair error'),
                                      _("Nobody watched the movie ? "
@@ -355,7 +363,8 @@ class projection_choice(orm.Model):
         'date': fields.date(
             'Date',
             required=True,
-            states={'approved': [('readonly', True)]}),
+            readonly=True,
+            states={'unchoosed': [('readonly', False)]}),
         'projection_id': fields.many2one(
             'movie.projection',
             'Projection',

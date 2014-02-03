@@ -7,7 +7,7 @@
 -->
 
 <openerp>
-    <data noupdate="0">
+    <data noupdate="1">
 
     <!--Email template -->
 <record id="start_planning_projection_template" model="email.template">
@@ -136,6 +136,208 @@
 </div>
         ]]></field>
     </record>
+
+<!--        DATA FOR THE OBJECT : movie.type-->
+
+<record id="type_americana" model="movie.type">
+    <field name="name">Americana</field>
+</record>
+
+<record id="type_buddy_movie" model="movie.type">
+    <field name="name">Buddy Movie</field>
+</record>
+
+<record id="type_samurai" model="movie.type">
+    <field name="name">Samourai</field>
+</record>
+
+<record id="type_comedy" model="movie.type">
+    <field name="name">Comedy</field>
+</record>
+
+<record id="type_burlesque" model="movie.type">
+    <field name="name">Burlesque</field>
+</record>
+
+<record id="type_manners_comedy" model="movie.type">
+    <field name="name">Comedy of Manners</field>
+</record>
+
+<record id="type_comedy_drama" model="movie.type">
+    <field name="name">Comedy Drama</field>
+</record>
+
+<record id="type_crime_comedy" model="movie.type">
+    <field name="name">Crime Comedy</field>
+</record>
+
+<record id="type_romantic_comedy" model="movie.type">
+    <field name="name">Romantic Comedy</field>
+</record>
+
+<record id="type_parody" model="movie.type">
+    <field name="name">Parody</field>
+</record>
+
+<record id="type_screwball_comedy" model="movie.type">
+    <field name="name">Screwball Comedy</field>
+</record>
+
+<record id="type_fairy_tale" model="movie.type">
+    <field name="name">Fairy Tale</field>
+</record>
+
+<record id="type_documentary_film" model="movie.type">
+    <field name="name">Documentary</field>
+</record>
+
+<record id="type_docufiction" model="movie.type">
+    <field name="name">Docufiction</field>
+</record>
+
+<record id="type_ethnofiction" model="movie.type">
+    <field name="name">Ethnofiction</field>
+</record>
+
+<record id="type_drama" model="movie.type">
+    <field name="name">Drama</field>
+</record>
+
+<record id="type_melodrama" model="movie.type">
+    <field name="name">Melodrama</field>
+</record>
+
+<record id="type_anthology_film" model="movie.type">
+    <field name="name">Anthology Film</field>
+</record>
+
+<record id="type_thriller" model="movie.type">
+    <field name="name">Thriller</field>
+</record>
+
+<record id="type_action_film" model="movie.type">
+    <field name="name">Action Film</field>
+</record>
+
+<record id="type_adventure_film" model="movie.type">
+    <field name="name">Adventure Film</field>
+</record>
+
+<record id="type_swashbuckler_film" model="movie.type">
+    <field name="name">Swashbuckler Film</field>
+</record>
+
+<record id="type_disaster_film" model="movie.type">
+    <field name="name">Disaster Film</field>
+</record>
+
+<record id="type_porno_soft" model="movie.type">
+    <field name="name">Porno Soft</field>
+</record>
+
+<record id="type_spy_film" model="movie.type">
+    <field name="name">Spy Film</field>
+</record>
+
+<record id="type_fantasy" model="movie.type">
+    <field name="name">Fantasy</field>
+</record>
+
+<record id="type_vampire_film" model="movie.type">
+    <field name="name">Vampire Film</field>
+</record>
+
+<record id="type_zombies_film" model="movie.type">
+    <field name="name">Zombies Film</field>
+</record>
+
+<record id="type_war_film" model="movie.type">
+    <field name="name">War Film</field>
+</record>
+
+<record id="type_costume_drama" model="movie.type">
+    <field name="name">Costume Drama</field>
+</record>
+
+<record id="type_biographical_film" model="movie.type">
+    <field name="name">Biographical Film</field>
+</record>
+
+<record id="type_autobiographical_film" model="movie.type">
+    <field name="name">Autobiographical Film</field>
+</record>
+
+<record id="type_corporate_film" model="movie.type">
+    <field name="name">Corporate Film</field>
+</record>
+
+<record id="type_wedding_film" model="movie.type">
+    <field name="name">Wedding Film</field>
+</record>
+
+<record id="type_sword_and_sandal" model="movie.type">
+    <field name="name">Sword and Sandal</field>
+</record>
+
+<record id="type_horror_film" model="movie.type">
+    <field name="name">Horror Film</field>
+</record>
+
+<record id="type_slasher" model="movie.type">
+    <field name="name">Slasher</field>
+</record>
+
+<record id="type_musical_film" model="movie.type">
+    <field name="name">Musical Film</field>
+</record>
+
+<record id="type_crime_film" model="movie.type">
+    <field name="name">Crime Film</field>
+</record>
+
+<record id="type_mob_film" model="movie.type">
+    <field name="name">Mob Film</field>
+</record>
+
+<record id="type_film_noir" model="movie.type">
+    <field name="name">Film Noir</field>
+</record>
+
+<record id="type_pornographic_film" model="movie.type">
+    <field name="name">Pornographic Film</field>
+</record>
+
+<record id="type_Teen_film" model="movie.type">
+    <field name="name">Teen Film</field>
+</record>
+
+<record id="type_masala_film" model="movie.type">
+    <field name="name">Masala Film</field>
+</record>
+
+<record id="type_road_movie" model="movie.type">
+    <field name="name">Road Movie</field>
+</record>
+
+<record id="type_romance" model="movie.type">
+    <field name="name">Romance</field>
+</record>
+
+<record id="type_science_fiction" model="movie.type">
+    <field name="name">Science Fiction</field>
+</record>
+
+<record id="type_serial_film" model="movie.type">
+    <field name="name">Serial Film</field>
+</record>
+
+<record id="type_troma_film" model="movie.type">
+    <field name="name">Troma Film</field>
+</record>
+
+<record id="type_western" model="movie.type">
+    <field name="name">Western</field>
+</record>
 
     </data>
 </openerp>
