@@ -291,14 +291,23 @@
                 <group name="users" colspan="4" string="Initial Users"
                     attrs="{'invisible': [('state', 'in', ['done', 'planned'])]}">
                     <field name="planned_user_ids" nolabel="1"
-                    attrs="{'readonly': [('state', 'in', ['done', 'planned', 'cancel'])]}"/>
+                        attrs="{'readonly': [('state', 'in', ['done', 'planned', 'cancel'])]}">
+                        <tree >
+                            <field name="name"/>
+                        </tree>
+                    </field>
                 </group>
                 <group name="actual_users" colspan="4" string="Actual Users"
                     attrs="{'invisible': [('state', '=', 'draft')]}">
                     <field name="actual_user_ids" nolabel="1"
-                    attrs="{'readonly': [('state', '=', 'cancel')]}"/>
+                        attrs="{'readonly': [('state', '=', 'cancel')]}">
+                        <tree >
+                            <field name="name"/>
+                        </tree>
+                    </field>
                 </group>
-                <group name="choices" colspan="4" string="Choices">
+                <group name="choices" colspan="4" string="Choices"
+                       attrs="{'invisible': [('state', 'in', ['planned', 'done'])]}">
                     <field name="choice_ids" nolabel="1">
                         <tree editable="top" colors="green:state=='approved';red:state == 'refused';grey:state=='unchoosed'">
                             <field name="user_id"/>
