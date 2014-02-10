@@ -125,6 +125,8 @@ class meal_attendance(orm.Model):
     _name="meal.attendance"
     _description="Meal attendance"
 
+    _order = "month asc"
+
     def _get_default_month(self, cr, uid, context=None):
         return str(date.today().month)
 
