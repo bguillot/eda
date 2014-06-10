@@ -27,7 +27,8 @@ from openerp.tools.translate import _
 MONTH = [('1', 'January'),
          ('2', 'February'),
          ('3', 'March'),
-         ('5', 'April'),
+         ('4', 'April'),
+         ('5', 'May'),
          ('6', 'June'),
          ('7', 'July'),
          ('8', 'August'),
@@ -125,7 +126,7 @@ class meal_attendance(orm.Model):
     _name="meal.attendance"
     _description="Meal attendance"
 
-    _order = "month asc"
+    _order = "month desc"
 
     def _get_default_month(self, cr, uid, context=None):
         return str(date.today().month)
