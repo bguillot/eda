@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  movies_management for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!--  VIEW FOR THE WIZARD : dl_movie -->
+
+        <record id="action_dl_movie" model="ir.actions.act_window">
+            <field name="name">Download movie</field>
+            <field name="res_model">dl.movie</field>
+            <field name="src_model">movie.movie</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="target">new</field>
+        </record>
+
+        <record id="dl_movie_form" model="ir.ui.view">
+            <field name="name">dl.movie.form</field>
+            <field name="model">dl.movie</field>
+            <field name="arch" type="xml">
+                <form string="Download movie" version="7.0">
+                    <group name="attributes" String="Movie attributes">
+                        <field name="language"/>
+                        <field name="quality"/>
+                    </group>
+                    <footer>
+                        <button name="dl_movie" string="Download movie"
+                            type="object" class="oe_highlight"/>
+                        or
+                        <button string="Cancel" class="oe_link" special="cancel"/>
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+    </data>
+</openerp>

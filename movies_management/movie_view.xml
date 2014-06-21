@@ -48,9 +48,9 @@
     <field name="arch" type="xml">
         <form string="Movie" version="7.0">
             <header>
-                <button name="dl_movie" string="Download movie"
-                    type="object" states="to_dl" class="oe_highlight"
-                    groups="base_colocation_tools.group_flatmates"/>
+                <button name="%(action_dl_movie)d" string="Download movie"
+                    type="action" states="to_dl" class="oe_highlight"
+                    target="New" groups="base_colocation_tools.group_flatmates"/>
                 <button name="watch_movie" string="Watch movie"
                     type="object" states="ready" class="oe_highlight"
                     groups="base_colocation_tools.group_flatmates"/>
@@ -81,7 +81,8 @@
                     <field name="year"/>
                     <field name="director"/>
                     <field name="type_id" widget="many2many_tags"/>
-                    <field name="language"/>
+                    <field name="language" attrs="{'invisible': [('state', '=', 'to_dl')]}"/>
+                    <field name="quality" attrs="{'invisible': [('state', '=', 'to_dl')]}"/>
                     <field name="synopsis"/>
                 </group>
             </sheet>

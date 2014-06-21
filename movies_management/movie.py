@@ -83,7 +83,9 @@ class movie_movie(orm.Model):
             required=True,
             readonly=True,
             states={'to_dl': [('readonly', False)]}),
-        'year': fields.selection(_get_years, 'Year',
+        'year': fields.selection(
+            _get_years,
+            'Year',
             readonly=True,
             states={'to_dl': [('readonly', False)]},
             help='Year of release'),
@@ -120,13 +122,24 @@ class movie_movie(orm.Model):
             'Language',
             readonly=True,
             states={'to_dl': [('readonly', False)]}),
-        'sequence': fields.function(_get_sequence, type="integer",
+        'sequence': fields.function(
+            _get_sequence,
+            type="integer",
             string="Sequence",
             store={
                 'movie.movie': (
                     lambda self, cr, uid, ids, c=None: ids,
                     ['watcher_ids', 'name'],
-                    10),})
+                    10),}),
+        'quality': fields.selection(
+            [('1080p', '1080p'),
+             ('720p', '720p'),
+             ('bdrip', 'BDRIP'),
+             ('dvdrip', 'DVDRIP'),
+             ('cam_ts', 'CAM-TS...')],
+            'Quality',
+            readonly=True,
+            states={'to_dl': [('readonly', False)]}),
         }
 
     _defaults={
@@ -138,10 +151,6 @@ class movie_movie(orm.Model):
          'unique(name, year)',
          'Movie already created with this name and year!'),
     ]
-
-    def dl_movie(self, cr, uid, ids, context=None):
-        self.write(cr, uid, ids, {'state': 'ready'}, context=context)
-        return True
 
     def reset_to_draft(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'to_dl'}, context=context)

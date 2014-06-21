@@ -38,6 +38,7 @@
            'security/ir.model.access.csv',
            'security/movie_security.xml',
            'wizard/projection_choice_view.xml',
+           'wizard/dl_movie_view.xml',
            'movie_view.xml',
            'movie_menu.xml',
            'data.xml',
