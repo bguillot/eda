@@ -289,6 +289,14 @@ class automatic_expense(orm.Model):
             'Amount',
             required=True),
         'active': fields.boolean('Active'),
+        'concerned_partner_ids': fields.many2many(
+            'res.partner',
+            'expense_partner_rel',
+            'expense_id',
+            'partner_id',
+            'Concerned Partners',
+            required=True),
+
         }
 
     _defaults = {
@@ -307,11 +315,15 @@ class automatic_expense(orm.Model):
                                              ('amount', '=', auto_expense.amount)],
                                             context=context)
             if not expense_id:
+                concerned_ids = []
+                for partner in auto_expense.concerned_partner_ids:
+                    concerned_ids.append(partner.id)
                 vals = {
                     'month': month,
                     'partner_id': auto_expense.partner_id.id,
                     'product_id': auto_expense.product_id.id,
                     'amount': auto_expense.amount,
+                    'concerned_partner_ids': [(6, 0, concerned_ids)]
                     }
                 expense_obj.create(cr, uid, vals, context=context)
         return True

@@ -95,7 +95,8 @@
                 </div>
                 <group name="extra_fields" colspan="4">
                     <field name="amount"/>
-                    <field name="concerned_partner_ids"/>
+                    <field name="concerned_partner_ids"
+                        widget="many2many_tags"/>
                 </group>
             </sheet>
         </form>
@@ -298,6 +299,7 @@
     <field name="arch" type="xml">
         <search string="Balances">
             <field name="month" string="Month"/>
+            <field name="state"/>
         </search>
     </field>
 </record>
@@ -374,6 +376,7 @@
             <field name="normal_average"/>
             <field name="prop_total"/>
             <field name="prop_average"/>
+            <field name="state"/>
         </tree>
     </field>
 </record>
@@ -439,6 +442,8 @@
                     <field name="partner_id"/>
                     <field name="amount"/>
                     <field name="active"/>
+                    <field name="concerned_partner_ids"
+                        widget="many2many_tags"/>
                 </group>
             </sheet>
         </form>
