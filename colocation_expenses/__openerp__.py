@@ -32,8 +32,7 @@
     'website': 'http://www.akretion.com/',
     'depends': [
         'base_colocation_tools',
-        'procurement',
-        ], 
+        ],
     'data': [
            'security/ir.model.access.csv',
            'data.xml',

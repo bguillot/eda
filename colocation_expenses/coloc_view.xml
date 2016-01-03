@@ -14,11 +14,11 @@
 <record id="product_normal_form_coloc_type" model="ir.ui.view">
     <field name="name">product.normal.form</field>
     <field name="model">product.product</field>
-    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="inherit_id" ref="base_colocation_tools.product_normal_form_view"/>
     <field name="arch" type="xml">
-        <field name="type" position="after">
+        <field name="colocation_type" position="after">
             <field name="expense_type"
-                attrs="{'invisible': [('type', '!=', 'expense')], 'required': [('type', '=', 'expense')]}"/>
+                attrs="{'invisible': [('colocation_type', '!=', 'expense')], 'required': [('colocation_type', '=', 'expense')]}"/>
         </field>
     </field>
 </record>
@@ -36,8 +36,8 @@
     <field name="res_model">product.product</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form,kanban</field>
-    <field name="context">{"default_type":"expense"}</field>
-    <field name="domain">[('type','=','expense')]</field>
+    <field name="context">{"default_colocation_type":"expense"}</field>
+    <field name="domain">[('colocation_type','=','expense')]</field>
     <field name="view_id" ref="product.product_product_tree_view"/>
     <field name="search_view_id" ref="product.product_search_form_view"/>
     <field name="help" type="html">
@@ -111,7 +111,7 @@
             <field name="month"/>
             <field name="partner_id"/>
             <field name="product_id"
-                context="{'force_type':'expense'})"/>
+                context="{'force_colocation_type':'expense'})"/>
 <!--            TODO onchange pour remplir le montant en fonction du produit -->
             <field name="amount"/>
             <field name="concerned_partner_ids" widget="many2many_tags"/>

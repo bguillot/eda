@@ -24,36 +24,14 @@ from openerp.osv import fields, orm
 from datetime import datetime, date
 
 
-class product_template(orm.Model):
-    _inherit="product.template"
-
-    _columns = {
-        'type': fields.selection(
-            [('product','Stockable Product'),
-             ('consu', 'Consumable'),
-             ('service','Service'),
-             ('expense', 'Expense')],
-            'Product Type',
-            required=True,
-            help="Consumable: Will not imply stock management for this product."
-            "\nStockable product: Will imply stock management for this product."
-            "\nExpense: Used for colocation expenses."),
-        }
-
-    def _get_default_type(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        product_type = 'consu'
-        if context.get('force_type'):
-            product_type = context['force_type']
-        return product_type
-
-    _defaults = {
-        'type': _get_default_type,
-        }
-
 class product_product(orm.Model):
     _inherit="product.product"
+
+    def _get_colocation_type(self, cr, uid, context=None):
+        res = super(product_product, self)._get_colocation_type(
+            cr, uid, context=context)
+        res.append(('expense', 'Expense'))
+        return res
 
     _columns={
         'expense_type': fields.selection(
@@ -63,3 +41,16 @@ class product_product(orm.Model):
              ('autres', 'Autres')],
             'Expense type'),
         }
+
+    def _get_default_colocation_type(self, cr, uid, context=None):
+        if context is None:
+            context = {}
+        colocation_type = ''
+        if context.get('force_colocation_type'):
+            colocation_type = context['force_colocation_type']
+        return colocation_type
+
+    _defaults = {
+        'colocation_type': _get_default_colocation_type,
+        }
+

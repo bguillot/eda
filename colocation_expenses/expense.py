@@ -72,7 +72,7 @@ class coloc_expense(orm.Model):
         'product_id': fields.many2one(
             'product.product',
             'Product',
-            domain="[('type', '=', 'expense')]"),
+            domain="[('colocation_type', '=', 'expense')]"),
         'create_date': fields.datetime('Create date'),
         'amount': fields.float(
             'Amount',
