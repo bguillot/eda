@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  colocation_tools for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!-- INHERITED VIEW FOR THE OBJECT : product.product -->
+
+<record id="product_normal_form_view" model="ir.ui.view">
+    <field name="name">coloc.product.form</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="arch" type="xml">
+        <field name="type" position="after">
+            <field name="colocation_type"/>
+        </field>
+    </field>
+</record>
+
+    </data>
+</openerp>

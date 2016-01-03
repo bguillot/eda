@@ -1,0 +1,4 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_product_template_flatmates,product.template flatmates,product.model_product_template,base_colocation_tools.group_flatmates,1,1,1,1
+access_product_product_flatmates,product.product flatmates,product.model_product_product,base_colocation_tools.group_flatmates,1,1,1,1
+access_product_category_flatmates,product.category flatmates,product.model_product_category,base_colocation_tools.group_flatmates,1,1,1,1
