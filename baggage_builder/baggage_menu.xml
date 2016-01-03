@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  movies_management for OpenERP
+  Copyright (C) 2013 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+<menuitem id="menu_main_baggage"
+          name="Baggages"
+          sequence="10"
+          groups="base.group_user"/>
+
+<menuitem id="menu_baggage_configuration"
+          name="Configuration"
+          parent="menu_main_baggage"
+          sequence="100"
+          groups="base_colocation_tools.group_flatmates"/>
+
+<menuitem id="menu_baggage"
+          name="Baggages"
+          parent="menu_main_baggage"
+          sequence="10"/>
+
+<menuitem id="menu_destination_tag_config"
+          name="Destination tags"
+          parent="menu_baggage_configuration"
+          sequence="1"/>
+
+<menuitem action="destination_tag_action_form"
+          id="menu_destination_tag"
+          parent="menu_destination_tag_config"
+          sequence="0"/>
+
+<menuitem action="trip_destination_action_form"
+          id="menu_trip_destination"
+          parent="menu_baggage"
+          sequence="5"/>
+
+<menuitem action="trip_baggage_action_form"
+          id="menu_trip_baggage"
+          parent="menu_baggage"
+          sequence="10"/>
+
+<menuitem action="product_baggage_action_form"
+          id="menu_product_baggage"
+          parent="menu_baggage"
+          sequence="15"/>
+
+    </data>
+</openerp>

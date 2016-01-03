@@ -1,0 +1,389 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* baggage_builder
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 7.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2014-11-02 17:18+0000\n"
+"PO-Revision-Date: 2014-11-02 17:18+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: baggage_builder
+#: model:ir.actions.act_window,help:baggage_builder.product_baggage_action_form
+msgid "<p class=\"oe_view_nocontent_create\">\n"
+"        Click to define a new product.\n"
+"      </p><p>\n"
+"        You must define a product for everything you buy or sell,\n"
+"        whether it's a physical product, a consumable or service.\n"
+"      </p>\n"
+"    "
+msgstr "<p class=\"oe_view_nocontent_create\">\n"
+"        Click to define a new product.\n"
+"      </p><p>\n"
+"        You must define a product for everything you buy or sell,\n"
+"        whether it's a physical product, a consumable or service.\n"
+"      </p>\n"
+"    "
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Adult"
+msgstr "Adulte"
+
+#. module: baggage_builder
+#: field:product.product,age:0
+#: field:res.partner,age:0
+msgid "Age"
+msgstr "Age"
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Ancester"
+msgstr "Ancêtre"
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Baby"
+msgstr "Bébé"
+
+#. module: baggage_builder
+#: view:product.product:0
+msgid "Baggage configuration"
+msgstr "Configuration des valises"
+
+#. module: baggage_builder
+#: field:product.product,baggage_tag_ids:0
+msgid "Baggage tags"
+msgstr "Tags de la valise"
+
+#. module: baggage_builder
+#: model:ir.ui.menu,name:baggage_builder.menu_baggage
+#: model:ir.ui.menu,name:baggage_builder.menu_main_baggage
+msgid "Baggages"
+msgstr "Valises"
+
+#. module: baggage_builder
+#: selection:trip.baggage,state:0
+msgid "Cancel"
+msgstr "Annuler"
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Cancel baggage"
+msgstr "Annuler la valise"
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Child"
+msgstr "Enfant"
+
+#. module: baggage_builder
+#: model:ir.ui.menu,name:baggage_builder.menu_baggage_configuration
+msgid "Configuration"
+msgstr "Configuration"
+
+#. module: baggage_builder
+#: field:trip.baggage,destination_id:0
+msgid "Destination"
+msgstr "Destination"
+
+#. module: baggage_builder
+#: model:ir.model,name:baggage_builder.model_destination_attribute
+msgid "Destination Attribute"
+msgstr "Tag de destination"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_destination_tag
+#, python-format
+msgid "Destination Tag"
+msgstr "Tag de destination"
+
+#. module: baggage_builder
+#: view:destination.tag:0
+msgid "Destination tag"
+msgstr "Tag de destination"
+
+#. module: baggage_builder
+#: sql_constraint:destination.tag:0
+msgid "Destination tag must be unique. You stupid fuck!"
+msgstr "Le tag de destination doit être unique. Mange gadins !"
+
+#. module: baggage_builder
+#: view:destination.tag:0
+#: model:ir.actions.act_window,name:baggage_builder.destination_tag_action_form
+#: model:ir.ui.menu,name:baggage_builder.menu_destination_tag
+#: model:ir.ui.menu,name:baggage_builder.menu_destination_tag_config
+#: view:trip.baggage:0
+#: view:trip.destination:0
+msgid "Destination tags"
+msgstr "Tags de destination"
+
+#. module: baggage_builder
+#: selection:trip.baggage,state:0
+msgid "Done"
+msgstr "Terminée"
+
+#. module: baggage_builder
+#: selection:trip.baggage,state:0
+msgid "Draft"
+msgstr "Brouillon"
+
+#. module: baggage_builder
+#: selection:product.product,gender:0
+#: selection:res.partner,gender:0
+msgid "Female"
+msgstr "Femme"
+
+#. module: baggage_builder
+#: field:product.product,gender:0
+#: field:res.partner,gender:0
+msgid "Gender"
+msgstr "Gender"
+
+#. module: baggage_builder
+#: selection:product.product,gender:0
+#: selection:res.partner,gender:0
+msgid "Male"
+msgstr "Homme"
+
+#. module: baggage_builder
+#: field:destination.tag,name:0
+#: field:product.baggage,name:0
+#: field:trip.baggage,name:0
+#: field:trip.destination,name:0
+msgid "Name"
+msgstr "Nom"
+
+#. module: baggage_builder
+#: help:product.product,usability_coef:0
+msgid "Number of products needed for one week (7 days). Select -1 if the product if unique, for example sun glasses."
+msgstr "Quantité nécessaire pour une semaine (7 jours). Sélectionner -1 si le produit est unique, par exemple une paire de lunettes de soleil"
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Pack"
+msgstr "Ajouter"
+
+#. module: baggage_builder
+#: selection:product.baggage,state:0
+msgid "Packed"
+msgstr "Ajoutée à la valise"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_res_partner
+#: field:product.baggage,partner_id:0
+#, python-format
+msgid "Partner"
+msgstr "Personne"
+
+#. module: baggage_builder
+#: field:trip.baggage,partner_ids:0
+msgid "Partners"
+msgstr "Personnes"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_product_product
+#: field:product.baggage,product_id:0
+#, python-format
+msgid "Product"
+msgstr "Article"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_product_baggage
+#, python-format
+msgid "Product Baggage"
+msgstr "Affaire"
+
+#. module: baggage_builder
+#: field:trip.baggage,product_baggage_ids:0
+msgid "Product baggage"
+msgstr "Affaire"
+
+#. module: baggage_builder
+#: sql_constraint:product.baggage:0
+msgid "Product baggage must be unique for a same partner and a same trip"
+msgstr "Une affaire doit être unique pour un même partenaire et un même voyage."
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Product baggages"
+msgstr "Affaires"
+
+#. module: baggage_builder
+#: model:ir.actions.act_window,name:baggage_builder.product_baggage_action_form
+#: model:ir.ui.menu,name:baggage_builder.menu_product_baggage
+msgid "Products Baggages"
+msgstr "Affaires"
+
+#. module: baggage_builder
+#: field:product.baggage,quantity:0
+msgid "Quantity"
+msgstr "Quantité"
+
+#. module: baggage_builder
+#: field:trip.baggage,season:0
+msgid "Season"
+msgstr "Season"
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Start baggage"
+msgstr "Commencer la valise"
+
+#. module: baggage_builder
+#: selection:trip.baggage,state:0
+msgid "Started"
+msgstr "Commencée"
+
+#. module: baggage_builder
+#: field:product.baggage,state:0
+#: field:trip.baggage,state:0
+msgid "State"
+msgstr "État"
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Stupid teenager"
+msgstr "Stupide ado"
+
+#. module: baggage_builder
+#: selection:trip.baggage,season:0
+msgid "Summer"
+msgstr "Été"
+
+#. module: baggage_builder
+#: field:trip.destination,summer_tag_ids:0
+msgid "Summer Tags"
+msgstr "Tags d'Été"
+
+#. module: baggage_builder
+#: view:trip.destination:0
+msgid "Summer tags"
+msgstr "Tags d'Été"
+
+#. module: baggage_builder
+#: view:product.product:0
+#: field:trip.baggage,tag_ids:0
+#: field:trip.destination,tag_ids:0
+msgid "Tags"
+msgstr "Tags"
+
+#. module: baggage_builder
+#: field:trip.baggage,time_laps:0
+msgid "Time laps"
+msgstr "Durée du voyage"
+
+#. module: baggage_builder
+#: selection:product.baggage,state:0
+msgid "To Buy"
+msgstr "À acheter"
+
+#. module: baggage_builder
+#: selection:product.baggage,state:0
+msgid "To Pack"
+msgstr "À ajouter"
+
+#. module: baggage_builder
+#: field:product.baggage,trip_id:0
+msgid "Trip"
+msgstr "Voyage"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_trip_baggage
+#, python-format
+msgid "Trip Baggage"
+msgstr "Valise"
+
+#. module: baggage_builder
+#: code:_description:0
+#: model:ir.model,name:baggage_builder.model_trip_destination
+#, python-format
+msgid "Trip Destination"
+msgstr "Destination"
+
+#. module: baggage_builder
+#: model:ir.actions.act_window,name:baggage_builder.trip_destination_action_form
+#: model:ir.ui.menu,name:baggage_builder.menu_trip_destination
+msgid "Trip Destinations"
+msgstr "Destinations"
+
+#. module: baggage_builder
+#: model:ir.actions.act_window,name:baggage_builder.trip_baggage_action_form
+#: model:ir.ui.menu,name:baggage_builder.menu_trip_baggage
+#: view:trip.baggage:0
+msgid "Trip baggage"
+msgstr "Valise"
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Trip baggages"
+msgstr "Valises"
+
+#. module: baggage_builder
+#: view:trip.destination:0
+msgid "Trip destination"
+msgstr "Destination"
+
+#. module: baggage_builder
+#: view:trip.destination:0
+msgid "Trip destinations"
+msgstr "Destinations"
+
+#. module: baggage_builder
+#: help:trip.baggage,time_laps:0
+msgid "Trip number of days"
+msgstr "Durée du voyage"
+
+#. module: baggage_builder
+#: selection:res.partner,gender:0
+msgid "Undefined"
+msgstr "Unconnu"
+
+#. module: baggage_builder
+#: field:product.product,usability_coef:0
+msgid "Usability Coefficient"
+msgstr "Coefficient d'utilisation"
+
+#. module: baggage_builder
+#: view:trip.baggage:0
+msgid "Validate baggage"
+msgstr "Valider la valise"
+
+#. module: baggage_builder
+#: selection:product.product,age:0
+#: selection:res.partner,age:0
+msgid "Veteran"
+msgstr "Vétéran"
+
+#. module: baggage_builder
+#: selection:trip.baggage,season:0
+msgid "Winter"
+msgstr "Hiver"
+
+#. module: baggage_builder
+#: field:trip.destination,winter_tag_ids:0
+msgid "Winter Tags"
+msgstr "Tags d'hiver"
+
+#. module: baggage_builder
+#: view:trip.destination:0
+msgid "Winter tags"
+msgstr "Tags d'hiver"
+

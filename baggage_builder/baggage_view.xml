@@ -1,0 +1,290 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Module for OpenERP
+  Copyright (C) 2014 Akretion (http://www.akretion.com). All Rights Reserved
+  @author Benoît GUILLOT <benoit.guillot@akretion.com>
+  The licence is in the file __openerp__.py
+-->
+
+<openerp>
+    <data>
+
+        <!-- VIEW FOR THE OBJECT : trip_destination -->
+
+<record id="trip_destination_search_view" model="ir.ui.view">
+    <field name="name">trip.destination.search</field>
+    <field name="model">trip.destination</field>
+    <field name="arch" type="xml">
+        <search string="Trip destinations">
+            <field name="name"/>
+        </search>
+    </field>
+</record>
+
+<record id="trip_destination_form_view" model="ir.ui.view">
+    <field name="name">trip.destination.form</field>
+    <field name="model">trip.destination</field>
+    <field name="arch" type="xml">
+        <form string="Trip destination" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group name="tags" col="6">
+                    <group name="general_tags" string="Destination tags" colspan="2">
+                        <field name="tag_ids" nolabel="1"/>
+                    </group>
+                    <group name="summer_tags" string="Summer tags" colspan="2">
+                        <field name="summer_tag_ids" nolabel="1"/>
+                    </group>
+                    <group name="winter_tags" string="Winter tags" colspan="2">
+                        <field name="winter_tag_ids" nolabel="1"/>
+                    </group>
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="trip_destination_tree_view" model="ir.ui.view">
+    <field name="name">trip.destination.list</field>
+    <field name="model">trip.destination</field>
+    <field name="arch" type="xml">
+        <tree string="Trip destination">
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<record id="trip_destination_action_form" model="ir.actions.act_window">
+    <field name="name">Trip Destinations</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">trip.destination</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="trip_destination_search_view"/>
+</record>
+
+        <!-- VIEW FOR THE OBJECT : trip_baggage -->
+
+<record id="trip_baggage_search_view" model="ir.ui.view">
+    <field name="name">trip.baggage.search</field>
+    <field name="model">trip.baggage</field>
+    <field name="arch" type="xml">
+        <search string="Trip baggages">
+            <field name="name"/>
+        </search>
+    </field>
+</record>
+
+<record id="trip_baggage_form_view" model="ir.ui.view">
+    <field name="name">trip.baggage.form</field>
+    <field name="model">trip.baggage</field>
+    <field name="arch" type="xml">
+        <form string="Trip baggage" version="7.0">
+            <header>
+                <button name="start_baggage" string="Start baggage"
+                        type="object" states="draft"
+                        groups="base_colocation_tools.group_flatmates"/>
+                <button name="done_baggage" string="Validate baggage"
+                        type="object" states="started"
+                        groups="base_colocation_tools.group_flatmates"/>
+                <button name="cancel" string="Cancel baggage"
+                        type="object" states="draft,started"
+                        groups="base_colocation_tools.group_flatmates"/>
+                <field name="state" widget="statusbar"
+                    statusbar_visible="draft,started,done,cancel"/>
+            </header>
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+                <group colspan="4" col="6">
+                    <group colspan="2" col="4">
+                        <field name="destination_id"
+                            on_change="onchange_destination(destination_id, season)" colspan="2"/>
+                        <field name="season"
+                            on_change="onchange_destination(destination_id, season)" colspan="2"/>
+                        <field name="time_laps" colspan="2"/>
+                        <field name="partner_ids" widget="many2many_tags" coslpan="2"/>
+                        <separator name="tags"
+                            string="Destination tags" colspan="4"/>
+                        <field name="tag_ids" nolabel="1" colspan="4"/>
+                    </group>
+                    <group name="product_baggage" string="Product baggages"
+                        attrs="{'invisible': [('state', '=', 'draft')]}" coslpan="4">
+                        <field name="product_baggage_ids" nolabel="1" colspan="4">
+                            <tree colors="green:state=='packed';red:state == 'to_buy'">
+                                <field name="name"/>
+                                <field name="quantity"/>
+                                <field name="partner_id"/>
+                                <field name="state"/>
+                                <field name="product_id" invisible="1"/>
+                                <button name="pack_product_baggage"
+                                        type="object" states="to_pack,to_buy"
+                                        string="Pack" icon="gtk-go-forward"
+                                        groups="base_colocation_tools.group_flatmates"/>
+                            </tree>
+                            <form>
+                                <field name="name"/>
+                                <field name="product_id"/>
+                                <field name="quantity"/>
+                                <field name="partner_id"/>
+                                <field name="state"/>
+                            </form>
+                        </field>
+                    </group>
+
+                </group>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="trip_baggage_tree_view" model="ir.ui.view">
+    <field name="name">trip.baggage.list</field>
+    <field name="model">trip.baggage</field>
+    <field name="arch" type="xml">
+        <tree string="Trip baggage">
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<record id="trip_baggage_action_form" model="ir.actions.act_window">
+    <field name="name">Trip baggage</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">trip.baggage</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="trip_baggage_search_view"/>
+</record>
+
+        <!-- VIEW FOR THE OBJECT : product_product -->
+
+<record id="product_normal_form_view" model="ir.ui.view">
+    <field name="name">product.baggage.form</field>
+    <field name="model">product.product</field>
+    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="arch" type="xml">
+        <xpath expr="//page[@string='Information']" position="after">
+            <page name="product_baggage" string="Baggage configuration">
+                <group name="baggage_conf" colspan="4">
+                    <field name="gender"/>
+                    <field name="age"/>
+                    <field name="usability_coef"/>
+                </group>
+                <group name="tags" string="Tags">
+                    <field name="baggage_tag_ids" nolabel="1"/>
+                </group>
+            </page>
+        </xpath>
+    </field>
+</record>
+
+<record id="product_baggage_action_form" model="ir.actions.act_window">
+    <field name="name">Products Baggages</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">product.product</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form,kanban</field>
+    <field name="context">{"default_colocation_type":"baggage"}</field>
+    <field name="domain">[('colocation_type','=','baggage')]</field>
+    <field name="view_id" ref="product.product_product_tree_view"/>
+    <field name="search_view_id" ref="product.product_search_form_view"/>
+    <field name="help" type="html">
+      <p class="oe_view_nocontent_create">
+        Click to define a new product.
+      </p><p>
+        You must define a product for everything you buy or sell,
+        whether it's a physical product, a consumable or service.
+      </p>
+    </field>
+</record>
+
+        <!-- VIEW FOR THE OBJECT : destination_tag -->
+
+<record id="destination_tag_search_view" model="ir.ui.view">
+    <field name="name">destination.tag.search</field>
+    <field name="model">destination.tag</field>
+    <field name="arch" type="xml">
+        <search string="Destination tags">
+            <field name="name"/>
+        </search>
+    </field>
+</record>
+
+<record id="destination_tag_form_view" model="ir.ui.view">
+    <field name="name">destination.tag.form</field>
+    <field name="model">destination.tag</field>
+    <field name="arch" type="xml">
+        <form string="Destination tag" version="7.0">
+            <sheet>
+                <div class="oe_title">
+                    <label for="name" class="oe_edit_only"/>
+                    <h1>
+                        <field name="name"/>
+                    </h1>
+                </div>
+            </sheet>
+        </form>
+    </field>
+</record>
+
+<record id="destination_tag_tree_view" model="ir.ui.view">
+    <field name="name">destination.tag.list</field>
+    <field name="model">destination.tag</field>
+    <field name="arch" type="xml">
+        <tree string="Destination tag" editable="top">
+            <field name="name"/>
+        </tree>
+    </field>
+</record>
+
+<record id="destination_tag_action_form" model="ir.actions.act_window">
+    <field name="name">Destination tags</field>
+    <field name="type">ir.actions.act_window</field>
+    <field name="res_model">destination.tag</field>
+    <field name="context">{}</field>
+    <field name="domain">[]</field>
+    <field name="view_type">form</field>
+    <field name="view_mode">tree,form</field>
+    <field name="search_view_id" ref="destination_tag_search_view"/>
+</record>
+
+
+<!--        <record id="baggage_baggage_view_form" model="ir.ui.view">
+            <field name="name">baggage_builder.baggage_baggage.view_form</field>
+            <field name="model">baggage.baggage</field>
+            <field name="inherit_id" ref="module_name_to_inherit.view_id" />
+            <field name="arch" type="xml">
+                <field name="field_reference" position="after">
+                </field>
+            </field>
+        </record>
+
+        <record id="baggage_baggage_view_tree" model="ir.ui.view">
+            <field name="name">baggage_builder.baggage_baggage.view_tree</field>
+            <field name="model">baggage.baggage</field>
+            <field name="inherit_id" ref="module_name_to_inherit.view_id" />
+            <field name="arch" type="xml">
+                <field name="field_reference" position="after">
+                </field>
+            </field>
+        </record>
+    -->
+
+
+
+    </data>
+</openerp>
