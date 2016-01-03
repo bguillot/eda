@@ -30,10 +30,12 @@
     'description': """empty""",
     'author': 'Akretion',
     'website': 'http://www.akretion.com/',
-    'depends': ['base'], 
+    'depends': ['base', 'product'],
     'data': [
            'security/colocation_security.xml',
+           'security/ir.model.access.csv',
            'base_view.xml',
+           'product_view.xml',
            'coloc_menu.xml',
     ],
     'demo_xml': [],
