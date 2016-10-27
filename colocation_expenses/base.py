@@ -20,17 +20,14 @@
 #
 ###############################################################################
 
-from openerp.osv import orm
+from openerp import fields, api, models
 
 
-class res_company(orm.Model):
+class ResCompany(models.Model):
     _inherit="res.company"
 
-    def expense_attendance_reminder(self, cr, uid, context=None):
-        data_obj = self.pool['ir.model.data']
-        template_obj = self.pool['email.template']
-        model, template_id = data_obj.get_object_reference(cr, uid,
-                'colocation_expenses', 'expense_reminder_template')
-        template_obj.send_mail(cr, uid, template_id, 1, force_send=False,
-                               context=context)
+    @api.model
+    def expense_attendance_reminder(self):
+        template = self.env.ref('colocation_expenses.expense_reminder_template')
+        template.send_mail(self.env.user.company_id.id)
         return True

@@ -20,9 +20,9 @@
 #
 ###############################################################################
 
-from openerp.osv import fields, orm
-from datetime import datetime, date
-from openerp.tools.translate import _
+from openerp import fields, api, models, _
+from openerp.exceptions import Warning as UserError
+from datetime import date
 
 MONTH = [('1', 'January'),
          ('2', 'February'),
@@ -38,114 +38,99 @@ MONTH = [('1', 'January'),
          ('12', 'December')]
 
 
-class coloc_expense(orm.Model):
+class ColocExpense(models.Model):
     _name = "coloc.expense"
     _description="Coloc Expenses"
 
     _order = "month desc, create_date desc"
 
-    def _get_default_month(self, cr, uid, context=None):
+    @api.model
+    def _get_default_month(self):
         return str(date.today().month)
 
-    def _get_default_partner(self, cr, uid, context=None):
-        partner_id = False
-        user_obj = self.pool['res.users']
-        if uid != 1:
-            partner_id = user_obj.read(cr, uid, uid, ['partner_id'],
-                                       context=context)['partner_id'][0]
-        return partner_id
+    @api.model
+    def _get_default_partner(self):
+        partner = None
+        if self.env.user.id != 1:
+            partner = self.env.user.partner_id
+        return partner
 
-    def _get_default_concerned_partners(self, cr, uid, context=None):
-        user = self.pool['res.users'].browse(cr, uid, uid, context=context)
-        partners = user.company_id.flatmate_ids
-        partner_ids  = [x.id for x in partners]
-        return partner_ids
+    @api.model
+    def _get_default_concerned_partners(self):
+        return self.env.user.company_id.flatmate_ids.ids
 
-    def _get_balanced(self, cr, uid, ids, name, args, context=None):
-        res = {}
-        for expense in self.browse(cr, uid, ids, context=context):
+    @api.depends('balance_id')
+    @api.multi
+    def _get_balanced(self):
+        for expense in self:
             if expense.balance_id:
-                res[expense.id] = True
+                expense.balanced = True
             else:
-                res[expense.id] = False
-        return res
+                expense.balanced = False
 
-    _columns={
-        'product_id': fields.many2one(
-            'product.product',
-            'Product',
-            domain="[('colocation_type', '=', 'expense')]"),
-        'create_date': fields.datetime('Create date'),
-        'amount': fields.float(
-            'Amount',
-            required=True),
-        'partner_id': fields.many2one(
-            'res.partner',
-            'Partner',
-            required=True),
-        'comment': fields.char('Comment', size=128),
-        'month': fields.selection(
-            MONTH,
-            'Month',
-            required=True),
-        'balance_id': fields.many2one('balance.result', 'Balance result'),
-        'balanced': fields.function(
-            _get_balanced,
-            string='Balanced',
-            type='boolean',
-            store={
-                'coloc.expense':
-                    (lambda self, cr, uid, ids, c=None:
-                        ids,
-                        ['balance_id'],
-                        10),
-                }),
-        'concerned_partner_ids': fields.many2many(
-            'res.partner',
-            'expense_partner_rel',
-            'expense_id',
-            'partner_id',
-            'Concerned Partners',
-            required=True),
-        }
+    product_id = fields.Many2one(
+        comodel_name='product.product',
+        string='Product',
+        domain="[('colocation_type', '=', 'expense')]")
+    create_date = fields.Datetime('Create date')
+    amount = fields.Float(
+        string='Amount',
+        required=True)
+    partner_id = fields.Many2one(
+        comodel_name='res.partner',
+        string='Partner',
+        default=_get_default_partner,
+        required=True)
+    comment = fields.Char('Comment', size=128)
+    month = fields.Selection(
+        MONTH,
+        'Month',
+        default=_get_default_month,
+        required=True)
+    balance_id = fields.Many2one(
+        comodel_name='balance.result',
+        string='Balance result')
+    balanced = fields.Boolean(
+        compute='_get_balanced',
+        string='Balanced',
+        store=True)
+    concerned_partner_ids = fields.Many2many(
+        'res.partner',
+        'expense_partner_rel',
+        'expense_id',
+        'partner_id',
+        'Concerned Partners',
+        default=_get_default_concerned_partners,
+        required=True)
 
-    _defaults={
-        'month': _get_default_month,
-        'partner_id': _get_default_partner,
-        'concerned_partner_ids': _get_default_concerned_partners,
-        }
-
-    def unlink(self, cr, uid, ids, context=None):
-        for expense in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def unlink(self):
+        for expense in self:
             if expense.balance_id:
-                raise orm.except_orm(_('Keyboard/Chair error'),
-                                     _("You can't delete and expense already "
-                                    "balanced, you stupid fuck!"))
-        return super(coloc_expense, self).unlink(cr, uid, ids, context=context)
+                raise UserError(_('Keyboard/Chair error'),
+                                _("You can't delete and expense already "
+                                  "balanced, you stupid fuck!"))
+        return super(ColocExpense, self).unlink()
 
 
-class meal_attendance(orm.Model):
+class MealAttendance(models.Model):
     _name="meal.attendance"
     _description="Meal attendance"
 
     _order = "month desc"
 
-    def _get_default_month(self, cr, uid, context=None):
+    @api.model
+    def _get_default_month(self):
         return str(date.today().month)
 
-    _columns={
-        'partner_id': fields.many2one('res.partner', string="Partner"),
-        'meal_qty': fields.float('Meal quantity'),
-        'write_date': fields.datetime('Write date'),
-        'month': fields.selection(
-            MONTH,
-            'month'),
-        'color': fields.integer('Color Index'),
-        }
-
-    _defaults={
-        'month': _get_default_month
-        }
+    partner_id = fields.Many2one('res.partner', string="Partner")
+    meal_qty = fields.Float('Meal quantity')
+    write_date = fields.Datetime('Write date')
+    month = fields.Selection(
+        MONTH,
+        'month',
+        default=_get_default_month)
+    color = fields.Integer('Color Index')
 
     _sql_constraints = [
         ('month_partner_uniq',
@@ -153,28 +138,30 @@ class meal_attendance(orm.Model):
          'Balance has to be uniq per partner and per month!'),
     ]
 
-    def add_meal_attendance(self, cr, uid, ids, context=None):
+    @api.multi
+    def add_meal_attendance(self):
         month = str(date.today().month)
-        for attendance in self.browse(cr, uid, ids, context=context):
+        for attendance in self:
             if month != attendance.month:
-                raise orm.except_orm(_('Keyboard/Chair error'),
-                                     _("You try to add an attendance of "
-                                       "another month, you stupid fuck!"))
-            attendance.write({'meal_qty': attendance.meal_qty + 1})
+                raise UserError(_('Keyboard/Chair error'),
+                                _("You try to add an attendance of "
+                                  "another month, you stupid fuck!"))
+            attendance.meal_qty += 1
         return True
 
-    def remove_meal_attendance(self, cr, uid, ids, context=None):
+    @api.multi
+    def remove_meal_attendance(self):
         month = str(date.today().month)
-        for attendance in self.browse(cr, uid, ids, context=context):
+        for attendance in self:
             if month != attendance.month:
-                raise orm.except_orm(_('Keyboard/Chair error'),
-                                     _("You try to add an attendance of "
-                                       "another month, you stupid fuck!"))
-            attendance.write({'meal_qty': attendance.meal_qty - 1})
+                raise UserError(_('Keyboard/Chair error'),
+                                _("You try to add an attendance of "
+                                  "another month, you stupid fuck!"))
+            attendance.meal_qty -= 1
         return True
 
 
-class balance_result(orm.Model):
+class BalanceResult(models.Model):
     _name = "balance.result"
     _description = "Balance Result"
 
@@ -187,7 +174,6 @@ class balance_result(orm.Model):
 #        return res
 
 
-    _columns={
 #        'name': fields.function(
 #            _get_name,
 #            type='char',
@@ -200,123 +186,110 @@ class balance_result(orm.Model):
 #                        ['month'],
 #                        10),
 #                }),
-        'total_paid': fields.float('Total paid'),
-        'month': fields.selection(
-            MONTH,
-            'Month'),
-        'normal_average': fields.float('Normal average'),
-        'prop_total': fields.float('Total proportional'),
-        'prop_average': fields.float('Proportional average'),
-        'partner_balance_ids': fields.one2many(
-            'partner.balance',
-            'balance_id',
-            'Partner balance'),
-        'transaction_ids': fields.one2many(
-            'balance.transaction',
-            'balance_id',
-            'Transactions'),
-        'synthesis': fields.text('Synthesis'),
-        'state': fields.selection(
-            [('to_pay', 'To Pay'), ('paid', 'Paid')],
-            'State'),
-        'payment_method': fields.char(
-            'Payment Method',
-            size=128,
-            help="Way to pay the balance result"),
-        }
-
-    _defaults = {
-        'state': 'to_pay',
-        }
+    total_paid = fields.Float('Total paid')
+    month = fields.Selection(
+        MONTH,
+        'Month')
+    normal_average = fields.Float('Normal average')
+    prop_total = fields.Float('Total proportional')
+    prop_average = fields.Float('Proportional average')
+    partner_balance_ids = fields.One2many(
+       'partner.balance',
+       'balance_id',
+       'Partner balance')
+    transaction_ids = fields.One2many(
+       'balance.transaction',
+       'balance_id',
+       'Transactions')
+    synthesis = fields.Text('Synthesis')
+    state = fields.Selection(
+       [('to_pay', 'To Pay'), ('paid', 'Paid')],
+       'State',
+       default='to_pay')
+    payment_method = fields.Char(
+        'Payment Method',
+        size=128,
+        help="Way to pay the balance result")
 
     _sql_constraints = [
         ('month_uniq', 'unique(month)', 'Balance has to be uniq per month!'),
     ]
 
-    def pay_balance(self, cr, uid, ids, context=None):
-        return self.write(cr, uid, ids, {'state': 'paid'}, context=context)
+    @api.multi
+    def pay_balance(self):
+        return self.write({'state': 'paid'})
 
-    def unlink(self, cr, uid, ids, context=None):
-        for result in self.browse(cr, uid, ids, context=context):
+    @api.multi
+    def unlink(self):
+        for result in self:
             if result.state == 'paid':
-                raise orm.except_orm(_('Keyboard/Chair error'),
-                                     _("You can't delete a balance result that "
-                                     "have already been paid, you stupid fuck!"))
-        return super(balance_result, self).unlink(cr, uid, ids, context=context)
+                raise UserError(_('Keyboard/Chair error'),
+                                _("You can't delete a balance result that "
+                                  "have already been paid, you stupid fuck!"))
+        return super(BalanceResult, self).unlink()
 
 
-class partner_balance(orm.Model):
+class PartnerBalance(models.Model):
     _name = "partner.balance"
     _description = "Partner balance"
 
-    _columns={
-        'balance_id': fields.many2one(
-            'balance.result',
-            'Balance',
-            ondelete="cascade"),
-        'partner_id': fields.many2one('res.partner', 'Partner'),
-        'total_owe': fields.float('Total owe'),
-        'total_paid': fields.float('Total paid'),
-        }
+    balance_id = fields.Many2one(
+        'balance.result',
+        'Balance',
+        ondelete="cascade")
+    partner_id = fields.Many2one('res.partner', 'Partner')
+    total_owe = fields.Float('Total owe')
+    total_paid = fields.Float('Total paid')
 
 
-class balance_transaction(orm.Model):
+class BalanceTransaction(models.Model):
     _name = "balance.transaction"
     _description = "Balance transaction"
 
-    _columns={
-        'balance_id': fields.many2one(
-            'balance.result',
-            'Balance',
-            ondelete="cascade"),
-        'ower_id': fields.many2one('res.partner', 'Ower'),
-        'receiver_id': fields.many2one('res.partner', 'Receiver'),
-        'amount': fields.float('Amount'),
-        }
+    balance_id = fields.Many2one(
+        'balance.result',
+        'Balance',
+        ondelete="cascade")
+    ower_id = fields.Many2one('res.partner', 'Ower')
+    receiver_id = fields.Many2one('res.partner', 'Receiver')
+    amount = fields.Float('Amount')
 
-class automatic_expense(orm.Model):
+
+class AutomaticExpense(models.Model):
     _name = "automatic.expense"
     _description = "Automatic Expenses"
 
-    _columns = {
-        'partner_id': fields.many2one(
-            'res.partner',
-            'Partner',
-            required=True),
-        'product_id': fields.many2one(
-            'product.product',
-            'Product',
-            required=True),
-        'amount': fields.float(
-            'Amount',
-            required=True),
-        'active': fields.boolean('Active'),
-        'concerned_partner_ids': fields.many2many(
-            'res.partner',
-            'expense_partner_rel',
-            'expense_id',
-            'partner_id',
-            'Concerned Partners',
-            required=True),
+    partner_id = fields.Many2one(
+        'res.partner',
+        'Partner',
+        required=True)
+    product_id = fields.Many2one(
+        'product.product',
+        'Product',
+        required=True)
+    amount = fields.Float(
+        'Amount',
+        required=True)
+    active = fields.Boolean('Active', default=True)
+    concerned_partner_ids = fields.Many2many(
+        'res.partner',
+        'expense_partner_rel',
+        'expense_id',
+        'partner_id',
+        'Concerned Partners',
+        required=True)
 
-        }
-
-    _defaults = {
-        'active': True,
-        }
-
-    def automatic_expense_scheduler(self, cr, uid, context=None):
-        expense_obj = self.pool['coloc.expense']
-        ids = self.search(cr, uid, [], context=context)
+    @api.model
+    def automatic_expense_scheduler(self):
+        expense_obj = self.env['coloc.expense']
         month = str(date.today().month)
-        for auto_expense in self.browse(cr, uid, ids, context=context):
-            expense_id = expense_obj.search(cr, uid,
-                                            [('month', '=', month),
-                                             ('partner_id', '=', auto_expense.partner_id.id),
-                                             ('product_id', '=', auto_expense.product_id.id),
-                                             ('amount', '=', auto_expense.amount)],
-                                            context=context)
-            if not expense_id:
+        for auto_expense in self.search([]):
+            expense = expense_obj.search([
+                ('month', '=', month),
+                ('partner_id', '=', auto_expense.partner_id.id),
+                ('product_id', '=', auto_expense.product_id.id),
+                ('amount', '=', auto_expense.amount)])
+            if not expense:
                 concerned_ids = []
                 for partner in auto_expense.concerned_partner_ids:
                     concerned_ids.append(partner.id)
@@ -327,5 +300,5 @@ class automatic_expense(orm.Model):
                     'amount': auto_expense.amount,
                     'concerned_partner_ids': [(6, 0, concerned_ids)]
                     }
-                expense_obj.create(cr, uid, vals, context=context)
+                expense_obj.create(vals)
         return True

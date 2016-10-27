@@ -21,10 +21,9 @@
 ###############################################################################
 
 from openerp import fields, models, api
-from datetime import datetime, date
 
 
-class product_product(models.Model):
+class ProductProduct(models.Model):
     _inherit="product.product"
 
     @api.model
