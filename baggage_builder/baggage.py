@@ -227,39 +227,6 @@ class product_baggage(orm.Model):
         return True
 
 
-class product_product(orm.Model):
-    _inherit = "product.product"
-
-    def _get_colocation_type(self, cr, uid, context=None):
-        res = super(product_product, self)._get_colocation_type(cr, uid,
-                context=context)
-        res.append(('baggage', 'Baggage'))
-        return res
-
-    _columns = {
-        'baggage_tag_ids': fields.many2many(
-            'destination.tag',
-            'product_baggage_tag_rel',
-            'tag_id',
-            'product_id',
-            'Baggage tags'),
-        'gender': fields.selection(
-            [('male', 'Male'), ('female', 'Female')],
-            'Gender'),
-        'age': fields.selection(
-            _BAGGAGE_AGE,
-            'Age'),
-        'usability_coef': fields.float(
-            'Usability Coefficient',
-            help="Number of products needed for one week (7 days). "
-            "Select -1 if the product if unique, for example sun glasses."),
-    }
-
-    _defaults = {
-        'usability_coef': -1,
-        }
-
-
 class res_partner(orm.Model):
     _inherit = "res.partner"
 

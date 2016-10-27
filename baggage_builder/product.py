@@ -20,5 +20,28 @@
 #
 ###############################################################################
 
-from . import baggage
-from . import product
+from openerp import fields, api, models
+import math
+from .baggage import _BAGGAGE_AGE
+
+class product_product(models.Model):
+    _inherit = "product.product"
+
+    colocation_type = fields.Selection(
+        selection_add=[('baggage', 'Baggage')])
+    baggage_tag_ids = fields.Many2many(
+        comodel_name='destination.tag',
+        relation='product_baggage_tag_rel',
+        column1='tag_id',
+        column2='product_id',
+        string='Baggage tags')
+    gender = fields.Selection(
+        selection=[('male', 'Male'), ('female', 'Female')],
+        string='Gender')
+    age = fields.Selection(
+        selection=_BAGGAGE_AGE)
+    usability_coef = fields.Float(
+        string='Usability Coefficient',
+        default=-1,
+        help="Number of products needed for one week (7 days). "
+            "Select -1 if the product if unique, for example sun glasses.")
