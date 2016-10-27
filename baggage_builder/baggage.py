@@ -37,6 +37,7 @@ class destination_tag(orm.Model):
 
     _columns = {
         'name': fields.char('Name', required=True),
+        'tag_type': fields.selection([('activity')], string='Type'),
         }
 
     _sql_constraints = [('name_uniq', 'unique(name)',
@@ -75,6 +76,24 @@ class trip_baggage(orm.Model):
     _name = "trip.baggage"
     _description = "Trip Baggage"
 
+    def _product_baggage_count(self, cr, uid, ids, field_name, arg, context=None):
+        r = dict.fromkeys(ids, 0)
+        for trip_id in ids:
+            domain = [
+                ('state', 'in', ['to_buy', 'to_pack']),
+                ('trip_id', '=', trip_id),
+            ]
+            product_baggage_ids = self.pool['product.baggage'].search(cr, uid, domain, context=context)
+            r[trip_id] = len(product_baggage_ids)
+        return r
+
+    def action_view_product_baggages(self, cr, uid, ids, context=None):
+        result = self.pool['ir.model.data'].xmlid_to_res_id(cr, uid, 'baggage_builder.product_baggage_action_form', raise_if_not_found=True)
+        result = self.pool['ir.actions.act_window'].read(cr, uid, [result], context=context)[0]
+        result['domain'] = "[('trip_id','in',[" + ','.join(map(str, ids)) + "])]"
+        result['context'] = "{'search_default_to_pack': 1, 'search_default_to_buy': 1}"
+        return result
+
     _columns = {
         'name': fields.char('Name', required=True),
         'destination_id': fields.many2one('trip.destination','Destination'),
@@ -108,6 +127,16 @@ class trip_baggage(orm.Model):
         'season': fields.selection(
             [('summer', 'Summer'), ('winter', 'Winter')],
             'Season'),
+        'activitiy_tag_ids': fields.many2many(
+            'destination.tag',
+            'baggage_activity_tag_rel',
+            'tag_id',
+            'baggage_id',
+            'Activities'),
+        'product_baggage_count': fields.function(
+            _product_baggage_count,
+            string='# Product Baggage',
+            type='integer'),
         }
 
     _defaults = {
@@ -123,21 +152,29 @@ class trip_baggage(orm.Model):
                 ages.append(partner.age)
                 genders.append(partner.gender)
             tag_ids = [x.id for x in baggage.tag_ids]
+            activity_ids = [x.id for x in baggage.activity_tag_ids]
+            tag_ids = list(set(tag_ids).union(set(activity_ids)))
             product_ids = product_obj.search(
                 cr, uid, [('colocation_type', '=', 'baggage'),
-                          ('baggage_tag_ids', 'in', tag_ids),
+                          '|', ('baggage_tag_ids', 'in', tag_ids), ('always_needed', '=', True),
                           '|', ('gender', 'in', genders), ('gender', '=', False),
                           '|', ('age', 'in', ages), ('age', '=', False)],
                 context=context)
             lines = []
+            unique_product_ids = []
             for partner in baggage.partner_ids:
                 for product in product_obj.browse(cr, uid, product_ids, context=context):
                     if product.gender and product.gender != partner.gender:
                         continue
                     if product.age and product.age != partner.age:
                         continue
+                    if product.id in unique_product_ids:
+                        continue
                     if product.usability_coef == -1:
                         qty = 1
+                    elif product.usability_coef == -2:
+                        qty = 1
+                        unique_product_ids.append(product.id)
                     else:
                         qty = math.ceil((product.usability_coef * baggage.time_laps)/7)
                     line_vals = {
@@ -224,6 +261,10 @@ class product_baggage(orm.Model):
 
     def pack_product_baggage(self, cr, uid, ids, context=None):
         self.write(cr, uid, ids, {'state': 'packed'}, context=context)
+        return True
+
+    def buy_product_baggage(self, cr, uid, ids, context=None):
+        self.write(cr, uid, ids, {'state': 'to_buy'}, context=context)
         return True
 
 

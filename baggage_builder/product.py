@@ -44,4 +44,6 @@ class product_product(models.Model):
         string='Usability Coefficient',
         default=-1,
         help="Number of products needed for one week (7 days). "
-            "Select -1 if the product if unique, for example sun glasses.")
+            "Select -1 if the product is unique, for example sun glasses."
+            "Select -2 if the product is unique for everyone, for exemple sun cream")
+    always_needed = fields.Boolean('Always needed')
