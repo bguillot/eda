@@ -42,6 +42,8 @@ class coloc_expense(orm.Model):
     _name = "coloc.expense"
     _description="Coloc Expenses"
 
+    _order = "month desc, create_date desc"
+
     def _get_default_month(self, cr, uid, context=None):
         return str(date.today().month)
 
