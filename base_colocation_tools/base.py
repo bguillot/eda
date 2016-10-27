@@ -20,50 +20,31 @@
 #
 ###############################################################################
 
-from openerp.osv import fields, orm
+from openerp import fields, api, models
 
 
-class res_company(orm.Model):
+class ResCompany(models.Model):
     _inherit="res.company"
 
-    def _get_company_from_partner(self, cr, uid, ids, context=None):
-        company_obj = self.pool['res.company']
-        company_ids = company_obj.search(cr, uid, [('flatmate_ids', 'in', ids)],
-                                         context=context)
-        return company_ids
-
-    def _get_flatmate_email(self, cr, uid, ids, name, args, context=None):
-        res = {}
-        for company in self.browse(cr, uid, ids, context=context):
-            emails = ''
+    @api.depends('flatmate_ids', 'flatmate_ids.email')
+    @api.multi
+    def _get_flatmate_email(self):
+        for company in self:
+            emails = []
             for flatmate in company.flatmate_ids:
                 if flatmate.email:
-                    if emails:
-                        emails = emails + ', ' + flatmate.email
-                    else:
-                        emails = flatmate.email
-            res[company.id] = emails
-        return res
+                    emails.append(flatmate.email)
+            company.flatmates_email = ', '.join(emails)
 
-    _columns={
-        'flatmate_ids': fields.many2many(
-            'res.partner',
-            'partner_company_rel',
-            'company_id',
-            'partner_id',
-            'Flatmates',
-            ),
-        'flatmates_email': fields.function(
-            _get_flatmate_email,
-            type='char',
-            string='Flatmates emails',
-            store={
-                'res.company':
-                    (lambda self, cr, uid, ids, c=None:
-                        ids,
-                        ['flatmate_ids'],
-                        10),
-                'res.partner': (_get_company_from_partner, ['email'], 20),
-                }),
-        }
-
+    flatmate_ids = fields.Many2many(
+        'res.partner',
+        'partner_company_rel',
+        'company_id',
+        'partner_id',
+        'Flatmates',
+        )
+    flatmates_email = fields.Char(
+        compute='_get_flatmate_email',
+        string='Flatmates emails',
+        store=True
+        )

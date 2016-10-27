@@ -23,7 +23,7 @@
 from openerp import fields, api, models
 
 
-class product_product(models.Model):
+class ProductProduct(models.Model):
     _inherit="product.product"
 
     colocation_type = fields.Selection(selection=[], string='Colocation type')
