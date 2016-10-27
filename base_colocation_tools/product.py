@@ -20,21 +20,10 @@
 #
 ###############################################################################
 
-from openerp.osv import fields, orm
+from openerp import fields, api, models
 
 
-class product_product(orm.Model):
+class product_product(models.Model):
     _inherit="product.product"
 
-    def _get_colocation_type(self, cr, uid, context=None):
-        return []
-
-    def __get_colocation_type(self, cr, uid, context=None):
-        return self._get_colocation_type(cr, uid, context=context)
-
-    _columns = {
-        'colocation_type': fields.selection(
-            __get_colocation_type,
-            'Colocation type'),
-        }
-
+    colocation_type = fields.Selection(selection=[], string='Colocation type')
