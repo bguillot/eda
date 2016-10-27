@@ -20,37 +20,28 @@
 #
 ###############################################################################
 
-from openerp.osv import fields, orm
+from openerp import fields, models, api
 from datetime import datetime, date
 
 
-class product_product(orm.Model):
+class product_product(models.Model):
     _inherit="product.product"
 
-    def _get_colocation_type(self, cr, uid, context=None):
-        res = super(product_product, self)._get_colocation_type(
-            cr, uid, context=context)
-        res.append(('expense', 'Expense'))
-        return res
-
-    _columns={
-        'expense_type': fields.selection(
-            [('courses', 'Courses'),
-             ('fournitures', 'Fournitures'),
-             ('charges', 'Charges'),
-             ('autres', 'Autres')],
-            'Expense type'),
-        }
-
-    def _get_default_colocation_type(self, cr, uid, context=None):
-        if context is None:
-            context = {}
+    @api.model
+    def _get_default_colocation_type(self):
         colocation_type = ''
-        if context.get('force_colocation_type'):
-            colocation_type = context['force_colocation_type']
+        if self._context.get('force_colocation_type'):
+            colocation_type = self._context['force_colocation_type']
         return colocation_type
 
-    _defaults = {
-        'colocation_type': _get_default_colocation_type,
-        }
+    colocation_type = fields.Selection(
+        selection_add=[('expense', 'Expense')],
+        default=_get_default_colocation_type)
+    expense_type = fields.Selection(
+        selection=[('courses', 'Courses'),
+            ('fournitures', 'Fournitures'),
+            ('charges', 'Charges'),
+            ('autres', 'Autres')],
+        string='Expense type')
+
 
