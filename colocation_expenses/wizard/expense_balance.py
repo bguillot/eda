@@ -40,9 +40,12 @@ class expense_balance(orm.TransientModel):
         expense_obj = self.pool['coloc.expense']
         participant_ids = []
         if context.get('active_ids'):
-            for expense in expense_obj.read(cr, uid, context['active_ids'], ['partner_id'], context=context):
+            for expense in expense_obj.read(cr, uid, context['active_ids'], ['partner_id', 'concerned_partner_ids'], context=context):
                 if not expense['partner_id'][0] in participant_ids:
                     participant_ids.append(expense['partner_id'][0])
+                for concerned_partner in expense['concerned_partner_ids']:
+                    if not concerned_partner in participant_ids:
+                        participant_ids.append(concerned_partner)
         return participant_ids
 
 
