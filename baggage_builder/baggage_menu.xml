@@ -45,7 +45,7 @@
           parent="menu_baggage"
           sequence="10"/>
 
-<menuitem action="product_baggage_action_form"
+<menuitem action="product_product_baggage_action_form"
           id="menu_product_baggage"
           parent="menu_baggage"
           sequence="15"/>

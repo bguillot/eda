@@ -104,7 +104,7 @@
                 <div class="oe_right oe_button_box" style="width: 300px;" name="buttons">
                     <button class="oe_inline oe_stat_button" name="action_view_product_baggages"
                         type="object" icon="fa-strikethrough">
-                        <field string="Product Baggages" name="product_baggage_count" widget="statinfo" />
+                        <field string="Product baggages" name="product_baggage_count" widget="statinfo" />
                     </button>
                 </div>
                 <div class="oe_left" style="width: 500px;">
@@ -131,30 +131,6 @@
                             string="Destination tags" colspan="4"/>
                         <field name="tag_ids" nolabel="1" colspan="4"/>
                     </group>
-                    <group name="product_baggage" string="Product baggages"
-                        attrs="{'invisible': [('state', '=', 'draft')]}" coslpan="4">
-                        <field name="product_baggage_ids" nolabel="1" colspan="4">
-                            <tree colors="green:state=='packed';red:state == 'to_buy'">
-                                <field name="name"/>
-                                <field name="quantity"/>
-                                <field name="partner_id"/>
-                                <field name="state"/>
-                                <field name="product_id" invisible="1"/>
-                                <button name="pack_product_baggage"
-                                        type="object" states="to_pack,to_buy"
-                                        string="Pack" icon="gtk-go-forward"
-                                        groups="base_colocation_tools.group_flatmates"/>
-                            </tree>
-                            <form>
-                                <field name="name"/>
-                                <field name="product_id"/>
-                                <field name="quantity"/>
-                                <field name="partner_id"/>
-                                <field name="state"/>
-                            </form>
-                        </field>
-                    </group>
-
                 </group>
             </sheet>
         </form>
@@ -187,7 +163,7 @@
 <record id="product_normal_form_view" model="ir.ui.view">
     <field name="name">product.baggage.form</field>
     <field name="model">product.product</field>
-    <field name="inherit_id" ref="product.product_normal_form_view"/>
+    <field name="inherit_id" ref="base_colocation_tools.product_normal_form_view"/>
     <field name="arch" type="xml">
         <xpath expr="//page[@string='Information']" position="after">
             <page name="product_baggage" string="Baggage configuration">
@@ -205,7 +181,7 @@
     </field>
 </record>
 
-<record id="product_baggage_action_form" model="ir.actions.act_window">
+<record id="product_product_baggage_action_form" model="ir.actions.act_window">
     <field name="name">Products Baggages</field>
     <field name="type">ir.actions.act_window</field>
     <field name="res_model">product.product</field>
@@ -342,7 +318,7 @@
             <field name="product_id" invisible="1"/>
             <button name="buy_product_baggage"
                     type="object" states="to_pack"
-                    string="To buy" icon="gtk-go-forward"
+                    string="To buy" icon="terp-dolar"
                     groups="base_colocation_tools.group_flatmates"/>
             <button name="pack_product_baggage"
                     type="object" states="to_pack,to_buy"
@@ -360,6 +336,7 @@
     <field name="domain">[]</field>
     <field name="view_type">form</field>
     <field name="view_mode">tree,form</field>
+    <field name="view_id" ref="product_baggage_tree_view"/>
     <field name="search_view_id" ref="product_baggage_search_view"/>
 </record>
 

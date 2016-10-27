@@ -37,7 +37,7 @@ class destination_tag(orm.Model):
 
     _columns = {
         'name': fields.char('Name', required=True),
-        'tag_type': fields.selection([('activity')], string='Type'),
+        'tag_type': fields.selection([('activity', 'Activity')], string='Type'),
         }
 
     _sql_constraints = [('name_uniq', 'unique(name)',
@@ -127,7 +127,7 @@ class trip_baggage(orm.Model):
         'season': fields.selection(
             [('summer', 'Summer'), ('winter', 'Winter')],
             'Season'),
-        'activitiy_tag_ids': fields.many2many(
+        'activity_tag_ids': fields.many2many(
             'destination.tag',
             'baggage_activity_tag_rel',
             'tag_id',
