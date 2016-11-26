@@ -19,44 +19,40 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-from openerp.osv import fields, orm
+from openerp import fields, api, models
 from datetime import datetime, date
 from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
 
 
-class dl_movie(orm.TransientModel):
+class DlMovie(models.TransientModel):
     _name = "dl.movie"
     _description = "Download movie"
 
-    _columns = {
-        'language': fields.selection(
-            [('vo', 'VO'),
-             ('fr', 'FR'),
-             ('vostfr','VOSTFR'),
-             ('vosten', 'VOSTEN'),
-             ('multi', 'MULTI')],
-            'Language',
-            required=True),
-        'quality': fields.selection(
-            [('1080p', '1080p'),
-             ('720p', '720p'),
-             ('bdrip', 'BDRIP'),
-             ('dvdrip', 'DVDRIP'),
-             ('cam_ts', 'CAM-TS...')],
-            'Quality',
-            required=True),
-        }
+    language = fields.Selection(
+       [('vo', 'VO'),
+        ('fr', 'FR'),
+        ('vostfr','VOSTFR'),
+        ('vosten', 'VOSTEN'),
+        ('multi', 'MULTI')],
+       'Language',
+       required=True)
+    quality = fields.Selection(
+       [('1080p', '1080p'),
+        ('720p', '720p'),
+        ('bdrip', 'BDRIP'),
+        ('dvdrip', 'DVDRIP'),
+        ('cam_ts', 'CAM-TS...')],
+       'Quality',
+       required=True)
 
-
-    def dl_movie(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        movie_id = context.get('active_id')
-        wizard = self.browse(cr, uid, ids[0], context=context)
+    @api.multi
+    def dl_movie(self):
+        self.ensure_one()
+        movie = self.env['movie.movie'].search([('id', '=', self._context.get('active_id'))])
         vals = {
-            'language': wizard.language,
-            'quality': wizard.quality,
+            'language': self.language,
+            'quality': self.quality,
             'state': 'ready'
             }
-        self.pool['movie.movie'].write(cr, uid, movie_id, vals, context=context)
+        movie.write(vals)
         return {'type': 'ir.actions.act_window_close'}

@@ -19,75 +19,57 @@
 #   along with this program.  If not, see <http://www.gnu.org/licenses/>.
 #
 ###############################################################################
-from openerp.osv import fields, orm
-from datetime import datetime, date
-from openerp.tools import DEFAULT_SERVER_DATETIME_FORMAT
+from openerp import fields, api, models
 
 
-class projection_dates(orm.TransientModel):
+class ProjectionDates(models.TransientModel):
     _name = "projection.dates"
     _description = "Projection dates"
 
-    _columns = {
-        'generate_projection_id': fields.many2one(
-            'generate.projection.choice',
-            'Generate projection',
-            ondelete='cascade',
-            required=True),
-        'date': fields.date('Date'),
-        }
+    generate_projection_id = fields.Many2one(
+        'generate.projection.choice',
+        'Generate projection',
+        ondelete='cascade',
+        required=True)
+    date = fields.Date('Date')
 
 
-class generate_projection_choice(orm.TransientModel):
+class GenerateProjectionChoice(models.TransientModel):
     _name = "generate.projection.choice"
     _description = "Generate Projection choice"
 
-    def _get_user_ids(self, cr, uid, context=None):
-        if context is None:
-            context = {}
-        proj = self.pool['movie.projection'].browse(cr, uid,
-                                                    context.get('active_id'),
-                                                    context=context)
-        user_ids = [x.id for x in proj.planned_user_ids]
-        return user_ids
+    @api.model
+    def _get_user_ids(self):
+        proj = self.env['movie.projection'].browse(self._context.get('active_id'))
+        return proj.planned_user_ids
 
-    _columns = {
-        'dates': fields.one2many(
-            'projection.dates',
-            'generate_projection_id',
-            'Dates'),
-        'user_ids': fields.many2many(
-            'res.users',
-            'user_igenerate_projection_rel',
-            'projection_id',
-            'user_id',
-            'Users'),
-        }
+    dates = fields.One2many(
+        'projection.dates',
+        'generate_projection_id',
+        'Dates')
+    user_ids = fields.Many2many(
+        'res.users',
+        'user_igenerate_projection_rel',
+        'projection_id',
+        'user_id',
+        'Users',
+        default=_get_user_ids)
 
-    _defaults = {
-        'user_ids': _get_user_ids,
-        }
-
-    def generate_dates(self, cr, uid, ids, context=None):
-        if context is None:
-            context = {}
-        proj_id = context.get('active_id')
-        wizard = self.browse(cr, uid, ids[0], context=context)
+    @api.multi
+    def generate_dates(self):
+        self.ensure_one()
+        proj_id = self._context.get('active_id')
         email_to = ""
-        for user in wizard.user_ids:
+        for user in self.user_ids:
             email_to += "%s, " % user.partner_id.email
-            for date in wizard.dates:
+            for date in self.dates:
                 vals = {
                     'projection_id': proj_id,
                     'user_id': user.id,
                     'date': date.date,
                     'state': 'unchoosed'
                     }
-                self.pool['projection.choice'].create(cr, uid, vals,
-                                                      context=context)
-        context['email_to'] = email_to
-        template_id = self.pool['ir.model.data'].get_object_reference(cr, uid,
-            'movies_management', 'start_planning_projection_template')[1]
-        self.pool.get('email.template').send_mail(cr, uid, template_id,
-            proj_id, force_send=False, context=context)
+                self.env['projection.choice'].create(vals)
+        template = self.env.ref('movies_management.start_planning_projection_template')
+        template.with_context(email_to=email_to).send_mail(proj_id)
         return {'type': 'ir.actions.act_window_close'}
