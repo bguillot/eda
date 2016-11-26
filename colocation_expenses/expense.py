@@ -220,6 +220,22 @@ class BalanceResult(models.Model):
         return self.write({'state': 'paid'})
 
     @api.multi
+    def pay_balance_next_month(self):
+        for balance in self:
+            for transaction in balance.transaction_ids:
+# TODO create ajustment product in xml
+                expense_vals = {
+                    'product_id': self.env.ref('__export__.product_product_2').id,
+                    'amount': transaction.amount,
+                    'partner_id': transaction.receiver_id.id,
+                    'concerned_partner_ids': [(6, 0, [transaction.ower_id.id])],
+                    'month': str(int(balance.month) + 1),
+                    'comment': 'Balance adjustment %s' % dict(MONTH).get(balance.month),
+                }
+                self.env['coloc.expense'].create(expense_vals)
+        return self.write({'state': 'paid', 'payment_method': 'Paid with adjustment on the next month'})
+
+    @api.multi
     def unlink(self):
         for result in self:
             if result.state == 'paid':

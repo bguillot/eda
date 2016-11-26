@@ -113,7 +113,7 @@
             <field name="product_id"
                 context="{'force_colocation_type':'expense'})"/>
 <!--            TODO onchange pour remplir le montant en fonction du produit -->
-            <field name="amount"/>
+            <field name="amount" sum="Total"/>
             <field name="concerned_partner_ids" widget="many2many_tags"/>
             <field name="comment"/>
             <field name="create_date" readonly="1"/>
@@ -313,6 +313,9 @@
                 <button name="pay_balance" states="to_pay" class="oe_highlight"
                     string="Pay Balance Result" type="object"
                     groups="base_colocation_tools.group_flatmates"/>
+                <button name="pay_balance_next_month" states="to_pay" class="oe_highlight"
+                    string="Pay Balance Result Next Month" type="object"
+                    groups="base_colocation_tools.group_flatmates"/>
                 <field name="state"
                     widget="statusbar"
                     statusbar_visible="to_pay,paid"
@@ -372,9 +375,9 @@
     <field name="arch" type="xml">
         <tree string="Balances">
             <field name="month"/>
-            <field name="total_paid"/>
+            <field name="total_paid" sum="Total"/>
             <field name="normal_average"/>
-            <field name="prop_total"/>
+            <field name="prop_total" sum="Total Meal"/>
             <field name="prop_average"/>
             <field name="state"/>
         </tree>
